@@ -1,7 +1,7 @@
 ﻿using JobOffer.Domain.Base;
 using System;
 
-namespace JobOffer.Domain
+namespace JobOffer.Domain.Entities
 {
     public class Job : BaseAgregate
     {

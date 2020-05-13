@@ -1,4 +1,4 @@
-﻿using JobOffer.Domain.Base;
+﻿using JobOffer.Domain.Entities;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JobOffer.DataAccess
 {
-    public abstract class BaseRepository<T> where T : BaseEntity<T>
+    public abstract class BaseRepository<T> where T : IIdentity<T>
     {
         protected IMongoDatabase _database;
 
@@ -23,7 +23,7 @@ namespace JobOffer.DataAccess
             return Collection.Find(p => p.Id == id).SingleOrDefaultAsync();
         }
 
-        public virtual Task<ReplaceOneResult> Upsert(T entity)
+        public virtual Task<ReplaceOneResult> UpsertAsync(T entity)
         {
             if (entity.Id == null)
             {
@@ -34,7 +34,7 @@ namespace JobOffer.DataAccess
             
         }
 
-        public virtual Task<DeleteResult> RemoveOne(T entity)
+        public virtual Task<DeleteResult> RemoveOneAsync(T entity)
         {
             return Collection.DeleteOneAsync<T>(p => p.Id == entity.Id);
         }

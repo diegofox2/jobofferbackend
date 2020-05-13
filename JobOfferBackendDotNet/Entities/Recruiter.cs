@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace JobOffer.Domain
+namespace JobOffer.Domain.Entities
 {
-    public class Recruiter : Person
+    public class Recruiter : Person, IIdentity<Recruiter>
     {
         private List<Company> _companies = new List<Company>();
 

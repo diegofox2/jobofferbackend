@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace JobOffer.Domain
+namespace JobOffer.Domain.Entities
 {
-    public class Person : BaseEntity<Person>
+    public class Person : BaseEntity<Person>, IIdentity<Person>
     {
         private List<Job> _jobHistory;
         private List<Study> _studies;
@@ -17,11 +17,11 @@ namespace JobOffer.Domain
 
         public string LastName { get; set; }
 
-        public IEnumerable<Job> JobHistory { get => _jobHistory; set => _jobHistory = (List<Job>)value; }
+        public IEnumerable<Job> JobHistory { get => _jobHistory; set => _jobHistory = (List<Job>) value; }
 
-        public IEnumerable<Study> Studies { get => _studies; set => _studies = (List<Study>)value; }
+        public IEnumerable<Study> Studies { get => _studies; set => _studies = (List<Study>) value; }
 
-        public IEnumerable<Ability> Abilities { get => _abilities; set => _abilities = (List<Ability>)value; }
+        public IEnumerable<Ability> Abilities { get => _abilities; set => _abilities = (List<Ability>) value; }
 
         public void AddJobHistory(Job job)
         {

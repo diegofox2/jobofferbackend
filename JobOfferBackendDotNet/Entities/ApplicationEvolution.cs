@@ -1,9 +1,7 @@
 ﻿using JobOffer.Domain.Base;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace JobOffer.Domain
+namespace JobOffer.Domain.Entities
 {
     public enum ApplicationState
     {

@@ -1,18 +1,14 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using JobOffer.Domain.Entities;
 using System;
 using System.Text;
 
 namespace JobOffer.Domain.Base
 {
-    public abstract class BaseEntity<T>
+    public abstract class BaseEntity<T> : IIdentity<T>
     {
+        public string Id { get; set; }
 
         protected StringBuilder _errors = new StringBuilder();
-
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
 
         public static bool operator ==(BaseEntity<T> source, BaseEntity<T> reference)
         {
@@ -38,6 +34,8 @@ namespace JobOffer.Domain.Base
         }
 
         public bool HasIdCreated { get => !string.IsNullOrEmpty(Id); }
+
+        
 
         public override int GetHashCode()
         {

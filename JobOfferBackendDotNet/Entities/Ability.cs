@@ -1,6 +1,6 @@
 ﻿using JobOffer.Domain.Base;
 
-namespace JobOffer.Domain
+namespace JobOffer.Domain.Entities
 {
     public class Ability : BaseAgregate
     {

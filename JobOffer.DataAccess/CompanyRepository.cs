@@ -1,4 +1,4 @@
-﻿using JobOffer.Domain;
+﻿using JobOffer.Domain.Entities;
 using MongoDB.Driver;
 
 namespace JobOffer.DataAccess
