@@ -1,8 +1,9 @@
 ﻿using JobOffer.Domain.Base;
+using JobOffer.Domain.Constants;
 
 namespace JobOffer.Domain.Entities
 {
-    public class Ability : BaseAgregate
+    public class Ability : BaseEntity<Ability>
     {
         public Skill Skill { get; set; }
 
@@ -22,10 +23,10 @@ namespace JobOffer.Domain.Entities
         public override void Validate()
         {
             if (Skill == null)
-                _errors.Append("SKILL_REQUIRED");
+                _errors.Append(DomainErrorMessages.SKILL_REQUIRED);
 
             if (Years == 0)
-                _errors.Append("YEAR_REQUIRED");
+                _errors.Append(DomainErrorMessages.YEAR_REQUIRED);
 
             ThrowExceptionIfErrors();
         }

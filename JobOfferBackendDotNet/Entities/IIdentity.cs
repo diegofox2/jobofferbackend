@@ -8,5 +8,7 @@ namespace JobOffer.Domain.Entities
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         string Id { get; set; }
+
+        bool HasIdCreated { get ; }
     }
 }

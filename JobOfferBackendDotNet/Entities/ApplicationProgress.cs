@@ -1,4 +1,5 @@
 ﻿using JobOffer.Domain.Base;
+using JobOffer.Domain.Constants;
 using System;
 
 namespace JobOffer.Domain.Entities
@@ -11,7 +12,7 @@ namespace JobOffer.Domain.Entities
         Closed
     }
 
-    public class ApplicationEvolution : BaseAgregate
+    public class ApplicationProgress : BaseEntity<ApplicationProgress>
     {
         public DateTime Date { get; set; }
 
@@ -24,10 +25,10 @@ namespace JobOffer.Domain.Entities
         public override void Validate()
         {
             if (Date.Year == 1900)
-                _errors.Append("APPLICATON_EVOLUTION_DATE_REQUIRED");
+                _errors.Append(DomainErrorMessages.DATE_REQUIRED);
 
             if (Applicant == null)
-                _errors.Append("APPLICANT_REQUIRED");
+                _errors.Append(DomainErrorMessages.APPLICANT_REQUIRED);
 
             ThrowExceptionIfErrors();
         }

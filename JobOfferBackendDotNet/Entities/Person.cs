@@ -1,15 +1,16 @@
 ﻿using JobOffer.Domain.Base;
+using JobOffer.Domain.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace JobOffer.Domain.Entities
 {
-    public class Person : BaseEntity<Person>, IIdentity<Person>
+    public class Person : BaseEntity<Person>
     {
-        private List<Job> _jobHistory;
-        private List<Study> _studies;
-        private List<Ability> _abilities;
+        private List<Job> _jobHistory = new List<Job>();
+        private List<Study> _studies = new List<Study>();
+        private List<Ability> _abilities = new List<Ability>();
 
         public string IdentityCard { get; set; }
 
@@ -25,14 +26,27 @@ namespace JobOffer.Domain.Entities
 
         public void AddJobHistory(Job job)
         {
-            if (_jobHistory.Any(item => item == job))
+            if (_jobHistory.Any(item => item.ComparePropertiesTo(job)))
             {
-                throw new InvalidOperationException("JOB_REPEATED");
+                throw new InvalidOperationException(DomainErrorMessages.JOB_REPEATED);
             }
             else
             {
                 _jobHistory.Add(job);
             }
+        }
+
+        public void UpdateJobHistory(Job job)
+        {
+            var jobToUpdate = _jobHistory.Find(j => j == job);
+            
+            if(jobToUpdate == null)
+            {
+                throw new InvalidOperationException(DomainErrorMessages.JOB_DOES_NOT_EXISTS);
+            }
+
+            _jobHistory.Remove(jobToUpdate);
+            _jobHistory.Add(job);
         }
 
         public void AddStudy(Study study)
@@ -41,7 +55,7 @@ namespace JobOffer.Domain.Entities
 
             if (_studies.Any(item => item == study))
             {
-                throw new InvalidOperationException("STUDY_REPEATED");
+                throw new InvalidOperationException(DomainErrorMessages.STUDY_REPEATED);
             }
             else
             {
@@ -55,7 +69,7 @@ namespace JobOffer.Domain.Entities
 
             if (_abilities.Any(item => item == ability))
             {
-                throw new InvalidOperationException("ABILITY_REPEATED");
+                throw new InvalidOperationException(DomainErrorMessages.ABILITY_REPEATED);
             }
             else
             {
@@ -66,19 +80,19 @@ namespace JobOffer.Domain.Entities
         public override void Validate()
         {
             if (string.IsNullOrEmpty(IdentityCard))
-                _errors.Append("IDENTITY_CARD_REQUIRED");
+                _errors.Append(DomainErrorMessages.IDENTITY_CARD_REQUIRED);
 
             if (string.IsNullOrEmpty(FirstName))
-                _errors.Append("FIRST_NAME_REQUIRED");
+                _errors.Append(DomainErrorMessages.FIRST_NAME_REQUIRED);
 
             if (string.IsNullOrEmpty(LastName))
-                _errors.Append("LAST_NAME");
+                _errors.Append(DomainErrorMessages.LAST_NAME_REQUIRED);
 
-            _jobHistory.ForEach(item => item.Validate());
+            _jobHistory?.ForEach(item => item.Validate());
 
-            _studies.ForEach(item => item.Validate());
+            _studies?.ForEach(item => item.Validate());
 
-            _abilities.ForEach(item => item.Validate());
+            _abilities?.ForEach(item => item.Validate());
 
             ThrowExceptionIfErrors();
         }

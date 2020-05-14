@@ -1,4 +1,5 @@
 ﻿using JobOffer.Domain.Base;
+using JobOffer.Domain.Constants;
 
 namespace JobOffer.Domain.Entities
 {
@@ -11,7 +12,7 @@ namespace JobOffer.Domain.Entities
         public override void Validate()
         {
             if (string.IsNullOrEmpty(Name))
-                _errors.Append("SKILL_NAME_REQUIRED");
+                _errors.Append(DomainErrorMessages.NAME_REQUIRED);
 
             ThrowExceptionIfErrors();
         }

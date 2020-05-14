@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JobOffer.Domain.Constants;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,21 +7,17 @@ namespace JobOffer.Domain.Entities
 {
     public class Recruiter : Person, IIdentity<Recruiter>
     {
-        private List<Company> _companies = new List<Company>();
+        private List<Company> _clientCompanies = new List<Company>();
 
-        public IEnumerable<Company> Companies { get => _companies; set => _companies = (List<Company>)value; }
+        public IEnumerable<Company> ClientCompanies { get => _clientCompanies; set => _clientCompanies = (List<Company>)value; }
 
-        public void CreateJobOffer()
+
+        public void AddClientCompany(Company company)
         {
+            if (_clientCompanies.Any(item => item.Name == company.Name))
+                throw new InvalidOperationException(DomainErrorMessages.COMPANY_REPEATED);
 
-        }
-
-        public void AddCompany(Company company)
-        {
-            if (_companies.Any(item => item.Name == company.Name))
-                throw new InvalidOperationException("COMPANY_REPEATED");
-
-            _companies.Add(company);
+            _clientCompanies.Add(company);
         }
     }
 }

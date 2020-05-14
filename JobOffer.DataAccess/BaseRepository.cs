@@ -1,7 +1,11 @@
-﻿using JobOffer.Domain.Entities;
+﻿using JobOffer.Domain.Base;
+using JobOffer.Domain.Entities;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 
 namespace JobOffer.DataAccess
@@ -18,25 +22,35 @@ namespace JobOffer.DataAccess
 
         protected IMongoCollection<T> Collection { get; set; }
 
-        public virtual Task<T> GetByIdAsync(string id)
+        protected string CreateId()
         {
-            return Collection.Find(p => p.Id == id).SingleOrDefaultAsync();
+            return ObjectId.GenerateNewId(DateTime.UtcNow).ToString();
         }
 
-        public virtual Task<ReplaceOneResult> UpsertAsync(T entity)
+        public virtual async Task<T> GetByIdAsync(string id)
+        {
+            return await Collection.Find(p => p.Id == id).SingleOrDefaultAsync();
+        }
+
+        public virtual async Task<bool> CheckEntityExistsAsync(string id)
+        {
+            return await Collection.Find(p => p.Id == id).CountDocumentsAsync() == 1;
+        }
+
+        public virtual async Task<ReplaceOneResult> UpsertAsync(T entity)
         {
             if (entity.Id == null)
             {
-                entity.Id = ObjectId.GenerateNewId(DateTime.UtcNow).ToString();
+                entity.Id = CreateId();
             }
 
-            return Collection.ReplaceOneAsync(p => p.Id == entity.Id, entity, new UpdateOptions() { IsUpsert = true });
+            return await Collection.ReplaceOneAsync(p => p.Id == entity.Id, entity, new ReplaceOptions() { IsUpsert = true });
             
         }
 
-        public virtual Task<DeleteResult> RemoveOneAsync(T entity)
+        public virtual async Task<DeleteResult> RemoveOneAsync(T entity)
         {
-            return Collection.DeleteOneAsync<T>(p => p.Id == entity.Id);
+            return await Collection.DeleteOneAsync<T>(p => p.Id == entity.Id);
         }
     }
 }

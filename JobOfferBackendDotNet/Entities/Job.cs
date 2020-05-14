@@ -1,9 +1,10 @@
 ﻿using JobOffer.Domain.Base;
+using JobOffer.Domain.Constants;
 using System;
 
 namespace JobOffer.Domain.Entities
 {
-    public class Job : BaseAgregate
+    public class Job : BaseEntity<Job>
     {
         public string CompanyName { get; set; }
 
@@ -15,7 +16,7 @@ namespace JobOffer.Domain.Entities
 
         public bool IsCurrentJob { get; set; }
 
-        public Job(string companyName, string positionn, DateTime from, bool isCurrentJob = false, DateTime to = default)
+        public Job(string companyName, string positionn, DateTime from, bool isCurrentJob, DateTime to = default)
         {
             CompanyName = companyName;
             Position = positionn;
@@ -29,16 +30,16 @@ namespace JobOffer.Domain.Entities
         public override void Validate()
         {
             if (string.IsNullOrEmpty(CompanyName))
-                _errors.Append("COMPANY_REQUIRED");
+                _errors.Append(DomainErrorMessages.COMPANY_REQUIRED);
 
             if (string.IsNullOrEmpty(Position))
-                _errors.Append("POSITION_REQUIRED");
+                _errors.Append(DomainErrorMessages.POSITION_REQUIRED);
 
-            if (From.Year == 0)
-                _errors.Append("FROM_REQUIRED");
+            if (From.Year == 1900)
+                _errors.Append(DomainErrorMessages.FROM_REQUIRED);
 
-            if (!IsCurrentJob && To.Year == 0)
-                _errors.Append("TO_REQUIRED_WHEN_ISNOT_CURRENT_JOB");
+            if (!IsCurrentJob && To.Year == 1900)
+                _errors.Append(DomainErrorMessages.TO_REQUIRED_WHEN_ISNOT_CURRENT_JOB);
 
             ThrowExceptionIfErrors();
         }

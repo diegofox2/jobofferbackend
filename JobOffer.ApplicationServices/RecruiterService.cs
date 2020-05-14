@@ -1,4 +1,5 @@
-﻿using JobOffer.DataAccess;
+﻿using JobOffer.ApplicationServices.Constants;
+using JobOffer.DataAccess;
 using JobOffer.Domain.Entities;
 using System;
 using System.Threading.Tasks;
@@ -18,7 +19,9 @@ namespace JobOffer.ApplicationServices
 
         public async Task<Recruiter> GetRecruiterAsync(Person person)
         {
-            return await _recruiterRepository.GetByIdAsync(person.Id);
+            var caca =  await _recruiterRepository.GetByIdAsync(person.Id);
+
+            return caca;
         }
 
 
@@ -29,18 +32,34 @@ namespace JobOffer.ApplicationServices
             await _recruiterRepository.UpsertAsync(recruiter);
         }
 
+        public async Task UpdateRecruiterAsync(Recruiter recruiter)
+        {
+            recruiter.Validate();
+
+            if (await _recruiterRepository.CheckEntityExistsAsync(recruiter.Id))
+            {
+                await _recruiterRepository.UpsertAsync(recruiter);
+            }
+            else
+            {
+                throw new InvalidOperationException(ServicesErrorMessages.RECRUITER_DOES_NOT_EXISTS);
+            }
+        }
+
         public async Task CreateCompanyAsync(Company company)
         {
             company.Validate();
 
             var existingCompany = await _companyRepository.GetCompanyAsync(company.Name, company.Activity);
 
-            if(existingCompany != null)
+            if (existingCompany != null)
             {
-                throw new InvalidOperationException("COMPANY_ALREADY_EXISTS");
+                throw new InvalidOperationException(ServicesErrorMessages.COMPANY_ALREADY_EXISTS);
             }
-
-            await _companyRepository.UpsertAsync(company);
+            else
+            {
+                await _companyRepository.UpsertAsync(company);
+            }
         }
     }
 }

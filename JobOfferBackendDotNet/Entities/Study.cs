@@ -1,4 +1,5 @@
 ﻿using JobOffer.Domain.Base;
+using JobOffer.Domain.Constants;
 
 namespace JobOffer.Domain.Entities
 {
@@ -9,8 +10,7 @@ namespace JobOffer.Domain.Entities
         Abandoned
     }
 
-
-    public class Study : BaseAgregate
+    public class Study : BaseEntity<Study>
     {
         public string Institution { get; set; }
 
@@ -30,10 +30,10 @@ namespace JobOffer.Domain.Entities
         public override void Validate()
         {
             if (string.IsNullOrEmpty(Institution))
-                _errors.AppendLine("INSTITUTION_REQUIRED");
+                _errors.AppendLine(DomainErrorMessages.INSTITUTION_REQUIRED);
 
             if (string.IsNullOrEmpty(Title))
-                _errors.AppendLine("TITLE_REQUIRED");
+                _errors.AppendLine(DomainErrorMessages.TITLE_REQUIRED);
             
             ThrowExceptionIfErrors();
         }
