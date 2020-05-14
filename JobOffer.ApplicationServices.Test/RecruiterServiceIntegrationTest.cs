@@ -146,7 +146,7 @@ namespace JobOffer.ApplicationServices.Test
             var updatedRecruiter = await _service.GetRecruiterAsync(recruiter);
 
             //Assert
-            Assert.AreEqual("Globant", updatedRecruiter.JobHistory.Single(j => j == jobToModify).CompanyName);
+            Assert.AreEqual("Globant", updatedRecruiter.JobHistory.Single(j => j == jobToModify).CompanyName, "Company name of a recruiter was now updated");
         }
 
     }

@@ -45,7 +45,7 @@ namespace JobOffer.DataAccess
             }
 
             return await Collection.ReplaceOneAsync(p => p.Id == entity.Id, entity, new ReplaceOptions() { IsUpsert = true });
-            
+
         }
 
         public virtual async Task<DeleteResult> RemoveOneAsync(T entity)

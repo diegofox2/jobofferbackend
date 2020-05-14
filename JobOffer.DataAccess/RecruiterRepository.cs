@@ -1,43 +1,27 @@
 ﻿using JobOffer.Domain.Entities;
 using MongoDB.Driver;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace JobOffer.DataAccess
 {
-    public class RecruiterRepository : BaseRepository<Recruiter>
+    public class RecruiterRepository : PersonRepository
     {
         public RecruiterRepository(IMongoDatabase database) : base(database)
         {
         }
 
-        public override Task<ReplaceOneResult> UpsertAsync(Recruiter entity)
+        public async new Task<Recruiter> GetByIdAsync(string id)
         {
-            entity.Studies.ToList().ForEach(study =>
-            {
-                if(!study.HasIdCreated)
-                {
-                    study.Id = CreateId();
-                }
-            });
+            return (Recruiter) await base.GetByIdAsync(id);
+        }
 
-            entity.JobHistory.ToList().ForEach(job =>
-            {
-                if(!job.HasIdCreated)
-                {
-                    job.Id = CreateId();
-                }
-            });
+        public override Task<ReplaceOneResult> UpsertAsync(Person entity)
+        {
+            var recruiter = entity as Recruiter;
 
-            entity.Abilities.ToList().ForEach(ability =>
-            {
-                if(!ability.HasIdCreated)
-                {
-                    ability.Id = CreateId();
-                }
-            });
-
-            entity.ClientCompanies.ToList().ForEach(company =>
+            recruiter.ClientCompanies.ToList().ForEach(company =>
             {
                 if(!company.HasIdCreated)
                 {
@@ -45,7 +29,7 @@ namespace JobOffer.DataAccess
                 }
             });
 
-            return base.UpsertAsync(entity);
+            return base.UpsertAsync(recruiter);
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿using JobOffer.DataAccess;
+﻿using JobOffer.ApplicationServices.Constants;
+using JobOffer.DataAccess;
 using JobOffer.Domain.Entities;
+using System;
 using System.Threading.Tasks;
 
 namespace JobOffer.ApplicationServices
@@ -23,6 +25,20 @@ namespace JobOffer.ApplicationServices
             person.Validate();
 
             await _personRepository.UpsertAsync(person);
+        }
+
+        public async Task UpdatePersonAsync(Person recruiter)
+        {
+            recruiter.Validate();
+
+            if (await _personRepository.CheckEntityExistsAsync(recruiter.Id))
+            {
+                await _personRepository.UpsertAsync(recruiter);
+            }
+            else
+            {
+                throw new InvalidOperationException(ServicesErrorMessages.PERSON_DOES_NOT_EXISTS);
+            }
         }
     }
 }

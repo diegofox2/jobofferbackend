@@ -17,11 +17,9 @@ namespace JobOffer.ApplicationServices
             _recruiterRepository = recruiterRepository;
         }
 
-        public async Task<Recruiter> GetRecruiterAsync(Person person)
+        public async Task<Recruiter> GetRecruiterAsync(Recruiter recruiter)
         {
-            var caca =  await _recruiterRepository.GetByIdAsync(person.Id);
-
-            return caca;
+            return await _recruiterRepository.GetByIdAsync(recruiter.Id);
         }
 
 
