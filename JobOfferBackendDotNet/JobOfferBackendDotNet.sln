@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOffer.Domain.Test", "..\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOffer.DataAccess", "..\JobOffer.DataAccess\JobOffer.DataAccess.csproj", "{9DF149BB-5637-405D-863A-53ED4B7284E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobOffer.ApplicationServices", "..\JobOffer.ApplicationServices\JobOffer.ApplicationServices.csproj", "{7A0838A3-7DB2-4C72-A34D-DFA1E2A9BB7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOffer.ApplicationServices", "..\JobOffer.ApplicationServices\JobOffer.ApplicationServices.csproj", "{7A0838A3-7DB2-4C72-A34D-DFA1E2A9BB7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobOffer.ApplicationServices.Test", "..\JobOffer.ApplicationServices.Test\JobOffer.ApplicationServices.Test.csproj", "{3D2F2725-3FE1-4E5A-9B08-101919F2742A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{7A0838A3-7DB2-4C72-A34D-DFA1E2A9BB7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A0838A3-7DB2-4C72-A34D-DFA1E2A9BB7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A0838A3-7DB2-4C72-A34D-DFA1E2A9BB7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D2F2725-3FE1-4E5A-9B08-101919F2742A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D2F2725-3FE1-4E5A-9B08-101919F2742A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D2F2725-3FE1-4E5A-9B08-101919F2742A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D2F2725-3FE1-4E5A-9B08-101919F2742A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
