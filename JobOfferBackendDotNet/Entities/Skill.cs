@@ -12,7 +12,9 @@ namespace JobOffer.Domain.Entities
         public override void Validate()
         {
             if (string.IsNullOrEmpty(Name))
-                _errors.Append(DomainErrorMessages.NAME_REQUIRED);
+            {
+                _errors.AppendLine(DomainErrorMessages.NAME_REQUIRED);
+            }
 
             ThrowExceptionIfErrors();
         }

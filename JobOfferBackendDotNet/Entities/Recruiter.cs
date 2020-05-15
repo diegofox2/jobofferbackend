@@ -15,7 +15,9 @@ namespace JobOffer.Domain.Entities
         public void AddClientCompany(Company company)
         {
             if (_clientCompanies.Any(item => item.Name == company.Name))
+            {
                 throw new InvalidOperationException(DomainErrorMessages.COMPANY_REPEATED);
+            }
 
             _clientCompanies.Add(company);
         }

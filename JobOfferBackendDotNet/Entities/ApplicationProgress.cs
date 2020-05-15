@@ -25,10 +25,10 @@ namespace JobOffer.Domain.Entities
         public override void Validate()
         {
             if (Date.Year == 1900)
-                _errors.Append(DomainErrorMessages.DATE_REQUIRED);
+                _errors.AppendLine(DomainErrorMessages.DATE_REQUIRED);
 
             if (Applicant == null)
-                _errors.Append(DomainErrorMessages.APPLICANT_REQUIRED);
+                _errors.AppendLine(DomainErrorMessages.APPLICANT_REQUIRED);
 
             ThrowExceptionIfErrors();
         }

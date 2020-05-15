@@ -65,7 +65,9 @@ namespace JobOffer.Domain.Base
         protected void ThrowExceptionIfErrors()
         {
             if (_errors != null && !string.IsNullOrEmpty(_errors.ToString()))
+            {
                 throw new InvalidOperationException($"Error: {_errors}");
+            }
         }
 
 

@@ -23,10 +23,10 @@ namespace JobOffer.Domain.Entities
         public override void Validate()
         {
             if (Skill == null)
-                _errors.Append(DomainErrorMessages.SKILL_REQUIRED);
+                _errors.AppendLine(DomainErrorMessages.SKILL_REQUIRED);
 
             if (Years == 0)
-                _errors.Append(DomainErrorMessages.YEAR_REQUIRED);
+                _errors.AppendLine(DomainErrorMessages.YEAR_REQUIRED);
 
             ThrowExceptionIfErrors();
         }
