@@ -1,5 +1,4 @@
-﻿using JobOffer.ApplicationServices.Constants;
-using JobOffer.ApplicationServices.Test.Base;
+﻿using JobOffer.ApplicationServices.Test.Base;
 using JobOffer.DataAccess;
 using JobOffer.Domain.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

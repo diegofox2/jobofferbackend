@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 
 namespace JobOffer.DataAccess
 {
-    public class PersonRepository : BaseRepository<Person>
+    public class PersonRepository: BaseRepository<Person>
     {
-        public PersonRepository(IMongoDatabase database) : base(database)
+        public PersonRepository(IMongoDatabase database):base(database)
         {
         }
 
-        public virtual new Task<ReplaceOneResult> UpsertAsync(Person entity)
+        public override Task<ReplaceOneResult> UpsertAsync(Person entity)
         {
             entity.Studies.ToList().ForEach(study =>
             {
@@ -39,5 +39,6 @@ namespace JobOffer.DataAccess
 
             return base.UpsertAsync(entity);
         }
+
     }
 }

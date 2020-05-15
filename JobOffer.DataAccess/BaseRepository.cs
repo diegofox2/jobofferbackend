@@ -1,11 +1,7 @@
-﻿using JobOffer.Domain.Base;
-using JobOffer.Domain.Entities;
+﻿using JobOffer.Domain.Entities;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 
 namespace JobOffer.DataAccess
@@ -17,7 +13,7 @@ namespace JobOffer.DataAccess
         public BaseRepository(IMongoDatabase database)
         {
             _database = database;
-            Collection = _database.GetCollection<T>(nameof(T));
+            Collection = _database.GetCollection<T>(typeof(T).Name);
         }
 
         protected IMongoCollection<T> Collection { get; set; }
