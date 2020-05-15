@@ -15,12 +15,17 @@ namespace JobOffer.ApplicationServices.Test
         private readonly RecruiterService _service;
         private readonly RecruiterRepository _recruiterRepository;
         private readonly CompanyRepository _companyRepository;
+        private readonly JobOfferRepository _jobOfferRepository;
+        private readonly SkillRepository _skillRepository;
 
         public RecruiterServiceIntegrationTest()
         {
             _recruiterRepository = new RecruiterRepository(_database);
             _companyRepository = new CompanyRepository(_database);
-            _service = new RecruiterService(_companyRepository, _recruiterRepository);
+            _jobOfferRepository = new JobOfferRepository(_database);
+            _skillRepository = new SkillRepository(_database);
+
+            _service = new RecruiterService(_companyRepository, _recruiterRepository, _jobOfferRepository);
         }
 
         [TestInitialize]
@@ -147,6 +152,50 @@ namespace JobOffer.ApplicationServices.Test
 
             //Assert
             Assert.AreEqual("Globant", updatedRecruiter.JobHistory.Single(j => j == jobToModify).CompanyName, "Company name of a recruiter was now updated");
+        }
+
+        [TestMethod]
+        public async Task CreateJobOffer_SaveSuccessfully_WhenJobOfferDataIsCorrect()
+        {
+            //Arrange
+            var recruiter = new Recruiter() { FirstName = "Maidana", LastName = "Patricia", IdentityCard = "28123456" };
+
+            await _recruiterRepository.UpsertAsync(recruiter);
+
+            var company = new Company("Acme", "Software");
+
+            recruiter.AddClientCompany(company);
+            /*
+            var skill1 = new Skill() { Name = "C#" };
+            var skill2 = new Skill() { Name = "Javascript" };
+            var skill3 = new Skill() { Name = "React" };
+
+            await _skillRepository.UpsertAsync(skill1);
+            await _skillRepository.UpsertAsync(skill2);
+            await _skillRepository.UpsertAsync(skill3);
+            */
+            var jobOffer = new Domain.Entities.JobOffer() 
+            { 
+                Title = "Analista Funcional", 
+                Description = "Se necesita analista funcional con bla bla bla",
+                Owner = recruiter,
+                Date = DateTime.Now.Date
+            };
+            /*
+            jobOffer.AddSkillRequired(new SkillRequired(skill1, 5,true));
+            jobOffer.AddSkillRequired(new SkillRequired(skill2, 4, false));
+            jobOffer.AddSkillRequired(new SkillRequired(skill3, 2, false));
+            */
+
+            //Act
+            await _service.CreateJobOffer(jobOffer, recruiter);
+
+            var jobOfferCreated = await _jobOfferRepository.GetByIdAsync(jobOffer.Id);
+
+
+            //Assert
+            Assert.AreEqual(jobOffer, jobOfferCreated, "Job offer was not saved" ); 
+
         }
 
     }

@@ -6,13 +6,24 @@ namespace JobOffer.Domain.Entities
 {
     public class Application : BaseEntity<Application>
     {
-        public DateTime Date { get; set; }
+        private List<ApplicationProgress> _applicationProgress = new List<ApplicationProgress>();
 
-        public IEnumerable<ApplicationProgress> Progress { get; set; }
+        public DateTime Date { get;}
+
+        public IEnumerable<ApplicationProgress> Progress { get => _applicationProgress; set => _applicationProgress = (List<ApplicationProgress>)value; }
 
         public bool IsActive { get; set; }
 
-        public IEnumerable<Person> Applicants { get; set; }
+        public Person Applicant { get; }
+
+        public Application(Person applicant, DateTime date)
+        {
+            Applicant = applicant;
+            IsActive = true;
+            Date = date;
+
+            _applicationProgress.Add(new ApplicationProgress(applicant, date, ApplicationState.Requested));
+        }
 
 
         public override void Validate()

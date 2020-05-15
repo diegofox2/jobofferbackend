@@ -12,7 +12,7 @@ namespace JobOffer.DataAccess
         }
 
 
-        public override Task<ReplaceOneResult> UpsertAsync(Recruiter entity)
+        public override async Task<ReplaceOneResult> UpsertAsync(Recruiter entity)
         {
             entity.ClientCompanies.ToList().ForEach(company =>
             {
@@ -46,7 +46,7 @@ namespace JobOffer.DataAccess
                 }
             });
 
-            return base.UpsertAsync(entity);
+            return await base.UpsertAsync(entity);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using JobOffer.Domain.Base;
 using JobOffer.Domain.Constants;
+using MongoDB.Driver.GeoJsonObjectModel.Serializers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,6 +78,21 @@ namespace JobOffer.Domain.Entities
             }
         }
 
+        public void ApplyToJobOffer(JobOffer jobOffer)
+        {
+            var mandatorySkills = jobOffer.SkillsRequired.Where(s => s.IsMandatory).Select(s => s.Skill );
+
+            if(HasAnyMandatorySkills(mandatorySkills))
+            {
+                jobOffer.RecieveApplicant(this);
+            }
+            else
+            {
+                throw new InvalidOperationException(DomainErrorMessages.PERSON_DOES_NOT_HAVE_ALL_MANDATORY_SKILLS);
+            }
+            
+        }
+
         public override void Validate()
         {
             if (string.IsNullOrEmpty(IdentityCard))
@@ -95,6 +111,21 @@ namespace JobOffer.Domain.Entities
             _abilities?.ForEach(item => item.Validate());
 
             ThrowExceptionIfErrors();
+        }
+
+        private bool HasAnyMandatorySkills(IEnumerable<Skill> skillsRequired)
+        {
+            var result = false;
+
+            for (int s = 0; s < skillsRequired.Count(); s++)
+            {
+                if (_abilities.Any(a => a.Skill == skillsRequired.ElementAt(s)))
+                {
+                    return true;
+                }
+            }
+
+            return result;
         }
     }
 }

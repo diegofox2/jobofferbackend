@@ -1,7 +1,9 @@
 ﻿using JobOffer.ApplicationServices.Constants;
 using JobOffer.DataAccess;
+using JobOffer.Domain.Constants;
 using JobOffer.Domain.Entities;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace JobOffer.ApplicationServices
@@ -10,11 +12,13 @@ namespace JobOffer.ApplicationServices
     {
         private readonly CompanyRepository _companyRepository;
         private readonly RecruiterRepository _recruiterRepository;
+        private readonly JobOfferRepository _jobOfferRepository;
 
-        public RecruiterService(CompanyRepository companyRepository, RecruiterRepository recruiterRepository)
+        public RecruiterService(CompanyRepository companyRepository, RecruiterRepository recruiterRepository, JobOfferRepository jobOfferRepository)
         {
             _companyRepository = companyRepository;
             _recruiterRepository = recruiterRepository;
+            _jobOfferRepository = jobOfferRepository;
         }
 
         public async Task<Recruiter> GetRecruiterAsync(Recruiter recruiter)
@@ -58,6 +62,25 @@ namespace JobOffer.ApplicationServices
             {
                 await _companyRepository.UpsertAsync(company);
             }
+        }
+
+        public async Task CreateJobOffer(JobOffer.Domain.Entities.JobOffer jobOffer, Recruiter recruiter)
+        {
+            jobOffer.Validate();
+
+            if(jobOffer.HasIdCreated)
+            {
+                throw new InvalidOperationException(DomainErrorMessages.JOBOFFER_ALREADY_EXISTS);
+            }
+            
+            var jobOffersCreatedByRecruiter = await _jobOfferRepository.GetActiveJobOffer(recruiter);
+
+            if (jobOffersCreatedByRecruiter.Any(j => j.Company == jobOffer.Company && j.Title == jobOffer.Title))
+            {
+                throw new InvalidOperationException(DomainErrorMessages.JOBOFFER_ALREADY_EXISTS);
+            }
+
+            await _jobOfferRepository.UpsertAsync(jobOffer);
         }
     }
 }

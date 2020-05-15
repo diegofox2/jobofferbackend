@@ -6,21 +6,30 @@ namespace JobOffer.Domain.Entities
 {
     public enum ApplicationState
     {
-        Active,
+        Requested,
         Rejected,
-        Accepted,
-        Closed
+        Accepted
     }
 
-    public class ApplicationProgress : BaseEntity<ApplicationProgress>
+    public class ApplicationProgress : BaseValueObject
     {
-        public DateTime Date { get; set; }
+        public DateTime Date { get; }
 
-        public Person Applicant { get; set; }
+        public Person Applicant { get; }
 
-        public ApplicationState State { get; set; }
+        public ApplicationState State { get; }
 
-        public string Comment { get; set; }
+        public string Comment { get; }
+
+        public ApplicationProgress(Person applicant, DateTime date, ApplicationState state, string comment = default)
+        {
+            Date = date;
+            Applicant = applicant;
+            State = state;
+            Comment = comment;
+
+            Validate();
+        }
 
         public override void Validate()
         {

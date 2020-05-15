@@ -1,19 +1,35 @@
 ﻿using JobOffer.Domain.Base;
+using JobOffer.Domain.Constants;
 
 namespace JobOffer.Domain.Entities
 {
-    public class SkillRequired : BaseEntity<SkillRequired>
+    public class SkillRequired : BaseValueObject
     {
-        public Skill Skill { get; set; }
+        public Skill Skill { get; }
 
-        public byte Years { get; set; }
+        public byte Years { get; }
 
-        public bool IsMandatory { get; set; }
+        public bool IsMandatory { get; }
+
+        public SkillRequired(Skill skill ,byte years, bool isMandatory = default)
+        {
+            Skill = skill;
+            Years = years;
+            IsMandatory = isMandatory;
+
+            Validate();
+        }
 
 
         public override void Validate()
         {
-            throw new System.NotImplementedException();
+            if (Skill == null)
+                _errors.AppendLine(DomainErrorMessages.SKILL_REQUIRED);
+
+            if (Years < 1)
+                _errors.AppendLine(DomainErrorMessages.YEAR_REQUIRED);
+
+            ThrowExceptionIfErrors();
         }
     }
 }

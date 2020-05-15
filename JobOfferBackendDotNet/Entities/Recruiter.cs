@@ -21,5 +21,6 @@ namespace JobOffer.Domain.Entities
 
             _clientCompanies.Add(company);
         }
+
     }
 }

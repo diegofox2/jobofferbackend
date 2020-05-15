@@ -23,5 +23,9 @@ namespace JobOffer.Domain.Constants
         public const string COMPANY_REPEATED = "COMPANY_REPEATED";
         public const string INSTITUTION_REQUIRED = "INSTITUTION_REQUIRED";
         public const string TITLE_REQUIRED = "TITLE_REQUIRED";
+        public const string APPLICANT_ALREADY_EXISTS = "APPLICANT_ALREADY_EXISTS";
+        public const string SKILL_REQUIRED_ALREADY_EXISTS = "SKILL_REQUIRED_ALREADY_EXISTS";
+        public const string PERSON_DOES_NOT_HAVE_ALL_MANDATORY_SKILLS = "PERSON_DOES_NOT_HAVE_ALL_MANDATORY_SKILLS";
+        public const string JOBOFFER_ALREADY_EXISTS = "JOBOFFER_ALREADY_EXISTS";
     }
 }

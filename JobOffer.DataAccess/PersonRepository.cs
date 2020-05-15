@@ -11,7 +11,7 @@ namespace JobOffer.DataAccess
         {
         }
 
-        public override Task<ReplaceOneResult> UpsertAsync(Person entity)
+        public override async Task<ReplaceOneResult> UpsertAsync(Person entity)
         {
             entity.Studies.ToList().ForEach(study =>
             {
@@ -37,7 +37,7 @@ namespace JobOffer.DataAccess
                 }
             });
 
-            return base.UpsertAsync(entity);
+            return await base.UpsertAsync(entity);
         }
 
     }
