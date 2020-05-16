@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 namespace JobOffer.ApplicationServices.Test
 {
     [TestClass]
+    [TestCategory("IntegrationTest")]
     public class RecruiterServiceIntegrationTest : IntegrationTestBase
     {
         private readonly RecruiterService _service;
@@ -42,7 +43,7 @@ namespace JobOffer.ApplicationServices.Test
         }
 
         [TestMethod]
-        [TestCategory("IntegrationTest")]
+        
         public async Task CreateCompany_SaveCompanySuccessfully_WhenCompanyDataIsCorrectAndCompanyDoesNotExists()
         {
 
@@ -60,7 +61,6 @@ namespace JobOffer.ApplicationServices.Test
         }
 
         [TestMethod]
-        [TestCategory("IntegrationTest")]
         public async Task CreateCompany_ThrowsError_WhenCompanyAlreadyExists()
         {
             //Arrage
@@ -88,7 +88,6 @@ namespace JobOffer.ApplicationServices.Test
         }
 
         [TestMethod]
-        [TestCategory("IntegrationTest")]
         public async Task CreateRecruiter_SaveCruiterSuccessfully_WhenRecruiterDataIsCorrectAndRecruiterNotExists()
         {
             //Arrange
@@ -116,7 +115,6 @@ namespace JobOffer.ApplicationServices.Test
         }
 
         [TestMethod]
-        [TestCategory("IntegrationTest")]
         public async Task UpdateRecruiter_SaveCruiterSuccessfully_WhenRecruiterDataIsCorrectAndRecruiterExists()
         {
             //Arrange
@@ -165,7 +163,7 @@ namespace JobOffer.ApplicationServices.Test
             var company = new Company("Acme", "Software");
 
             recruiter.AddClientCompany(company);
-            /*
+            
             var skill1 = new Skill() { Name = "C#" };
             var skill2 = new Skill() { Name = "Javascript" };
             var skill3 = new Skill() { Name = "React" };
@@ -173,7 +171,7 @@ namespace JobOffer.ApplicationServices.Test
             await _skillRepository.UpsertAsync(skill1);
             await _skillRepository.UpsertAsync(skill2);
             await _skillRepository.UpsertAsync(skill3);
-            */
+            
             var jobOffer = new Domain.Entities.JobOffer() 
             { 
                 Title = "Analista Funcional", 
@@ -181,11 +179,11 @@ namespace JobOffer.ApplicationServices.Test
                 Owner = recruiter,
                 Date = DateTime.Now.Date
             };
-            /*
+            
             jobOffer.AddSkillRequired(new SkillRequired(skill1, 5,true));
             jobOffer.AddSkillRequired(new SkillRequired(skill2, 4, false));
             jobOffer.AddSkillRequired(new SkillRequired(skill3, 2, false));
-            */
+            
 
             //Act
             await _service.CreateJobOffer(jobOffer, recruiter);

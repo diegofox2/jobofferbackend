@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 namespace JobOffer.ApplicationServices.Test
 {
     [TestClass]
+    [TestCategory("IntegrationTest")]
     public class PersonServiceIntegrationTest : IntegrationTestBase
     {
         private readonly PersonService _service;
@@ -35,7 +36,6 @@ namespace JobOffer.ApplicationServices.Test
 
         
         [TestMethod]
-        [TestCategory("IntegrationTest")]
         public async Task CreatePerson_SavePersonSuccessfully_WhenPersonDataIsCorrectAndPersonNotExists()
         {
             //Arrange
@@ -61,7 +61,6 @@ namespace JobOffer.ApplicationServices.Test
         }
 
         [TestMethod]
-        [TestCategory("IntegrationTest")]
         public async Task UpdatePerson_SavePersonSuccessfully_WhenPersonDataIsCorrectAndPersonExists()
         {
             //Arrange

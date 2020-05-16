@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace JobOffer.Domain.Base
@@ -9,21 +11,21 @@ namespace JobOffer.Domain.Base
 
         public static bool operator ==(BaseValueObject source, BaseValueObject reference)
         {
-            var result = false;
+            var results = new List<bool>();
 
             foreach (var property in source.GetType().GetProperties())
             {
                 if (property.GetValue(source) == null && reference.GetType().GetProperty(property.Name).GetValue(reference) == null)
                 {
-                    return true;
+                    results.Add(true);
                 }
                 else
                 {
-                    result = property.GetValue(source).Equals(reference.GetType().GetProperty(property.Name).GetValue(reference));
+                    results.Add(property.GetValue(source).Equals(reference.GetType().GetProperty(property.Name).GetValue(reference)));
                 }
             }
 
-            return result;
+            return results.All(p=> p == true);
         }
 
         public static bool operator !=(BaseValueObject source, BaseValueObject reference)
