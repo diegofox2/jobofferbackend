@@ -3,7 +3,7 @@ using JobOffer.Domain.Constants;
 
 namespace JobOffer.Domain.Entities
 {
-    public class Ability : BaseEntity<Ability>
+    public class Ability : BaseValueObject
     {
         public Skill Skill { get; set; }
 
@@ -11,7 +11,7 @@ namespace JobOffer.Domain.Entities
 
         public string Comment { get; set; }
 
-        public Ability(Skill skill, byte years, string comment)
+        public Ability(Skill skill, byte years, string comment = default)
         {
             Skill = skill;
             Years = years;

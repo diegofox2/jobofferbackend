@@ -1,6 +1,5 @@
 ﻿using JobOffer.Domain.Base;
 using JobOffer.Domain.Constants;
-using MongoDB.Driver.GeoJsonObjectModel.Serializers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,32 +24,25 @@ namespace JobOffer.Domain.Entities
 
         public IEnumerable<Ability> Abilities { get => _abilities; set => _abilities = (List<Ability>) value; }
 
-        public void AddJobHistory(Job job)
+        public void SetPreviousJob(Job job, Job jobToReplace = default)
         {
-            if (_jobHistory.Any(item => item.ComparePropertiesTo(job)))
+            if (_jobHistory.Any(item => item == job))
             {
                 throw new InvalidOperationException(DomainErrorMessages.JOB_REPEATED);
             }
             else
             {
+                if (jobToReplace != null && _jobHistory.Exists(s => s.GetHashCode() == jobToReplace.GetHashCode()))
+                {
+                    _jobHistory.Remove(jobToReplace);
+                }
+
                 _jobHistory.Add(job);
             }
         }
 
-        public void UpdateJobHistory(Job job)
-        {
-            var jobToUpdate = _jobHistory.Find(j => j == job);
-            
-            if(jobToUpdate == null)
-            {
-                throw new InvalidOperationException(DomainErrorMessages.JOB_DOES_NOT_EXISTS);
-            }
 
-            _jobHistory.Remove(jobToUpdate);
-            _jobHistory.Add(job);
-        }
-
-        public void AddStudy(Study study)
+        public void SetStudy(Study study, Study studyToReplace = default)
         {
             study.Validate();
 
@@ -60,11 +52,16 @@ namespace JobOffer.Domain.Entities
             }
             else
             {
+                if (studyToReplace != null && _studies.Exists(s => s.GetHashCode() == studyToReplace.GetHashCode()))
+                {
+                    _studies.Remove(studyToReplace);
+                }
+
                 _studies.Add(study); 
             }
         }
 
-        public void AddAbility(Ability ability)
+        public void SetAbility(Ability ability, Ability abilityToReplace = default)
         {
             ability.Validate();
 
@@ -74,6 +71,11 @@ namespace JobOffer.Domain.Entities
             }
             else
             {
+                if(abilityToReplace != null && _abilities.Exists(a => a.GetHashCode() == abilityToReplace.GetHashCode()))
+                {
+                    _abilities.Remove(abilityToReplace);
+                }
+
                 _abilities.Add(ability);
             }
         }

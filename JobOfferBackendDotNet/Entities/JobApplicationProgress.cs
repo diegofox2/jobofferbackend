@@ -11,7 +11,7 @@ namespace JobOffer.Domain.Entities
         Accepted
     }
 
-    public class ApplicationProgress : BaseValueObject
+    public class JobApplicationProgress : BaseValueObject
     {
         public DateTime Date { get; }
 
@@ -21,7 +21,7 @@ namespace JobOffer.Domain.Entities
 
         public string Comment { get; }
 
-        public ApplicationProgress(Person applicant, DateTime date, ApplicationState state, string comment = default)
+        public JobApplicationProgress(Person applicant, DateTime date, ApplicationState state, string comment = default)
         {
             Date = date;
             Applicant = applicant;

@@ -22,30 +22,6 @@ namespace JobOffer.DataAccess
                 }
             });
 
-            entity.Studies.ToList().ForEach(study =>
-            {
-                if (!study.HasIdCreated)
-                {
-                    study.Id = CreateId();
-                }
-            });
-
-            entity.JobHistory.ToList().ForEach(job =>
-            {
-                if (!job.HasIdCreated)
-                {
-                    job.Id = CreateId();
-                }
-            });
-
-            entity.Abilities.ToList().ForEach(ability =>
-            {
-                if (!ability.HasIdCreated)
-                {
-                    ability.Id = CreateId();
-                }
-            });
-
             return await base.UpsertAsync(entity);
         }
     }

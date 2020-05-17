@@ -15,18 +15,6 @@ namespace JobOffer.Domain.Test
                 public string MyProp { get; set; }
             }
 
-            class ValueObjectReference : BaseValueObject
-            {
-                public string MyProp { get; set; }
-
-                public SomeValueObject SomeValueObjectProperty { get; set; }
-
-                public override void Validate()
-                {
-                }
-            }
-
-
             class SomeValueObject : BaseValueObject
             {
 
@@ -41,6 +29,18 @@ namespace JobOffer.Domain.Test
 
                 }
             }
+
+            class ValueObjectWithAnotherValueObject : BaseValueObject
+            {
+                public string MyProp { get; set; }
+
+                public SomeValueObject SomeValueObjectProperty { get; set; }
+
+                public override void Validate()
+                {
+                }
+            }
+
 
             [TestMethod]
             public void AValueObject_IsEqualToAnotherOne_WhenBothHaveSamePropertyValues()
@@ -127,9 +127,9 @@ namespace JobOffer.Domain.Test
 
                 var b = new SomeValueObject() { SomeIntProp = 1, SomeStringProp = "MyString" };
 
-                var c = new ValueObjectReference() { MyProp = "MyString", SomeValueObjectProperty = a };
+                var c = new ValueObjectWithAnotherValueObject() { MyProp = "MyString", SomeValueObjectProperty = a };
 
-                var d = new ValueObjectReference() { MyProp = "MyString", SomeValueObjectProperty = b };
+                var d = new ValueObjectWithAnotherValueObject() { MyProp = "MyString", SomeValueObjectProperty = b };
 
                 //Assert
                 Assert.IsTrue(a == b);
@@ -143,31 +143,29 @@ namespace JobOffer.Domain.Test
 
                 var b = new SomeValueObject() { SomeIntProp = 2, SomeStringProp = "MyString" };
 
-                var c = new ValueObjectReference() { MyProp = "MyString", SomeValueObjectProperty = a };
+                var c = new ValueObjectWithAnotherValueObject() { MyProp = "MyString", SomeValueObjectProperty = a };
 
-                var d = new ValueObjectReference() { MyProp = "MyString", SomeValueObjectProperty = b };
+                var d = new ValueObjectWithAnotherValueObject() { MyProp = "MyString", SomeValueObjectProperty = b };
 
                 //Assert
                 Assert.IsTrue(a != b);
             }
 
-            /*
+            
             [TestMethod]
             public void GetHashCode_ReturnsSameValue_WhenTwoValueObjectAreEquals()
             {
                 //Arrange
                 var a = new SomeValueObject() { SomeIntProp = 1, SomeStringProp = "MyString" };
 
-                var b = new SomeValueObject() { SomeIntProp = 1, SomeStringProp = "MyString" };
+                var c = new ValueObjectWithAnotherValueObject() { MyProp = "MyString", SomeValueObjectProperty = a };
 
-                var c = new ValueObjectReference() { MyProp = "MyString", SomeValueObjectProperty = a };
-
-                var d = new ValueObjectReference() { MyProp = "MyString", SomeValueObjectProperty = a };
+                var d = new ValueObjectWithAnotherValueObject() { MyProp = "MyString", SomeValueObjectProperty = a };
 
                 //Assert
                 Assert.AreEqual(c.GetHashCode(), d.GetHashCode());
             }
-            
+
             [TestMethod]
             public void GetHashCode_ReturnsDifferentValues_WhenTwoValueObjectAreNotEquals()
             {
@@ -176,14 +174,13 @@ namespace JobOffer.Domain.Test
 
                 var b = new SomeValueObject() { SomeIntProp = 1, SomeStringProp = "MyString" };
 
-                var c = new ValueObjectReference() { MyProp = "MyString", SomeValueObjectProperty = a };
+                var c = new ValueObjectWithAnotherValueObject() { MyProp = "MyString", SomeValueObjectProperty = a };
 
-                var d = new ValueObjectReference() { SomeValueObjectProperty = b };
+                var d = new ValueObjectWithAnotherValueObject() { SomeValueObjectProperty = b };
 
                 //Assert
                 Assert.AreNotEqual(c.GetHashCode(), d.GetHashCode());
             }
-            */
 
         }
     }

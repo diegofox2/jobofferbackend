@@ -4,7 +4,7 @@ using System;
 
 namespace JobOffer.Domain.Entities
 {
-    public class Job : BaseEntity<Job>
+    public class Job : BaseValueObject
     {
         public string CompanyName { get; set; }
 
@@ -16,10 +16,10 @@ namespace JobOffer.Domain.Entities
 
         public bool IsCurrentJob { get; set; }
 
-        public Job(string companyName, string positionn, DateTime from, bool isCurrentJob, DateTime to = default)
+        public Job(string companyName, string position, DateTime from, bool isCurrentJob, DateTime to = default)
         {
             CompanyName = companyName;
-            Position = positionn;
+            Position = position;
             From = from;
             To = to;
             IsCurrentJob = isCurrentJob;

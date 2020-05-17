@@ -9,7 +9,7 @@ namespace JobOffer.Domain.Entities
 {
     public class JobOffer : BaseEntity<JobOffer>
     {
-        private List<Application> _applications = new List<Application>();
+        private List<JobApplication> _applications = new List<JobApplication>();
         private List<SkillRequired> _skillsRequired = new List<SkillRequired>();
 
         public DateTime Date { get; set; }
@@ -18,7 +18,7 @@ namespace JobOffer.Domain.Entities
 
         public string Description { get; set; }
 
-        public IEnumerable<Application> Applications { get => _applications; set => _applications = (List<Application>)value; }
+        public IEnumerable<JobApplication> Applications { get => _applications; set => _applications = (List<JobApplication>)value; }
 
         public Company Company { get; set; }
 
@@ -47,9 +47,19 @@ namespace JobOffer.Domain.Entities
                 throw new InvalidOperationException(DomainErrorMessages.APPLICANT_ALREADY_EXISTS);
             }
 
-            var application = new Application(person, DateTime.Now.Date);
+            var application = new JobApplication(person, DateTime.Now.Date);
 
             _applications.Add(application);
+        }
+
+        public void AcceptApplicant(Person person)
+        {
+            if (!_applications.Any(a => a.Applicant == person))
+            {
+                throw new InvalidOperationException(DomainErrorMessages.APPLICANT_DOES_NOT_EXISTS);
+            }
+
+            _applications.Single(a => a.Applicant == person).SetAcceptedStatus();
         }
 
         public override void Validate()

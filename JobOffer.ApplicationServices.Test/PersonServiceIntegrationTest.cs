@@ -46,10 +46,10 @@ namespace JobOffer.ApplicationServices.Test
                 IdentityCard = "28123456"
             };
 
-            person.AddJobHistory(new Job("Accenture", "Sr.Talent Adquision", new DateTime(2015,5,1), true));
-            person.AddJobHistory(new Job("Accenture", "Sr.Talent Adquision", new DateTime(2014, 1, 1), false, new DateTime(2015,4,30)));
+            person.SetPreviousJob(new Job("Accenture", "Sr.Talent Adquision", new DateTime(2015,5,1), true));
+            person.SetPreviousJob(new Job("Accenture", "Sr.Talent Adquision", new DateTime(2014, 1, 1), false, new DateTime(2015,4,30)));
 
-            person.AddStudy(new Study("UBA", "Lic.Relaciones del Trabajo", StudyStatus.Completed));
+            person.SetStudy(new Study("UBA", "Lic.Relaciones del Trabajo", StudyStatus.Completed));
 
             //Act
             await _service.CreatePersonAsync(person);
@@ -71,10 +71,10 @@ namespace JobOffer.ApplicationServices.Test
                 IdentityCard = "28123456"
             };
 
-            person.AddJobHistory(new Job("Accenture", "Sr.Talent Adquision", new DateTime(2015, 5, 1), true));
-            person.AddJobHistory(new Job("Accenture", "Sr.Talent Adquision", new DateTime(2014, 1, 1), false, new DateTime(2015, 4, 30)));
+            person.SetPreviousJob(new Job("Accenture", "Sr.Talent Adquision", new DateTime(2015, 5, 1), true));
+            person.SetPreviousJob(new Job("Accenture", "Sr.Talent Adquision", new DateTime(2014, 1, 1), false, new DateTime(2015, 4, 30)));
 
-            person.AddStudy(new Study("UBA", "Lic.Relaciones del Trabajo", StudyStatus.Completed));
+            person.SetStudy(new Study("UBA", "Lic.Relaciones del Trabajo", StudyStatus.Completed));
 
             await _service.CreatePersonAsync(person);
 
@@ -82,18 +82,20 @@ namespace JobOffer.ApplicationServices.Test
 
             //Act
 
-            var jobToModify = savedPerson.JobHistory.Where(j => j.CompanyName == "Accenture" && j.From.Date == new DateTime(2014, 1, 1).Date).Single();
+            var previousJob = savedPerson.JobHistory.Where(j => j.CompanyName == "Accenture" && j.From.Date == new DateTime(2014, 1, 1).Date).Single();
 
-            jobToModify.CompanyName = "Globant";
+            var newJob = (Job)previousJob.Clone();
 
-            person.UpdateJobHistory(jobToModify);
+            newJob.CompanyName = "Globant";
+
+            person.SetPreviousJob(newJob, previousJob);
 
             await _service.UpdatePersonAsync(person);
 
             var updatedPerson = await _service.GetPersonAsync(person);
 
             //Assert
-            Assert.AreEqual("Globant", updatedPerson.JobHistory.Single(j => j == jobToModify).CompanyName, "Company name of a person was now updated");
+            Assert.AreEqual("Globant", updatedPerson.JobHistory.Single(j => j == newJob).CompanyName, "Company name of a person was now updated");
         }
 
     }

@@ -5,6 +5,7 @@ using JobOffer.Domain.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace JobOffer.ApplicationServices.Test
@@ -100,10 +101,22 @@ namespace JobOffer.ApplicationServices.Test
 
             recruiter.AddClientCompany(new Company("Acme", "Software"));
 
-            recruiter.AddJobHistory(new Job("Accenture", "Sr.Talent Adquision", new DateTime(2015,5,1), true));
-            recruiter.AddJobHistory(new Job("Accenture", "Sr.Talent Adquision", new DateTime(2014, 1, 1), false, new DateTime(2015,4,30)));
+            recruiter.SetPreviousJob(new Job("Accenture", "Sr.Talent Adquision", new DateTime(2015,5,1), true));
+            recruiter.SetPreviousJob(new Job("Accenture", "Sr.Talent Adquision", new DateTime(2014, 1, 1), false, new DateTime(2015,4,30)));
 
-            recruiter.AddStudy(new Study("UBA", "Lic.Relaciones del Trabajo", StudyStatus.Completed));
+            recruiter.SetStudy(new Study("UBA", "Lic.Relaciones del Trabajo", StudyStatus.Completed));
+
+            var cSharp = new Skill() { Name = "C#" };
+            var javascript = new Skill() { Name = "Javascript" };
+            var react = new Skill() { Name = "React" };
+
+            await _skillRepository.UpsertAsync(cSharp);
+            await _skillRepository.UpsertAsync(javascript);
+            await _skillRepository.UpsertAsync(react);
+
+            recruiter.SetAbility(new Ability(cSharp, 10));
+            recruiter.SetAbility(new Ability(javascript, 8));
+            recruiter.SetAbility(new Ability(react, 7));
 
             //Act
             await _service.CreateRecruiterAsync(recruiter);
@@ -127,29 +140,51 @@ namespace JobOffer.ApplicationServices.Test
 
             recruiter.AddClientCompany(new Company("Acme", "Software"));
 
-            recruiter.AddJobHistory(new Job("Accenture", "Sr.Talent Adquision", new DateTime(2015, 5, 1), true));
-            recruiter.AddJobHistory(new Job("Accenture", "Sr.Talent Adquision", new DateTime(2014, 1, 1), false, new DateTime(2015, 4, 30)));
+            recruiter.SetPreviousJob(new Job("Accenture", "Sr.Talent Adquision", new DateTime(2015, 5, 1), true));
+            recruiter.SetPreviousJob(new Job("Accenture", "Sr.Talent Adquision", new DateTime(2014, 1, 1), false, new DateTime(2015, 4, 30)));
 
-            recruiter.AddStudy(new Study("UBA", "Lic.Relaciones del Trabajo", StudyStatus.Completed));
+            recruiter.SetStudy(new Study("UBA", "Lic.Relaciones del Trabajo", StudyStatus.Completed));
+
+            var cSharp = new Skill() { Name = "C#" };
+            var javascript = new Skill() { Name = "Javascript" };
+            var react = new Skill() { Name = "React" };
+
+            await _skillRepository.UpsertAsync(cSharp);
+            await _skillRepository.UpsertAsync(javascript);
+            await _skillRepository.UpsertAsync(react);
+
+            var cSharpAbility = new Ability(cSharp, 10);
+            var javascriptAbility = new Ability(javascript, 8);
+
+            recruiter.SetAbility(cSharpAbility);
+            recruiter.SetAbility(javascriptAbility);
 
             await _service.CreateRecruiterAsync(recruiter);
 
-            var savedRecruiter = await _service.GetRecruiterAsync(recruiter);
-
             //Act
 
-            var jobToModify = savedRecruiter.JobHistory.Where(j => j.CompanyName == "Accenture" && j.From.Date == new DateTime(2014, 1, 1).Date).Single();
+            var savedRecruiter = await _service.GetRecruiterAsync(recruiter);
 
-            jobToModify.CompanyName = "Globant";
+            var previousJob = savedRecruiter.JobHistory.Where(j => j.CompanyName == "Accenture" && j.From.Date == new DateTime(2014, 1, 1).Date).Single();
 
-            recruiter.UpdateJobHistory(jobToModify);
+            var newJob = (Job)previousJob.Clone();
 
-            await _service.UpdateRecruiterAsync(recruiter);
+            newJob.CompanyName = "Globant";
 
-            var updatedRecruiter = await _service.GetRecruiterAsync(recruiter);
+            savedRecruiter.SetPreviousJob(newJob, previousJob);
+
+            var reactAbility = new Ability(react, 5);
+
+            savedRecruiter.SetAbility(reactAbility, cSharpAbility);
+
+            await _service.UpdateRecruiterAsync(savedRecruiter);
+
+            var updatedRecruiter = await _service.GetRecruiterAsync(savedRecruiter);
 
             //Assert
-            Assert.AreEqual("Globant", updatedRecruiter.JobHistory.Single(j => j == jobToModify).CompanyName, "Company name of a recruiter was now updated");
+            Assert.AreEqual("Globant", updatedRecruiter.JobHistory.Single(j => j == newJob).CompanyName, "Company name of a recruiter was now updated");
+            Assert.IsTrue(updatedRecruiter.Abilities.Count() == 2);
+            Assert.IsNotNull(updatedRecruiter.Abilities.SingleOrDefault(a => a.Skill == react));
         }
 
         [TestMethod]

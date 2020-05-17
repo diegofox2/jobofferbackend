@@ -10,7 +10,7 @@ namespace JobOffer.Domain.Entities
         Abandoned
     }
 
-    public class Study : BaseEntity<Study>
+    public class Study : BaseValueObject
     {
         public string Institution { get; set; }
 
