@@ -12,11 +12,11 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
     [TestClass]
     public class RecruiterServiceUnitTest
     {
-        private Mock<CompanyRepository> _companyRepositoryMock;
-        private Mock<RecruiterRepository> _recruiterRepositoryMock;
-        private Mock<JobOfferRepository> _jobOfferRepositoryMock;
-        private Mock<IMongoDatabase> _mongoDataBaseMock;
-        private RecruiterService _service;
+        private readonly Mock<CompanyRepository> _companyRepositoryMock;
+        private readonly Mock<RecruiterRepository> _recruiterRepositoryMock;
+        private readonly Mock<JobOfferRepository> _jobOfferRepositoryMock;
+        private readonly Mock<IMongoDatabase> _mongoDataBaseMock;
+        private readonly RecruiterService _service;
 
         public RecruiterServiceUnitTest()
         {
