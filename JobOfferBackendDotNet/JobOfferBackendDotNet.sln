@@ -5,13 +5,13 @@ VisualStudioVersion = 16.0.30104.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOfferBackend.Domain", "JobOfferBackend.Domain.csproj", "{4727AC46-2224-476A-AFEE-BA7B0467D4E5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOfferBackend.Domain.Test", "..\JobOffer.Domain.Test\JobOfferBackend.Domain.Test.csproj", "{042E7A61-646C-46B1-94C1-B21DA42CF34F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOfferBackend.Domain.Test", "..\JobOfferBackend.Domain.Test\JobOfferBackend.Domain.Test.csproj", "{042E7A61-646C-46B1-94C1-B21DA42CF34F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOfferBackend.DataAccess", "..\JobOffer.DataAccess\JobOfferBackend.DataAccess.csproj", "{9DF149BB-5637-405D-863A-53ED4B7284E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOfferBackend.DataAccess", "..\JobOfferBackend.DataAccess\JobOfferBackend.DataAccess.csproj", "{9DF149BB-5637-405D-863A-53ED4B7284E6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOfferBackend.ApplicationServices", "..\JobOffer.ApplicationServices\JobOfferBackend.ApplicationServices.csproj", "{7A0838A3-7DB2-4C72-A34D-DFA1E2A9BB7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOfferBackend.ApplicationServices", "..\JobOfferBackend.ApplicationServices\JobOfferBackend.ApplicationServices.csproj", "{7A0838A3-7DB2-4C72-A34D-DFA1E2A9BB7A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOfferBackend.ApplicationServices.Test", "..\JobOffer.ApplicationServices.Test\JobOfferBackend.ApplicationServices.Test.csproj", "{3D2F2725-3FE1-4E5A-9B08-101919F2742A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOfferBackend.ApplicationServices.Test", "..\JobOfferBackend.ApplicationServices.Test\JobOfferBackend.ApplicationServices.Test.csproj", "{3D2F2725-3FE1-4E5A-9B08-101919F2742A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

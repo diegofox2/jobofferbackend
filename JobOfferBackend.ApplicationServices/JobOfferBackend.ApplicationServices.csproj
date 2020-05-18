@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\JobOffer.DataAccess\JobOfferBackend.DataAccess.csproj" />
+    <ProjectReference Include="..\JobOfferBackend.DataAccess\JobOfferBackend.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>

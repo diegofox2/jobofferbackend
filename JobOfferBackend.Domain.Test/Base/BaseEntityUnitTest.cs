@@ -1,7 +1,7 @@
 ﻿using JobOfferBackend.Domain.Base;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace JobOfferJobOfferBackend.Domain.Test.Base
+namespace JobOfferBackend.Domain.Test.Base
 {
     [TestClass]
     [TestCategory("UnitTest")]
