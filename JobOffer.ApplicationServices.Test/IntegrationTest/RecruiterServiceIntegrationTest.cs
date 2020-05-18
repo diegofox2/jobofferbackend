@@ -1,14 +1,13 @@
-﻿using JobOffer.ApplicationServices.Constants;
-using JobOffer.ApplicationServices.Test.Base;
-using JobOffer.DataAccess;
-using JobOffer.Domain.Entities;
+﻿using JobOfferBackend.ApplicationServices.Constants;
+using JobOfferBackend.ApplicationServices.Test.Base;
+using JobOfferBackend.DataAccess;
+using JobOfferBackend.Domain.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 
-namespace JobOffer.ApplicationServices.Test
+namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
 {
     [TestClass]
     [TestCategory("IntegrationTest")]
@@ -207,7 +206,7 @@ namespace JobOffer.ApplicationServices.Test
             await _skillRepository.UpsertAsync(skill2);
             await _skillRepository.UpsertAsync(skill3);
             
-            var jobOffer = new Domain.Entities.JobOffer() 
+            var jobOffer = new JobOffer() 
             { 
                 Title = "Analista Funcional", 
                 Description = "Se necesita analista funcional con bla bla bla",

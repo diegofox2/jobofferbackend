@@ -1,7 +1,4 @@
-﻿
-using System.Data;
-
-namespace JobOffer.ApplicationServices.Constants
+﻿namespace JobOfferBackend.ApplicationServices.Constants
 {
     public static class ServicesErrorMessages
     {

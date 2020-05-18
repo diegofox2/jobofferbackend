@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Driver;
 
-namespace JobOffer.ApplicationServices.Test.Base
+namespace JobOfferBackend.ApplicationServices.Test.Base
 {
     [TestClass]
     public class IntegrationTestBase

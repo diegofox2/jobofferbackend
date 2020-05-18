@@ -1,7 +1,7 @@
-﻿using JobOffer.Domain.Entities;
+﻿using JobOfferBackend.Domain.Entities;
 using MongoDB.Driver;
 
-namespace JobOffer.DataAccess
+namespace JobOfferBackend.DataAccess
 {
     public class PersonRepository: BaseRepository<Person>
     {

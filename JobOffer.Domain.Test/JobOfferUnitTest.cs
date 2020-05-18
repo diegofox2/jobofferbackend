@@ -1,8 +1,8 @@
-﻿using JobOffer.Domain.Entities;
+﻿using JobOfferBackend.Domain.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 
-namespace JobOffer.Domain.Test
+namespace JobOfferBackend.Domain.Test
 {
     [TestClass]
     [TestCategory("UnitTest")]
@@ -15,7 +15,7 @@ namespace JobOffer.Domain.Test
             var person = new Person() { FirstName = "Pepe", LastName = "Lopez" };
             person.SetAbility(new Ability(new Skill() { Name = "C#" }, 5));
 
-            var jobOffer = new JobOffer.Domain.Entities.JobOffer();
+            var jobOffer = new JobOffer();
             jobOffer.AddSkillRequired(new SkillRequired(new Skill() { Name = "C#" }, 3, true));
 
             person.ApplyToJobOffer(jobOffer);

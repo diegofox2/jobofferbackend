@@ -1,11 +1,16 @@
-﻿using JobOffer.Domain.Entities;
+﻿using JobOfferBackend.Domain.Entities;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Threading.Tasks;
 
-namespace JobOffer.DataAccess
+namespace JobOfferBackend.DataAccess
 {
+    /// <summary>
+    /// Intentionally it doesn't implements an Interface because it could create a fake abstraction
+    /// See https://medium.com/@dcamacho31/foreword-224a02be04f8
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract class BaseRepository<T> where T : IIdentity<T>
     {
         protected IMongoDatabase _database;

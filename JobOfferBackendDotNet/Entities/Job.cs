@@ -1,8 +1,8 @@
-﻿using JobOffer.Domain.Base;
-using JobOffer.Domain.Constants;
+﻿using JobOfferBackend.Domain.Base;
+using JobOfferBackend.Domain.Constants;
 using System;
 
-namespace JobOffer.Domain.Entities
+namespace JobOfferBackend.Domain.Entities
 {
     public class Job : BaseValueObject
     {

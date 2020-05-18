@@ -1,6 +1,6 @@
 ﻿using MongoDB.Driver;
 
-namespace JobOffer.ApplicationServices.Test.Base
+namespace JobOfferBackend.ApplicationServices.Test.Base
 {
     public class SetupIntegrationTest
     {

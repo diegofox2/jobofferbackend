@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace JobOffer.Domain.Entities
+namespace JobOfferBackend.Domain.Entities
 {
     public interface IIdentity<T>
     {

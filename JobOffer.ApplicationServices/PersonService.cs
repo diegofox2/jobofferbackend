@@ -1,11 +1,15 @@
-﻿using JobOffer.ApplicationServices.Constants;
-using JobOffer.DataAccess;
-using JobOffer.Domain.Entities;
+﻿using JobOfferBackend.ApplicationServices.Constants;
+using JobOfferBackend.DataAccess;
+using JobOfferBackend.Domain.Entities;
 using System;
 using System.Threading.Tasks;
 
-namespace JobOffer.ApplicationServices
+namespace JobOfferBackend.ApplicationServices
 {
+    /// <summary>
+    /// Intentionally it doesn't implements an Interface because it could create a fake abstraction
+    /// See https://medium.com/@dcamacho31/foreword-224a02be04f8
+    /// </summary>
     public class PersonService
     {
         private readonly PersonRepository _personRepository;
@@ -15,19 +19,19 @@ namespace JobOffer.ApplicationServices
             _personRepository = personRepository;
         }
 
-        public async Task<Person> GetPersonAsync(Person person)
+        public virtual async Task<Person> GetPersonAsync(Person person)
         {
             return await _personRepository.GetByIdAsync(person.Id);
         }
 
-        public async Task CreatePersonAsync(Person person)
+        public virtual async Task CreatePersonAsync(Person person)
         {
             person.Validate();
 
             await _personRepository.UpsertAsync(person);
         }
 
-        public async Task UpdatePersonAsync(Person recruiter)
+        public virtual async Task UpdatePersonAsync(Person recruiter)
         {
             recruiter.Validate();
 

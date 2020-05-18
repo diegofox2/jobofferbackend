@@ -1,5 +1,5 @@
 ﻿
-namespace JobOffer.Domain.Constants
+namespace JobOfferBackend.Domain.Constants
 {
     public static class DomainErrorMessages
     {

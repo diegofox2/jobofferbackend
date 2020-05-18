@@ -1,9 +1,9 @@
-﻿using JobOffer.Domain.Entities;
+﻿using JobOfferBackend.Domain.Entities;
 using MongoDB.Driver;
 using System;
 using System.Threading.Tasks;
 
-namespace JobOffer.DataAccess
+namespace JobOfferBackend.DataAccess
 {
     public class CompanyRepository : BaseRepository<Company>
     {

@@ -1,12 +1,12 @@
-﻿using JobOffer.ApplicationServices.Test.Base;
-using JobOffer.DataAccess;
-using JobOffer.Domain.Entities;
+﻿using JobOfferBackend.ApplicationServices.Test.Base;
+using JobOfferBackend.DataAccess;
+using JobOfferBackend.Domain.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace JobOffer.ApplicationServices.Test
+namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
 {
     [TestClass]
     [TestCategory("IntegrationTest")]

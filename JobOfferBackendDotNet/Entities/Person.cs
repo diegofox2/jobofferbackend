@@ -1,10 +1,10 @@
-﻿using JobOffer.Domain.Base;
-using JobOffer.Domain.Constants;
+﻿using JobOfferBackend.Domain.Base;
+using JobOfferBackend.Domain.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace JobOffer.Domain.Entities
+namespace JobOfferBackend.Domain.Entities
 {
     public class Person : BaseEntity<Person>
     {

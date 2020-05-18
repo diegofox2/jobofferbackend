@@ -1,8 +1,8 @@
-﻿using JobOffer.Domain.Base;
+﻿using JobOfferBackend.Domain.Base;
 using System;
 using System.Collections.Generic;
 
-namespace JobOffer.Domain.Entities
+namespace JobOfferBackend.Domain.Entities
 {
     public class JobApplication : BaseEntity<JobApplication>
     {

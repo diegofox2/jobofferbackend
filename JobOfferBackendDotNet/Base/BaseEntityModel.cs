@@ -1,9 +1,9 @@
-﻿using JobOffer.Domain.Entities;
+﻿using JobOfferBackend.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace JobOffer.Domain.Base
+namespace JobOfferBackend.Domain.Base
 {
     public abstract class BaseEntity<T> : IIdentity<T>
     {
@@ -15,9 +15,9 @@ namespace JobOffer.Domain.Base
 
         public static bool operator ==(BaseEntity<T> source, BaseEntity<T> reference)
         {
-            if (ReferenceEquals(source, null))
+            if (source is null)
             {
-                return ReferenceEquals(reference, null);
+                return reference is null;
             }
 
             return source.Equals(reference);
@@ -36,10 +36,7 @@ namespace JobOffer.Domain.Base
             return Id == ((BaseEntity<T>)obj).Id;
         }
 
-        public override int GetHashCode()
-        {
-            return Id.GetHashCode();
-        }
+        public override int GetHashCode() => Id.GetHashCode();
 
         public bool ComparePropertiesTo(T other)
         {

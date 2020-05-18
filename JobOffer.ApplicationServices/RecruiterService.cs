@@ -1,13 +1,17 @@
-﻿using JobOffer.ApplicationServices.Constants;
-using JobOffer.DataAccess;
-using JobOffer.Domain.Constants;
-using JobOffer.Domain.Entities;
+﻿using JobOfferBackend.ApplicationServices.Constants;
+using JobOfferBackend.DataAccess;
+using JobOfferBackend.Domain.Constants;
+using JobOfferBackend.Domain.Entities;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace JobOffer.ApplicationServices
+namespace JobOfferBackend.ApplicationServices
 {
+    /// <summary>
+    /// Intentionally it doesn't implements an Interface because it could create a fake abstraction
+    /// See https://medium.com/@dcamacho31/foreword-224a02be04f8
+    /// </summary>
     public class RecruiterService
     {
         private readonly CompanyRepository _companyRepository;
@@ -21,20 +25,20 @@ namespace JobOffer.ApplicationServices
             _jobOfferRepository = jobOfferRepository;
         }
 
-        public async Task<Recruiter> GetRecruiterAsync(Recruiter recruiter)
+        public virtual async Task<Recruiter> GetRecruiterAsync(Recruiter recruiter)
         {
             return await _recruiterRepository.GetByIdAsync(recruiter.Id);
         }
 
 
-        public async Task CreateRecruiterAsync(Recruiter recruiter)
+        public virtual async Task CreateRecruiterAsync(Recruiter recruiter)
         {
             recruiter.Validate();
 
             await _recruiterRepository.UpsertAsync(recruiter);
         }
 
-        public async Task UpdateRecruiterAsync(Recruiter recruiter)
+        public virtual async Task UpdateRecruiterAsync(Recruiter recruiter)
         {
             recruiter.Validate();
 
@@ -48,7 +52,7 @@ namespace JobOffer.ApplicationServices
             }
         }
 
-        public async Task CreateCompanyAsync(Company company)
+        public virtual async Task CreateCompanyAsync(Company company)
         {
             company.Validate();
 
@@ -64,7 +68,7 @@ namespace JobOffer.ApplicationServices
             }
         }
 
-        public async Task CreateJobOffer(JobOffer.Domain.Entities.JobOffer jobOffer, Recruiter recruiter)
+        public virtual async Task CreateJobOffer(JobOffer jobOffer, Recruiter recruiter)
         {
             jobOffer.Validate();
 
