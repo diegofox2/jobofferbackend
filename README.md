@@ -1,4 +1,4 @@
-![.NET Core](https://github.com/diegofox2/jobofferbackend/workflows/.NET%20Core/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/diegofox2/jobofferbackend/badge.svg)](https://coveralls.io/github/diegofox2/jobofferbackend)
 
 # Job Offer Backend
 
