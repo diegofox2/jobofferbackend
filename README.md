@@ -26,8 +26,9 @@ In order to create code coverage reports, this project also uses [Coverlet](http
 
 > Remember to replace the things required in this script. This script runs on Windows
 
-dotnet tool install --global coverlet.console
-dotnet tool install -g dotnet-reportgenerator-globaltool
+dotnet tool install --global coverlet.console :: THIS INSTALL COVERLET AS GLOBAL
+
+dotnet tool install -g dotnet-reportgenerator-globaltool :: THIS INSTALL REPORT GENERATOR AS GLOBAL
 
 
 :: REPLACE USING THE FOLDER OF THE SOLUTION
