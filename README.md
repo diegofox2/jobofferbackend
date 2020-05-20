@@ -1,3 +1,5 @@
+![.NET Core](https://github.com/diegofox2/jobofferbackend/workflows/.NET%20Core/badge.svg)
+
 # Job Offer Backend
 
 This project is a real-world example of DDD in a backend application
