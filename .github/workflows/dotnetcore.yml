@@ -22,5 +22,13 @@ jobs:
       working-directory: .\JobOfferBackendDotNet
     - name: Installing MongoDB
       run: choco install mongodb
-    - name: Runnig Tests
-      run: dotnet test .\JobOfferBackendDotNet\JobOfferBackendDotNet.sln
+    - name: Installing Coverlet
+      run: dotnet tool install --global coverlet.console
+    - name: Runnig Tests and Code Coverage
+      run: dotnet test .\JobOfferBackendDotNet\JobOfferBackendDotNet.sln /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+    - name: Coveralls GitHub Action
+      uses: coverallsapp/github-action@v1.1.1
+      with:
+        github-token: d0yWm2f1f01JJKEH0H7q5tCq5OJtSUewV
+        base-path: .\JobOfferBackendDotNet\
+    
