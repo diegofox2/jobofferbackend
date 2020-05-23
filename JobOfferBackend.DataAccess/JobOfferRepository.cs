@@ -12,10 +12,16 @@ namespace JobOfferBackend.DataAccess
         {
         }
 
-        public async Task<List<JobOffer>> GetActiveJobOffer(Recruiter recruiter)
+        public async Task<List<JobOffer>> GetActiveJobOffers(Recruiter recruiter)
         {
             return await Collection.Find(item => item.IsActive == true && item.Owner == recruiter).ToListAsync();
         }
+
+        public async Task<List<JobOffer>> GetActiveJobOffersAsync()
+        {
+            return await Collection.Find(item => item.IsActive == true).ToListAsync();
+        }
+
 
         public override async Task<ReplaceOneResult> UpsertAsync(JobOffer entity)
         {

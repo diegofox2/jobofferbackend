@@ -77,7 +77,7 @@ namespace JobOfferBackend.ApplicationServices
                 throw new InvalidOperationException(DomainErrorMessages.JOBOFFER_ALREADY_EXISTS);
             }
             
-            var jobOffersCreatedByRecruiter = await _jobOfferRepository.GetActiveJobOffer(recruiter);
+            var jobOffersCreatedByRecruiter = await _jobOfferRepository.GetActiveJobOffers(recruiter);
 
             if (jobOffersCreatedByRecruiter.Any(j => j.Company == jobOffer.Company && j.Title == jobOffer.Title))
             {

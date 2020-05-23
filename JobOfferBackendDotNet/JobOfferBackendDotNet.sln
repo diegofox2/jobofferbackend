@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOfferBackend.Application
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOfferBackend.ApplicationServices.Test", "..\JobOfferBackend.ApplicationServices.Test\JobOfferBackend.ApplicationServices.Test.csproj", "{3D2F2725-3FE1-4E5A-9B08-101919F2742A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobOfferBackend.WebAPI", "..\JobOfferBackend.WebAPI\JobOfferBackend.WebAPI.csproj", "{076ACE2F-9442-4424-A92F-CF34620CB7F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{3D2F2725-3FE1-4E5A-9B08-101919F2742A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D2F2725-3FE1-4E5A-9B08-101919F2742A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D2F2725-3FE1-4E5A-9B08-101919F2742A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{076ACE2F-9442-4424-A92F-CF34620CB7F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{076ACE2F-9442-4424-A92F-CF34620CB7F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{076ACE2F-9442-4424-A92F-CF34620CB7F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{076ACE2F-9442-4424-A92F-CF34620CB7F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
