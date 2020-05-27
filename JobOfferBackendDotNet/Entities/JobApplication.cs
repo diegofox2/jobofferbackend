@@ -1,4 +1,4 @@
-﻿using JobOfferBackend.Domain.Base;
+﻿using JobOfferBackend.Domain.Common;
 using System;
 using System.Collections.Generic;
 

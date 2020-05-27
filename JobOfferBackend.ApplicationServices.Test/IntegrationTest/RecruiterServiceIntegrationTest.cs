@@ -220,7 +220,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
             
 
             //Act
-            await _service.CreateJobOffer(jobOffer, recruiter);
+            await _service.CreateJobOfferAsync(jobOffer, recruiter.Id);
 
             var jobOfferCreated = await _jobOfferRepository.GetByIdAsync(jobOffer.Id);
 

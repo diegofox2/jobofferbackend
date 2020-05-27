@@ -1,4 +1,5 @@
-﻿using JobOfferBackend.Domain.Constants;
+﻿using JobOfferBackend.Domain.Common;
+using JobOfferBackend.Domain.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;

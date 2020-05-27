@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using JobOfferBackend.ApplicationServices;
+using JobOfferBackend.DataAccess;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using MongoDB.Driver;
 
 namespace JobOfferBackend.WebAPI
 {
@@ -19,6 +22,15 @@ namespace JobOfferBackend.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var mongo = new MongoClient();
+
+            services.AddSingleton(mongo.GetDatabase("JobOfferDatabase"));
+            services.AddScoped<CompanyRepository>();
+            services.AddScoped<JobOfferRepository>();
+            services.AddScoped<RecruiterRepository>();
+            services.AddScoped<RecruiterService>();
+            services.AddScoped<JobOfferService>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddSwaggerGen(c =>
             {
@@ -36,6 +48,7 @@ namespace JobOfferBackend.WebAPI
 
             app.UseMvc();
             app.UseSwagger();
+
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Job Offer API v1");

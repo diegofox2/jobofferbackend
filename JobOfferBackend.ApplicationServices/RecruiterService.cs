@@ -35,6 +35,14 @@ namespace JobOfferBackend.ApplicationServices
         {
             recruiter.Validate();
 
+            recruiter.ClientCompanies.ToList().ForEach(async company =>
+            {
+                if (!company.HasIdCreated)
+                {
+                    await _companyRepository.UpsertAsync(company);
+                }
+            });
+
             await _recruiterRepository.UpsertAsync(recruiter);
         }
 
@@ -68,7 +76,7 @@ namespace JobOfferBackend.ApplicationServices
             }
         }
 
-        public virtual async Task CreateJobOffer(JobOffer jobOffer, Recruiter recruiter)
+        public virtual async Task CreateJobOfferAsync(JobOffer jobOffer, string recruiterId)
         {
             jobOffer.Validate();
 
@@ -76,13 +84,19 @@ namespace JobOfferBackend.ApplicationServices
             {
                 throw new InvalidOperationException(DomainErrorMessages.JOBOFFER_ALREADY_EXISTS);
             }
-            
+
+            var recruiter = await _recruiterRepository.GetByIdAsync(recruiterId);
+
             var jobOffersCreatedByRecruiter = await _jobOfferRepository.GetActiveJobOffers(recruiter);
 
             if (jobOffersCreatedByRecruiter.Any(j => j.Company == jobOffer.Company && j.Title == jobOffer.Title))
             {
                 throw new InvalidOperationException(DomainErrorMessages.JOBOFFER_ALREADY_EXISTS);
             }
+
+            jobOffer.Owner = recruiter;
+
+            jobOffer.IsActive = true;
 
             await _jobOfferRepository.UpsertAsync(jobOffer);
         }

@@ -11,18 +11,5 @@ namespace JobOfferBackend.DataAccess
         {
         }
 
-
-        public override async Task<ReplaceOneResult> UpsertAsync(Recruiter entity)
-        {
-            entity.ClientCompanies.ToList().ForEach(company =>
-            {
-                if(!company.HasIdCreated)
-                {
-                    company.Id = CreateId();
-                }
-            });
-
-            return await base.UpsertAsync(entity);
-        }
     }
 }

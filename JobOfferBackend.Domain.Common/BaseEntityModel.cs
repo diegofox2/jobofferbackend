@@ -1,9 +1,8 @@
-﻿using JobOfferBackend.Domain.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace JobOfferBackend.Domain.Base
+namespace JobOfferBackend.Domain.Common
 {
     public abstract class BaseEntity<T> : IIdentity<T>
     {

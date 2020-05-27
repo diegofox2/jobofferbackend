@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace JobOfferBackend.Domain.Base
+namespace JobOfferBackend.Domain.Common
 {
     public abstract class BaseValueObject 
     {

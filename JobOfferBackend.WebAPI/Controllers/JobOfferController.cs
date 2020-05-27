@@ -11,10 +11,12 @@ namespace JobOfferBackend.WebAPI.Controllers
     public class JobOfferController : ControllerBase
     {
         private readonly JobOfferService _jobOfferService;
+        private readonly RecruiterService _recruiterService;
 
-        public JobOfferController(JobOfferService jobOfferService)
+        public JobOfferController(JobOfferService jobOfferService, RecruiterService recruiterService)
         {
             _jobOfferService = jobOfferService;
+            _recruiterService = recruiterService;
         }
 
         // GET api/values

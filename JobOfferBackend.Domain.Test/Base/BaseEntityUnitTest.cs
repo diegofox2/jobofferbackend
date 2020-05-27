@@ -1,4 +1,4 @@
-﻿using JobOfferBackend.Domain.Base;
+﻿using JobOfferBackend.Domain.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JobOfferBackend.Domain.Test.Base

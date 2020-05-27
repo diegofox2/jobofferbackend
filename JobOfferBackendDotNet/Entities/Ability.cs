@@ -1,4 +1,5 @@
-﻿using JobOfferBackend.Domain.Base;
+﻿
+using JobOfferBackend.Domain.Common;
 using JobOfferBackend.Domain.Constants;
 
 namespace JobOfferBackend.Domain.Entities
