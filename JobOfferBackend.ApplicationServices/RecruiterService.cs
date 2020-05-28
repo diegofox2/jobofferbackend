@@ -78,6 +78,8 @@ namespace JobOfferBackend.ApplicationServices
 
         public virtual async Task CreateJobOfferAsync(JobOffer jobOffer, string recruiterId)
         {
+            
+            
             jobOffer.Validate();
 
             if(jobOffer.HasIdCreated)

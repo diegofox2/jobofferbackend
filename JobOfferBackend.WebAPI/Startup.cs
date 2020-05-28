@@ -31,6 +31,12 @@ namespace JobOfferBackend.WebAPI
             services.AddScoped<RecruiterService>();
             services.AddScoped<JobOfferService>();
 
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder => builder.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod());
+
+            });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddSwaggerGen(c =>
             {
@@ -46,8 +52,12 @@ namespace JobOfferBackend.WebAPI
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors();
+
             app.UseMvc();
             app.UseSwagger();
+
+            
 
             app.UseSwaggerUI(c =>
             {

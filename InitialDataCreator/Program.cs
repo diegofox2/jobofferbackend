@@ -54,10 +54,7 @@ namespace InitialDataCreator
                 recruiter.SetStudy(new Study("UBA", "Lic.RRHH", StudyStatus.Completed));
                 recruiter.SetPreviousJob(new Job("Coto", "HR Analyst", DateTime.Now.AddYears(-6), true));
 
-                recruiterService.CreateRecruiterAsync(recruiter);
-
-
-                var jobOffer = new JobOffer() { Date = DateTime.Now, Title = "Analista programador",Company = new Company("Acme", "software")};
+                var jobOffer = new JobOffer() { Date = DateTime.Now, Title = "Analista programador", Company = new Company("Acme", "software") };
 
                 jobOffer.Description = "Para importante empresa ubicada en San Telmo, estamos en búsqueda de desarrollador fullstack con " +
                     "al menos 3 años de experiencia utilizando React y NodeJs.Quien se incorpore estará participando dentro " +
@@ -66,7 +63,11 @@ namespace InitialDataCreator
                 jobOffer.AddSkillRequired(new SkillRequired(javascript, 5, true));
                 jobOffer.AddSkillRequired(new SkillRequired(react, 3));
 
-                recruiterService.CreateJobOfferAsync(jobOffer, recruiter.Id);
+                recruiterService.CreateRecruiterAsync(recruiter).Wait();
+                    
+                recruiterService.CreateJobOfferAsync(jobOffer, recruiter.Id).Wait();
+                
+
 
                 Console.WriteLine("Agregado correctamente!");
                 Console.ReadKey();
