@@ -20,9 +20,10 @@ namespace InitialDataCreator
             var database = mongoClient.GetDatabase("JobOfferDatabase");
 
             var cSharp = new Skill() { Description = "Lenguaje de programación C#", Name = "C#" };
-            var javascript = new Skill() { Description = "Lenguaje de programación C#", Name = "Javascript" };
-            var react = new Skill() { Description = "Lenguaje de programación C#", Name = "React" };
-            var docker = new Skill() { Description = "Lenguaje de programación C#", Name = "Docker" };
+            var javascript = new Skill() { Description = "Lenguaje de programación Javascript", Name = "Javascript" };
+            var react = new Skill() { Description = "Libreria de UI", Name = "React" };
+            var docker = new Skill() { Description = "Contenedores", Name = "Docker" };
+            var java = new Skill() { Description = "Lenguaje de programación Java", Name = "Java" };
 
             if (option == 1)
             {
@@ -33,6 +34,7 @@ namespace InitialDataCreator
                 Task.Run(async () => await skillRepository.UpsertAsync(javascript));
                 Task.Run(async () => await skillRepository.UpsertAsync(react));
                 Task.Run(async () => await skillRepository.UpsertAsync(docker));
+                Task.Run(async () => await skillRepository.UpsertAsync(java));
 
                 Console.WriteLine("Agregado correctamente!");
                 Console.ReadKey();
@@ -54,7 +56,7 @@ namespace InitialDataCreator
                 recruiter.SetStudy(new Study("UBA", "Lic.RRHH", StudyStatus.Completed));
                 recruiter.SetPreviousJob(new Job("Coto", "HR Analyst", DateTime.Now.AddYears(-6), true));
 
-                var jobOffer = new JobOffer() { Date = DateTime.Now, Title = "Analista programador", Company = new Company("Acme", "software") };
+                var jobOffer = new JobOffer() { Date = DateTime.Now, Title = "Analista programador", Company = new Company("Acme", "software"), Zone ="Palermo" };
 
                 jobOffer.Description = "Para importante empresa ubicada en San Telmo, estamos en búsqueda de desarrollador fullstack con " +
                     "al menos 3 años de experiencia utilizando React y NodeJs.Quien se incorpore estará participando dentro " +
@@ -66,8 +68,30 @@ namespace InitialDataCreator
                 recruiterService.CreateRecruiterAsync(recruiter).Wait();
                     
                 recruiterService.CreateJobOfferAsync(jobOffer, recruiter.Id).Wait();
-                
 
+                //
+
+                var jobOffer2 = new JobOffer() { Date = DateTime.Now, Title = "JAVA Full Stack Developer", Company = new Company("KaizenRH", "software"), Zone ="Las Cañitas" };
+
+                jobOffer2.Description = "En KaizenRH buscamos Python Developer Junior para trabajar en interesantes proyectos dentro de Startup en expansión LATAM dedicada a la automatización de procesos IT y negocios.";
+
+                jobOffer2.AddSkillRequired(new SkillRequired(javascript, 5, true));
+                jobOffer2.AddSkillRequired(new SkillRequired(react, 3));
+                jobOffer2.AddSkillRequired(new SkillRequired(java, 6, true));
+
+                recruiterService.CreateJobOfferAsync(jobOffer2, recruiter.Id).Wait();
+
+                //
+
+                var jobOffer3 = new JobOffer() { Date = DateTime.Now, Title = "Sr. C# Backend Developer/Engineer", Company = new Company("ADN Recursos Humanos", "Seleccion de personal"), Zone = "Microcentro" };
+
+                jobOffer3.Description = "ADN - Recursos Humanos estamos en la búsqueda de un Sr. Python Backend Developer/Engineer, para Importante Empresa de Tecnología";
+
+                
+                jobOffer3.AddSkillRequired(new SkillRequired(cSharp, 5));
+                jobOffer3.AddSkillRequired(new SkillRequired(javascript, 2, true));
+
+                recruiterService.CreateJobOfferAsync(jobOffer3, recruiter.Id).Wait();
 
                 Console.WriteLine("Agregado correctamente!");
                 Console.ReadKey();

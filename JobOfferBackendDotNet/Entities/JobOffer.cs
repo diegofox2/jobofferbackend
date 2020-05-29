@@ -28,6 +28,8 @@ namespace JobOfferBackend.Domain.Entities
 
         public IEnumerable<SkillRequired> SkillsRequired { get => _skillsRequired; set => _skillsRequired = (List<SkillRequired>)value; }
 
+        public string Zone { get; set; }
+
         public void AddSkillRequired(SkillRequired skill)
         {
             if(_skillsRequired.Any(s => s == skill))
