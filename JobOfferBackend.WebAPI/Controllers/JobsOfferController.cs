@@ -8,29 +8,29 @@ namespace JobOfferBackend.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class JobOfferController : ControllerBase
+    public class JobsOfferController : ControllerBase
     {
         private readonly JobOfferService _jobOfferService;
         private readonly RecruiterService _recruiterService;
 
-        public JobOfferController(JobOfferService jobOfferService, RecruiterService recruiterService)
+        public JobsOfferController(JobOfferService jobOfferService, RecruiterService recruiterService)
         {
             _jobOfferService = jobOfferService;
             _recruiterService = recruiterService;
         }
 
-        // GET api/values
+        // GET api/jobsoffer
         [HttpGet]
         public async Task<IEnumerable<JobOffer>> Get()
         {
             return await _jobOfferService.GetJobOffersAsync();
         }
 
-        // GET api/values/5
+        // GET api/jobsoffer/5as55d4bvbv658aaer897bv
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public async Task<JobOffer> Get(string id)
         {
-            return "value";
+            return await _jobOfferService.GetJobOffer(id);
         }
     }
 }

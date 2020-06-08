@@ -19,5 +19,10 @@ namespace JobOfferBackend.ApplicationServices
             return await _jobOfferRepository.GetActiveJobOffersAsync();
         }
 
+        public async Task<JobOffer> GetJobOffer(string id)
+        {
+            return await _jobOfferRepository.GetByIdAsync(id);
+        }
+
     }
 }
