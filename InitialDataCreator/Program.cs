@@ -65,6 +65,16 @@ namespace InitialDataCreator
                 jobOffer.AddSkillRequired(new SkillRequired(javascript, 5, true));
                 jobOffer.AddSkillRequired(new SkillRequired(react, 3));
 
+                jobOffer.Language = "Ingles";
+                jobOffer.LanguageLevel = "Avanzado";
+
+                jobOffer.ContractInformation = new ContractCondition()
+                {
+                    StartingFrom = "Inmediata",
+                    KindOfContract = "Relación de dependencia",
+                    WorkingDays = "Lunes a viernes 9 a 18"
+                };
+
                 recruiterService.CreateRecruiterAsync(recruiter).Wait();
                     
                 recruiterService.CreateJobOfferAsync(jobOffer, recruiter.Id).Wait();
@@ -79,6 +89,16 @@ namespace InitialDataCreator
                 jobOffer2.AddSkillRequired(new SkillRequired(react, 3));
                 jobOffer2.AddSkillRequired(new SkillRequired(java, 6, true));
 
+                jobOffer2.Language = "Ingles";
+                jobOffer2.LanguageLevel = "Intermedio";
+
+                jobOffer2.ContractInformation = new ContractCondition()
+                {
+                    StartingFrom = "Inmediata",
+                    KindOfContract = "Relación de dependencia",
+                    WorkingDays = "Lunes a viernes 9 a 18"
+                };
+
                 recruiterService.CreateJobOfferAsync(jobOffer2, recruiter.Id).Wait();
 
                 //
@@ -90,6 +110,13 @@ namespace InitialDataCreator
                 
                 jobOffer3.AddSkillRequired(new SkillRequired(cSharp, 5));
                 jobOffer3.AddSkillRequired(new SkillRequired(javascript, 2, true));
+
+                jobOffer3.ContractInformation = new ContractCondition()
+                {
+                    StartingFrom = "Inmediata",
+                    KindOfContract = "Relación de dependencia",
+                    WorkingDays = "Lunes a viernes 9 a 18"
+                };
 
                 recruiterService.CreateJobOfferAsync(jobOffer3, recruiter.Id).Wait();
 

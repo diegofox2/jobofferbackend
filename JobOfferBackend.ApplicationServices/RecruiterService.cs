@@ -96,7 +96,7 @@ namespace JobOfferBackend.ApplicationServices
                 throw new InvalidOperationException(DomainErrorMessages.JOBOFFER_ALREADY_EXISTS);
             }
 
-            jobOffer.Owner = recruiter;
+            jobOffer.Recruiter = recruiter;
 
             jobOffer.IsActive = true;
 

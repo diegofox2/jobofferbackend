@@ -14,11 +14,13 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
     {
         private readonly PersonService _service;
         private readonly PersonRepository _personRepository;
+        private readonly JobOfferRepository _jobOfferRepository;
 
         public PersonServiceIntegrationTest()
         {
             _personRepository = new PersonRepository(_database);
-            _service = new PersonService(_personRepository);
+            _jobOfferRepository = new JobOfferRepository(_database);
+            _service = new PersonService(_personRepository, _jobOfferRepository);
         }
 
         [TestInitialize]
@@ -58,6 +60,12 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
 
             //Assert
             Assert.AreEqual(person, savedPerson, "Person was not saved");
+        }
+
+        [TestMethod]
+        public async Task ApplyToJobOffer_AddNewJobApplicationToJobOffer_WhenPersonAndJobOfferAreValids()
+        {
+
         }
 
         [TestMethod]

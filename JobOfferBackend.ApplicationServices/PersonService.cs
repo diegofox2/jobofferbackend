@@ -13,10 +13,12 @@ namespace JobOfferBackend.ApplicationServices
     public class PersonService
     {
         private readonly PersonRepository _personRepository;
+        private readonly JobOfferRepository _jobOfferRepository;
 
-        public PersonService(PersonRepository personRepository)
+        public PersonService(PersonRepository personRepository, JobOfferRepository jobOfferRepository)
         {
             _personRepository = personRepository;
+            _jobOfferRepository = jobOfferRepository;
         }
 
         public virtual async Task<Person> GetPersonAsync(Person person)
@@ -43,6 +45,17 @@ namespace JobOfferBackend.ApplicationServices
             {
                 throw new InvalidOperationException(ServicesErrorMessages.PERSON_DOES_NOT_EXISTS);
             }
+        }
+
+        public virtual async Task ApplyToJobOffer(Person person, JobOffer jobOffer)
+        {
+            person.Validate();
+
+            jobOffer.Validate();
+
+            person.ApplyToJobOffer(jobOffer);
+
+            await _jobOfferRepository.UpsertAsync(jobOffer);
         }
     }
 }

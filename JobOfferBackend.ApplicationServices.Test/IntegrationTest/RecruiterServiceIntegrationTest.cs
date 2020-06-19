@@ -210,7 +210,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
             { 
                 Title = "Analista Funcional", 
                 Description = "Se necesita analista funcional con bla bla bla",
-                Owner = recruiter,
+                Recruiter = recruiter,
                 Date = DateTime.Now.Date
             };
             

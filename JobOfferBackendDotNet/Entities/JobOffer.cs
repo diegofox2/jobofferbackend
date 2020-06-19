@@ -22,9 +22,15 @@ namespace JobOfferBackend.Domain.Entities
 
         public Company Company { get; set; }
 
-        public Recruiter Owner { get; set; }
+        public Recruiter Recruiter { get; set; }
 
         public bool IsActive { get; set; }
+
+        public string Language { get; set; }
+
+        public string LanguageLevel { get; set; }
+
+        public ContractCondition ContractInformation { get; set; }
 
         public IEnumerable<SkillRequired> SkillsRequired { get => _skillsRequired; set => _skillsRequired = (List<SkillRequired>)value; }
 

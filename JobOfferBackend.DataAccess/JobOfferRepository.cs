@@ -14,7 +14,7 @@ namespace JobOfferBackend.DataAccess
 
         public async Task<List<JobOffer>> GetActiveJobOffers(Recruiter recruiter)
         {
-            return await Collection.Find(item => item.IsActive == true && item.Owner == recruiter).ToListAsync();
+            return await Collection.Find(item => item.IsActive == true && item.Recruiter == recruiter).ToListAsync();
         }
 
         public async Task<List<JobOffer>> GetActiveJobOffersAsync()
