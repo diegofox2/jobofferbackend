@@ -11,5 +11,10 @@ namespace JobOfferBackend.DataAccess
         {
         }
 
+        public async Task<Person> GetByIdentityCardAsync(string identityCard)
+        {
+            return await Collection.Find(p => p.IdentityCard == identityCard).SingleOrDefaultAsync();
+        }
+
     }
 }
