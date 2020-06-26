@@ -15,12 +15,17 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
         private readonly PersonService _service;
         private readonly PersonRepository _personRepository;
         private readonly JobOfferRepository _jobOfferRepository;
+        private readonly AccountRepository _accountRepository;
+        private readonly TokenInformationRepository _tokenInformationRepository;
 
         public PersonServiceIntegrationTest()
         {
             _personRepository = new PersonRepository(_database);
             _jobOfferRepository = new JobOfferRepository(_database);
-            _service = new PersonService(_personRepository, _jobOfferRepository);
+            _accountRepository = new AccountRepository(_database);
+            _tokenInformationRepository = new TokenInformationRepository(_database);
+
+            _service = new PersonService(_personRepository, _jobOfferRepository,_accountRepository, _tokenInformationRepository );
         }
 
         [TestInitialize]
@@ -56,17 +61,12 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
             //Act
             await _service.CreatePersonAsync(person);
 
-            var savedPerson = await _service.GetPersonByIdAsync(person);
+            var savedPerson = await _service.GetPersonByIdAsync(person.Id);
 
             //Assert
             Assert.AreEqual(person, savedPerson, "Person was not saved");
         }
 
-        [TestMethod]
-        public async Task ApplyToJobOffer_AddNewJobApplicationToJobOffer_WhenPersonAndJobOfferAreValids()
-        {
-
-        }
 
         [TestMethod]
         public async Task UpdatePerson_SavePersonSuccessfully_WhenPersonDataIsCorrectAndPersonExists()
@@ -86,7 +86,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
 
             await _service.CreatePersonAsync(person);
 
-            var savedPerson = await _service.GetPersonByIdAsync(person);
+            var savedPerson = await _service.GetPersonByIdAsync(person.Id);
 
             //Act
 
@@ -100,7 +100,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
 
             await _service.UpdatePersonAsync(person);
 
-            var updatedPerson = await _service.GetPersonByIdAsync(person);
+            var updatedPerson = await _service.GetPersonByIdAsync(person.Id);
 
             //Assert
             Assert.AreEqual("Globant", updatedPerson.JobHistory.Single(j => j == newJob).CompanyName, "Company name of a person was now updated");

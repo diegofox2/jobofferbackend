@@ -18,6 +18,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
         private readonly CompanyRepository _companyRepository;
         private readonly JobOfferRepository _jobOfferRepository;
         private readonly SkillRepository _skillRepository;
+        private readonly PersonRepository _personRepository;
 
         public RecruiterServiceIntegrationTest()
         {
@@ -25,8 +26,9 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
             _companyRepository = new CompanyRepository(_database);
             _jobOfferRepository = new JobOfferRepository(_database);
             _skillRepository = new SkillRepository(_database);
+            _personRepository = new PersonRepository(_database);
 
-            _service = new RecruiterService(_companyRepository, _recruiterRepository, _jobOfferRepository);
+            _service = new RecruiterService(_companyRepository, _recruiterRepository, _jobOfferRepository, _personRepository);
         }
 
         [TestInitialize]
