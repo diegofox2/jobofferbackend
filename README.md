@@ -8,7 +8,7 @@ It applies the concept of Entity, Value Object, Root, Aggregate, Services, Repos
 
 There are some classic unit tests based on Services but also there are some tests over domain entities as well
 
-[See Class Diagram](https://drive.google.com/file/d/1nv2abVf4QC01SvkrxOLRkBVeox8LvGXu/view?usp=sharing)
+[See Class Diagram](https://drive.google.com/file/d/1uShlMMqiRUyP1xUp-wJ1Lpi65frffNCy/view?usp=sharing)
 
 Also, this project doesn't use interfaces like many projects do because  in practice they are not really needed to do Unit Testing neither Inversion of Control. To go deeper on this topic, read  [Fake Abstractions](https://medium.com/@dcamacho31/foreword-224a02be04f8) and [Header Interface](https://martinfowler.com/bliki/HeaderInterface.html)
 
