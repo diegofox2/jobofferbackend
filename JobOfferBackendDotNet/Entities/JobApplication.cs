@@ -22,12 +22,12 @@ namespace JobOfferBackend.Domain.Entities
             IsActive = true;
             Date = date;
 
-            _applicationProgress.Add(new JobApplicationProgress(applicant, date, ApplicationState.Requested));
+            _applicationProgress.Add(new JobApplicationProgress(date, ApplicationState.Requested));
         }
 
         public void SetAcceptedStatus()
         {
-            _applicationProgress.Add(new JobApplicationProgress(Applicant, DateTime.Now.Date, ApplicationState.Accepted));
+            _applicationProgress.Add(new JobApplicationProgress(DateTime.Now.Date, ApplicationState.Accepted));
         }
 
         public override void Validate()
