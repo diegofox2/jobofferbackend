@@ -22,5 +22,12 @@ namespace JobOfferBackend.WebAPI.Controllers
         {
             await _recruiterService.CreateJobOfferAsync(jobOffer, recruiterId);
         }
+
+        [HttpPost]
+        [Route("CreateRecruiter")]
+        public async Task CreateRecruiter([FromBody] Recruiter recruiter)
+        {
+            await _recruiterService.CreateRecruiterAsync(recruiter);
+        }
     }
 }

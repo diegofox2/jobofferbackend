@@ -4,6 +4,7 @@ using JobOfferBackend.Domain.Entities;
 using JobOfferBackend.Doman.Security.Entities;
 using MongoDB.Driver;
 using System;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace InitialDataCreator
@@ -48,8 +49,9 @@ namespace InitialDataCreator
                         var companyRepository = new CompanyRepository(database);
                         var recruiterRepository = new RecruiterRepository(database);
                         var jobOfferRepository = new JobOfferRepository(database);
+                        var personRepository = new PersonRepository(database);
 
-                        var recruiterService = new RecruiterService(companyRepository, recruiterRepository, jobOfferRepository);
+                        var recruiterService = new RecruiterService(companyRepository, recruiterRepository, jobOfferRepository, personRepository);
 
                         var recruiter = new Recruiter();
                         recruiter.AddClientCompany(new Company("Acme", "Software"));
@@ -59,6 +61,8 @@ namespace InitialDataCreator
                         recruiter.LastName = "Maidana";
                         recruiter.SetStudy(new Study("UBA", "Lic.RRHH", StudyStatus.Completed));
                         recruiter.SetPreviousJob(new Job("Coto", "HR Analyst", DateTime.Now.AddYears(-6), true));
+
+                        recruiter.SetAbility(new Ability(javascript, 9));
 
                         var jobOffer = new JobOffer() { Date = DateTime.Now, Title = "Analista programador", Company = new Company("Acme", "software"), Zone = "Palermo" };
 
@@ -134,7 +138,7 @@ namespace InitialDataCreator
 
                         var person = pRepo.GetByIdentityCardAsync("28.999.999").Result;
 
-                        var account = new Account() { PersonId = person.Id, Email = "a@b.com", Password = "password" };
+                        var account = new Account() { Id = Guid.NewGuid().ToString(), Personid = person.Id, Email = "a@b.com", Password = "password" };
 
                         aRepo.UpsertAsync(account).Wait();
 

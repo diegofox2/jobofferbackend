@@ -17,12 +17,14 @@ namespace JobOfferBackend.ApplicationServices
         private readonly CompanyRepository _companyRepository;
         private readonly RecruiterRepository _recruiterRepository;
         private readonly JobOfferRepository _jobOfferRepository;
+        private readonly PersonRepository _personRepository;
 
-        public RecruiterService(CompanyRepository companyRepository, RecruiterRepository recruiterRepository, JobOfferRepository jobOfferRepository)
+        public RecruiterService(CompanyRepository companyRepository, RecruiterRepository recruiterRepository, JobOfferRepository jobOfferRepository, PersonRepository personRepository)
         {
             _companyRepository = companyRepository;
             _recruiterRepository = recruiterRepository;
             _jobOfferRepository = jobOfferRepository;
+            _personRepository = personRepository;
         }
 
         public virtual async Task<Recruiter> GetRecruiterAsync(Recruiter recruiter)
@@ -43,6 +45,7 @@ namespace JobOfferBackend.ApplicationServices
                 }
             });
 
+            await _personRepository.UpsertAsync(recruiter);
             await _recruiterRepository.UpsertAsync(recruiter);
         }
 

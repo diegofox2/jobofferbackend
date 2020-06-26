@@ -56,7 +56,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
             //Act
             await _service.CreatePersonAsync(person);
 
-            var savedPerson = await _service.GetPersonAsync(person);
+            var savedPerson = await _service.GetPersonByIdAsync(person);
 
             //Assert
             Assert.AreEqual(person, savedPerson, "Person was not saved");
@@ -86,7 +86,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
 
             await _service.CreatePersonAsync(person);
 
-            var savedPerson = await _service.GetPersonAsync(person);
+            var savedPerson = await _service.GetPersonByIdAsync(person);
 
             //Act
 
@@ -100,7 +100,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
 
             await _service.UpdatePersonAsync(person);
 
-            var updatedPerson = await _service.GetPersonAsync(person);
+            var updatedPerson = await _service.GetPersonByIdAsync(person);
 
             //Assert
             Assert.AreEqual("Globant", updatedPerson.JobHistory.Single(j => j == newJob).CompanyName, "Company name of a person was now updated");

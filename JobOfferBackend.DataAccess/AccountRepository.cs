@@ -13,9 +13,14 @@ namespace JobOfferBackend.DataAccess
         {
         }
 
-        public async Task<bool> CheckUserAndPasswordExists(string email, string password)
+        public async Task<Account> GetAccountAsync(string email, string password)
         {
-            return await Collection.Find(item => item.Email == email && item.Password == password).CountDocumentsAsync() == 1;
+            return await Collection.Find(item => item.Email == email && item.Password == password).SingleOrDefaultAsync();
+        }
+
+        public async Task<Account> GetByEmail(string email)
+        {
+            return await Collection.Find(item => item.Email == email).SingleOrDefaultAsync();
         }
     }
 }

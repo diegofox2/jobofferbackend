@@ -8,13 +8,13 @@ namespace JobOfferBackend.Domain.Entities
     {
         private List<JobApplicationProgress> _applicationProgress = new List<JobApplicationProgress>();
 
-        public DateTime Date { get;}
+        public DateTime Date { get; set; }
 
         public IEnumerable<JobApplicationProgress> Progress { get => _applicationProgress; set => _applicationProgress = (List<JobApplicationProgress>)value; }
 
         public bool IsActive { get; set; }
 
-        public Person Applicant { get; }
+        public Person Applicant { get; set; }
 
         public JobApplication(Person applicant, DateTime date)
         {

@@ -29,9 +29,14 @@ namespace JobOfferBackend.WebAPI
             services.AddScoped<JobOfferRepository>();
             services.AddScoped<RecruiterRepository>();
             services.AddScoped<AccountRepository>();
+            services.AddScoped<PersonRepository>();
+            services.AddScoped<TokenInformationRepository>();
+
             services.AddScoped<RecruiterService>();
             services.AddScoped<JobOfferService>();
+            services.AddScoped<PersonService>();
             services.AddScoped<AccountService>();
+
 
             services.AddCors(options =>
             {
