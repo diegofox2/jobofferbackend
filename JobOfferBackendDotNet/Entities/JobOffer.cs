@@ -60,16 +60,6 @@ namespace JobOfferBackend.Domain.Entities
             _applications.Add(application);
         }
 
-        public void AcceptApplicant(Person person)
-        {
-            if (!_applications.Any(a => a.Applicant == person))
-            {
-                throw new InvalidOperationException(DomainErrorMessages.APPLICANT_DOES_NOT_EXISTS);
-            }
-
-            _applications.Single(a => a.Applicant == person).SetAcceptedStatus();
-        }
-
         public override void Validate()
         {
             

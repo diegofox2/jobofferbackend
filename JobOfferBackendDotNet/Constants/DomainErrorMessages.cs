@@ -28,5 +28,6 @@ namespace JobOfferBackend.Domain.Constants
         public const string SKILL_REQUIRED_ALREADY_EXISTS = "SKILL_REQUIRED_ALREADY_EXISTS";
         public const string PERSON_DOES_NOT_HAVE_ALL_MANDATORY_SKILLS = "PERSON_DOES_NOT_HAVE_ALL_MANDATORY_SKILLS";
         public const string JOBOFFER_ALREADY_EXISTS = "JOBOFFER_ALREADY_EXISTS";
+        public const string PERSON_ALREADY_APLIED_TO_JOB_OFFER = "PERSON_ALREADY_APLIED_TO_JOB_OFFER";
     }
 }

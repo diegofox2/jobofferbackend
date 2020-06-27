@@ -25,14 +25,6 @@ namespace JobOfferBackend.DataAccess
 
         public override async Task<ReplaceOneResult> UpsertAsync(JobOffer entity)
         {
-            entity.Applications.ToList().ForEach(app =>
-            {
-                if(!app.HasIdCreated)
-                {
-                    app.Id = CreateId();
-                }
-            });
-
             return await base.UpsertAsync(entity);
         }
     }

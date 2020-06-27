@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace JobOfferBackend.Domain.Entities
 {
-    public class JobApplication : BaseEntity<JobApplication>
+    public class JobApplication : BaseValueObject
     {
         private List<JobApplicationProgress> _applicationProgress = new List<JobApplicationProgress>();
 
@@ -12,22 +12,24 @@ namespace JobOfferBackend.Domain.Entities
 
         public IEnumerable<JobApplicationProgress> Progress { get => _applicationProgress; set => _applicationProgress = (List<JobApplicationProgress>)value; }
 
-        public bool IsActive { get; set; }
-
         public Person Applicant { get; set; }
 
         public JobApplication(Person applicant, DateTime date)
         {
             Applicant = applicant;
-            IsActive = true;
             Date = date;
 
             _applicationProgress.Add(new JobApplicationProgress(date, ApplicationState.Requested));
         }
 
-        public void SetAcceptedStatus()
+        public void SetStatusAccepted()
         {
             _applicationProgress.Add(new JobApplicationProgress(DateTime.Now.Date, ApplicationState.Accepted));
+        }
+
+        public void SetStatusOffered()
+        {
+            _applicationProgress.Add(new JobApplicationProgress(DateTime.Now.Date, ApplicationState.Offered));
         }
 
         public override void Validate()
