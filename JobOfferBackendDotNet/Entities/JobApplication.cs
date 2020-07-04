@@ -12,14 +12,22 @@ namespace JobOfferBackend.Domain.Entities
 
         public IEnumerable<JobApplicationProgress> Progress { get => _applicationProgress; set => _applicationProgress = (List<JobApplicationProgress>)value; }
 
-        public Person Applicant { get; set; }
+        /// <summary>
+        /// The person applitant to the job
+        /// </summary>
+        public string PersonId { get; set; }
 
-        public JobApplication(Person applicant, DateTime date)
+        public JobApplication(string personId, DateTime date)
         {
-            Applicant = applicant;
+            PersonId = personId;
             Date = date;
 
-            _applicationProgress.Add(new JobApplicationProgress(date, ApplicationState.Requested));
+            _applicationProgress.Add(new JobApplicationProgress(date, ApplicationState.Recieved));
+        }
+
+        public void SetStatusRequested()
+        {
+            _applicationProgress.Add(new JobApplicationProgress(DateTime.Now.Date, ApplicationState.Requested));
         }
 
         public void SetStatusAccepted()

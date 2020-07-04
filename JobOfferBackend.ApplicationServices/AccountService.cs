@@ -9,29 +9,17 @@ namespace JobOfferBackend.ApplicationServices
     public class AccountService
     {
         private readonly AccountRepository _accountRepository;
-        private readonly TokenInformationRepository _tokenInformationRepository;
 
-        public AccountService(AccountRepository accountRepository, TokenInformationRepository tokenInformationRepository)
+        public AccountService(AccountRepository accountRepository)
         {
             _accountRepository = accountRepository;
-            _tokenInformationRepository = tokenInformationRepository;
         }
 
         public async Task<string> SignInAsync(string email, string password)
         {
             var account = await _accountRepository.GetAccountAsync(email, password);
 
-            if(account != null)
-            {
-                
-                var token = new TokenInformation() { AccountId = account.Id };
-                await _tokenInformationRepository.UpsertAsync(token);
-                
-                //It sends a token for future operations
-                return token.Id;
-            }
-
-            throw new InvalidOperationException(ServicesErrorMessages.SIGN_IN_ERROR);
+            return account?.Id;
         }
 
         public async Task SignUpAsync(string email, string password, string confirmedPassword)
@@ -45,6 +33,5 @@ namespace JobOfferBackend.ApplicationServices
 
             await _accountRepository.UpsertAsync(account);
         }
-
     }
 }

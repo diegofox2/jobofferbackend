@@ -16,16 +16,14 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
         private readonly PersonRepository _personRepository;
         private readonly JobOfferRepository _jobOfferRepository;
         private readonly AccountRepository _accountRepository;
-        private readonly TokenInformationRepository _tokenInformationRepository;
 
         public PersonServiceIntegrationTest()
         {
             _personRepository = new PersonRepository(_database);
             _jobOfferRepository = new JobOfferRepository(_database);
             _accountRepository = new AccountRepository(_database);
-            _tokenInformationRepository = new TokenInformationRepository(_database);
 
-            _service = new PersonService(_personRepository, _jobOfferRepository,_accountRepository, _tokenInformationRepository );
+            _service = new PersonService(_personRepository, _jobOfferRepository,_accountRepository);
         }
 
         [TestInitialize]

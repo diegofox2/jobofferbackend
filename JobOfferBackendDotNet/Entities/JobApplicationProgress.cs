@@ -6,6 +6,7 @@ namespace JobOfferBackend.Domain.Entities
 {
     public enum ApplicationState
     {
+        Recieved,
         Offered,
         Requested,
         Rejected,

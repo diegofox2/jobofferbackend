@@ -15,14 +15,12 @@ namespace JobOfferBackend.ApplicationServices
         private readonly PersonRepository _personRepository;
         private readonly JobOfferRepository _jobOfferRepository;
         private readonly AccountRepository _accountRepository;
-        private readonly TokenInformationRepository _tokenInformationRepository;
 
-        public PersonService(PersonRepository personRepository, JobOfferRepository jobOfferRepository, AccountRepository accountRepository, TokenInformationRepository tokenInformationRepository)
+        public PersonService(PersonRepository personRepository, JobOfferRepository jobOfferRepository, AccountRepository accountRepository)
         {
             _personRepository = personRepository;
             _jobOfferRepository = jobOfferRepository;
             _accountRepository = accountRepository;
-            _tokenInformationRepository = tokenInformationRepository;
         }
 
         public virtual async Task<Person> GetPersonByIdAsync(string personId)
@@ -51,36 +49,42 @@ namespace JobOfferBackend.ApplicationServices
             }
         }
 
-        public virtual async Task ApplyToJobOfferAsync(string token, string jobOfferId, string user)
+        public virtual async Task ApplyToJobOfferAsync(string jobOfferId, string accountId, string user)
         {
-            var account = await _accountRepository.GetByEmail(user);
+            var account = await _accountRepository.GetByIdAsync(accountId);
 
             if (account != null)
             {
-                var jobOffer = await _jobOfferRepository.GetByIdAsync(jobOfferId);
+                if (account.Email == user)
+                { 
+                    var jobOffer = await _jobOfferRepository.GetByIdAsync(jobOfferId);
 
-                if (jobOffer != null)
-                {
-                    if (await _tokenInformationRepository.CheckValidToken(token, account.Id))
+                    if (jobOffer != null)
                     {
-                        var person = await _personRepository.GetByIdAsync(account.Personid);
+                        var person = await _personRepository.GetByIdAsync(account.PersonId);
 
-                        if(person != null)
+                        if (person != null)
                         {
                             person.ApplyToJobOffer(jobOffer);
 
                             await _jobOfferRepository.UpsertAsync(jobOffer);
+
+                            await _personRepository.UpsertAsync(person);
                         }
                         else
                         {
                             throw new InvalidOperationException(ServicesErrorMessages.PERSON_DOES_NOT_EXISTS);
                         }
-                        
+
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException(ServicesErrorMessages.INVALID_JOB_OFFER);
                     }
                 }
                 else
                 {
-                    throw new InvalidOperationException(ServicesErrorMessages.INVALID_JOB_OFFER);
+                    throw new InvalidOperationException(ServicesErrorMessages.INVALID_USER_ACCOUNT);
                 }
             }
             else

@@ -5,7 +5,7 @@ namespace JobOfferBackend.Doman.Security.Entities
 {
     public class Account : BaseEntity<Account>
     {
-        public string Personid { get; set; }
+        public string PersonId { get; set; }
 
         public string Email { get; set; }
 

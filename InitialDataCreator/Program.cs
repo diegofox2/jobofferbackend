@@ -138,7 +138,7 @@ namespace InitialDataCreator
 
                         var person = pRepo.GetByIdentityCardAsync("28.999.999").Result;
 
-                        var account = new Account() { Id = Guid.NewGuid().ToString(), Personid = person.Id, Email = "a@b.com", Password = "password" };
+                        var account = new Account() { Id = Guid.NewGuid().ToString(), PersonId = person.Id, Email = "a@b.com", Password = "password" };
 
                         aRepo.UpsertAsync(account).Wait();
 

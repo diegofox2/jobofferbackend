@@ -21,9 +21,9 @@ namespace JobOfferBackend.Domain.Test
             jobOffer.AddSkillRequired(new SkillRequired(new Skill() { Name = "C#" }, 3, true));
 
             //Act
-            jobOffer.RecieveApplicant(person);
+            jobOffer.AddJobApplicationRequested(person);
 
-            var jobApplication = jobOffer.Applications.Where(a => a.Applicant == person).SingleOrDefault();
+            var jobApplication = jobOffer.Applications.Where(a => a.PersonId == person.Id).SingleOrDefault();
 
 
             //Assert
@@ -40,18 +40,18 @@ namespace JobOfferBackend.Domain.Test
             var jobOffer = new JobOffer();
             jobOffer.AddSkillRequired(new SkillRequired(new Skill() { Name = "C#" }, 3, true));
             
-            jobOffer.RecieveApplicant(person);
+            jobOffer.AddJobApplicationRequested(person);
 
             //Act
             try
             {
-                jobOffer.RecieveApplicant(person);
+                jobOffer.AddJobApplicationRequested(person);
                 
                 Assert.Fail("Job offer shoud throw exeption when a person tries to apply more than one time");
             }
             catch(InvalidOperationException ex)
             {
-                Assert.AreEqual(ex.Message, DomainErrorMessages.APPLICANT_ALREADY_EXISTS);
+                Assert.AreEqual(ex.Message, DomainErrorMessages.APPLICANT_ALREADY_REQUESTED_JOB_OFFER);
             }
         }
     }

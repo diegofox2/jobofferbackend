@@ -1,4 +1,5 @@
 ﻿using JobOfferBackend.ApplicationServices;
+using JobOfferBackend.ApplicationServices.DTO;
 using JobOfferBackend.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -11,24 +12,22 @@ namespace JobOfferBackend.WebAPI.Controllers
     public class JobsOfferController : ControllerBase
     {
         private readonly JobOfferService _jobOfferService;
-        private readonly RecruiterService _recruiterService;
 
-        public JobsOfferController(JobOfferService jobOfferService, RecruiterService recruiterService)
+        public JobsOfferController(JobOfferService jobOfferService)
         {
             _jobOfferService = jobOfferService;
-            _recruiterService = recruiterService;
         }
 
         // GET api/jobsoffer
-        [HttpGet]
-        public async Task<IEnumerable<JobOffer>> Get()
+        [HttpGet()]
+        public async Task<IEnumerable<JobOfferListDto>> Get(string accountId)
         {
-            return await _jobOfferService.GetJobOffersAsync();
+            return await _jobOfferService.GetJobOffersAsync(accountId);
         }
 
         // GET api/jobsoffer/5as55d4bvbv658aaer897bv
         [HttpGet("{id}")]
-        public async Task<JobOffer> Get(string id)
+        public async Task<JobOffer> GetById(string id)
         {
             return await _jobOfferService.GetJobOffer(id);
         }

@@ -18,9 +18,5 @@ namespace JobOfferBackend.DataAccess
             return await Collection.Find(item => item.Email == email && item.Password == password).SingleOrDefaultAsync();
         }
 
-        public async Task<Account> GetByEmail(string email)
-        {
-            return await Collection.Find(item => item.Email == email).SingleOrDefaultAsync();
-        }
     }
 }

@@ -27,16 +27,16 @@ namespace JobOfferBackend.Domain.Entities
         {
             CheckPersonSkills(person, jobOffer);
 
-            jobOffer.RecieveApplicant(person);
+            jobOffer.AddJobApplicationOffered(person);
 
-            jobOffer.Applications.Single(a => a.Applicant == person).SetStatusAccepted();
+            jobOffer.Applications.Single(a => a.PersonId == person.Id).SetStatusOffered();
         }
 
         public void AcceptApplicant(Person person, JobOffer jobOffer)
         {
             CheckPersonSkills(person, jobOffer);
 
-            jobOffer.RecieveApplicant(person);
+            jobOffer.SetJobApplicationAccepted(person);
             
         }
 
@@ -46,7 +46,7 @@ namespace JobOfferBackend.Domain.Entities
 
             var personSkills = person.Abilities.Select(h => h.Skill);
 
-            if (!mandatorySkills.Except(personSkills).Any())
+            if (!mandatorySkills.All(ms => personSkills.Any(ps => ps.Id == ms.Id)))
             {
                 throw new InvalidOperationException(DomainErrorMessages.PERSON_DOES_NOT_HAVE_ALL_MANDATORY_SKILLS);
             }

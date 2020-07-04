@@ -11,6 +11,7 @@ namespace JobOfferBackend.Domain.Entities
         private List<Job> _jobHistory = new List<Job>();
         private List<Study> _studies = new List<Study>();
         private List<Ability> _abilities = new List<Ability>();
+        private List<string> _myJobApplications = new List<string>();
 
         public string IdentityCard { get; set; }
 
@@ -23,6 +24,8 @@ namespace JobOfferBackend.Domain.Entities
         public IEnumerable<Study> Studies { get => _studies; set => _studies = (List<Study>) value; }
 
         public IEnumerable<Ability> Abilities { get => _abilities; set => _abilities = (List<Ability>) value; }
+
+        public IEnumerable<string> MyJobApplications { get => _myJobApplications; set => _myJobApplications = (List<string>)value; }
 
         public void SetPreviousJob(Job job, Job jobToReplace = default)
         {
@@ -86,13 +89,20 @@ namespace JobOfferBackend.Domain.Entities
 
             if(HasAnyMandatorySkills(mandatorySkills))
             {
-                jobOffer.RecieveApplicant(this);
+                _myJobApplications.Add(jobOffer.Id);
+
+                jobOffer.AddJobApplicationRequested(this);
             }
             else
             {
                 throw new InvalidOperationException(DomainErrorMessages.PERSON_DOES_NOT_HAVE_ALL_MANDATORY_SKILLS);
             }
             
+        }
+
+        public void SetJobApplicationAccepted(string jobOfferId)
+        {
+            _myJobApplications.Add(jobOfferId);
         }
 
         public override void Validate()
@@ -114,6 +124,7 @@ namespace JobOfferBackend.Domain.Entities
 
             ThrowExceptionIfErrors();
         }
+
 
         private bool HasAnyMandatorySkills(IEnumerable<Skill> skillsRequired)
         {

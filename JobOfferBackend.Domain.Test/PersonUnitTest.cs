@@ -9,7 +9,7 @@ namespace JobOfferBackend.Domain.Test
     public class PersonUnitTest
     {
         [TestMethod]
-        public void ApplyToJobOffer_CreatesNewApplication_OnAJobOffer()
+        public void ApplyToJobOffer_CreatesNewJobApplication_OnAJobOffer()
         {
             //Arrange
             var person = new Person() { FirstName = "Pepe", LastName = "Lopez" };
@@ -21,11 +21,12 @@ namespace JobOfferBackend.Domain.Test
             //Act
             person.ApplyToJobOffer(jobOffer);
 
-            var jobApplication = jobOffer.Applications.Where(a => a.Applicant == person).SingleOrDefault();
+            var jobApplication = jobOffer.Applications.Where(a => a.PersonId == person.Id).SingleOrDefault();
 
             //Assert
-            Assert.IsTrue(jobApplication.Progress.Count() == 1);
-            Assert.IsTrue(jobApplication.Progress.First().State == ApplicationState.Requested);
+            Assert.IsTrue(jobApplication.Progress.Count() == 2);
+            Assert.IsTrue(jobApplication.Progress.First().State == ApplicationState.Recieved);
+            Assert.IsTrue(jobApplication.Progress.Last().State == ApplicationState.Requested);
         }
     }
 }

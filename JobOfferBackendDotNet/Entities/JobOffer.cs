@@ -48,16 +48,42 @@ namespace JobOfferBackend.Domain.Entities
             _skillsRequired.Add(skill);
         }
 
-        public void RecieveApplicant(Person person)
+        public void AddJobApplicationRequested(Person person)
         {
-            if(_applications.Any(a=> a.Applicant == person))
+            if (_applications.Any(a => a.PersonId == person.Id && a.Progress.Any(p => p.State == ApplicationState.Requested)))
             {
-                throw new InvalidOperationException(DomainErrorMessages.APPLICANT_ALREADY_EXISTS);
+                throw new InvalidOperationException(DomainErrorMessages.APPLICANT_ALREADY_REQUESTED_JOB_OFFER);
             }
 
-            var application = new JobApplication(person, DateTime.Now.Date);
+            var application = new JobApplication(person.Id, DateTime.Now.Date);
+
+            application.SetStatusRequested();
 
             _applications.Add(application);
+        }
+
+        public void AddJobApplicationOffered(Person person)
+        {
+            if (_applications.Any(a => a.PersonId == person.Id && a.Progress.Any(p => p.State == ApplicationState.Offered)))
+            {
+                throw new InvalidOperationException(DomainErrorMessages.APPLICANT_ALREADY_OFFERED);
+            }
+
+            var application = new JobApplication(person.Id, DateTime.Now.Date);
+
+            application.SetStatusOffered();
+
+            _applications.Add(application);
+        }
+
+        public void SetJobApplicationAccepted(Person person)
+        {
+            if (_applications.Any(a => a.PersonId == person.Id && a.Progress.Any(p => p.State == ApplicationState.Accepted)))
+            {
+                throw new InvalidOperationException(DomainErrorMessages.APPLICANT_ALREADY_ACCEPTED);
+            }
+
+            _applications.Where(a => a.PersonId == person.Id).SingleOrDefault().SetStatusAccepted();
         }
 
         public override void Validate()
