@@ -1,6 +1,10 @@
 ﻿using JobOfferBackend.ApplicationServices;
 using JobOfferBackend.Domain.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
+using System.Linq;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -9,15 +13,14 @@ namespace JobOfferBackend.WebAPI.Controllers
 {
     public class ApplyToJobOfferRequest
     {
-        public string jobOfferId { get; set; }
+        public string JobOfferId { get; set; }
 
-        public string token { get; set; }
-
-        public string user { get; set; }
+        public string User { get; set; }
     }
 
 
     [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PersonController : Controller
     {
         private readonly PersonService _personService;
@@ -30,9 +33,9 @@ namespace JobOfferBackend.WebAPI.Controllers
 
         [HttpPost]
         [Route("ApplyToJobOffer")]
-        public async Task ApplyToJobOffer([FromBody] ApplyToJobOfferRequest request)
+        public async Task ApplyToJobOffer([FromBody] ApplyToJobOfferRequest request )
         {
-            await _personService.ApplyToJobOfferAsync(request.token, request.jobOfferId, request.user);
+            await _personService.ApplyToJobOfferAsync(request.JobOfferId, HttpContext.User.Claims.FirstOrDefault(c=> c.Type == "AccountId").Value, request.User);
         }
 
         [HttpPost]

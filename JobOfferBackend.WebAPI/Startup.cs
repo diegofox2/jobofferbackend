@@ -1,12 +1,15 @@
 ﻿using JobOfferBackend.ApplicationServices;
 using JobOfferBackend.DataAccess;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
+using System.Text;
 
 namespace JobOfferBackend.WebAPI
 {
@@ -30,21 +33,36 @@ namespace JobOfferBackend.WebAPI
             services.AddScoped<RecruiterRepository>();
             services.AddScoped<AccountRepository>();
             services.AddScoped<PersonRepository>();
-            services.AddScoped<TokenInformationRepository>();
-
             services.AddScoped<RecruiterService>();
             services.AddScoped<JobOfferService>();
             services.AddScoped<PersonService>();
             services.AddScoped<AccountService>();
-
-
+            
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder => builder.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod());
 
             });
 
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = Configuration["Jwt:Issuer"],
+                        ValidAudience = Configuration["Jwt:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                    };
+                });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddSession();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Job Offer API", Version = "v1" });
@@ -62,9 +80,12 @@ namespace JobOfferBackend.WebAPI
             app.UseCors();
 
             app.UseMvc();
-            app.UseSwagger();
 
-            
+            app.UseAuthentication();
+
+            app.UseSession();
+
+            app.UseSwagger();
 
             app.UseSwaggerUI(c =>
             {
