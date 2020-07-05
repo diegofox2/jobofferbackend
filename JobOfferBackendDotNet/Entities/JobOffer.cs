@@ -7,6 +7,13 @@ using System.Linq;
 
 namespace JobOfferBackend.Domain.Entities
 {
+    public enum JobOfferState
+    {
+        Created,
+        Published,
+        Finished
+    }
+
     public class JobOffer : BaseEntity<JobOffer>
     {
         private List<JobApplication> _applications = new List<JobApplication>();
@@ -24,7 +31,7 @@ namespace JobOfferBackend.Domain.Entities
 
         public Recruiter Recruiter { get; set; }
 
-        public bool IsActive { get; set; }
+        public JobOfferState State { get; set; }
 
         public string Language { get; set; }
 
@@ -36,16 +43,16 @@ namespace JobOfferBackend.Domain.Entities
 
         public string Zone { get; set; }
 
-        public void AddSkillRequired(SkillRequired skill)
+        public void AddSkillRequired(SkillRequired skillRequired)
         {
-            if(_skillsRequired.Any(s => s == skill))
+            if(_skillsRequired.Any(s => s.Skill == skillRequired.Skill))
             {
                 throw new InvalidOperationException(DomainErrorMessages.SKILL_REQUIRED_ALREADY_EXISTS);
             }
 
-            skill.Validate();
+            skillRequired.Validate();
 
-            _skillsRequired.Add(skill);
+            _skillsRequired.Add(skillRequired);
         }
 
         public void AddJobApplicationRequested(Person person)
@@ -84,6 +91,11 @@ namespace JobOfferBackend.Domain.Entities
             }
 
             _applications.Where(a => a.PersonId == person.Id).SingleOrDefault().SetStatusAccepted();
+        }
+
+        public void Publish()
+        {
+            State = JobOfferState.Published;
         }
 
         public override void Validate()

@@ -22,7 +22,7 @@ namespace JobOfferBackend.ApplicationServices
 
         public async Task<IEnumerable<JobOfferListDto>> GetJobOffersAsync(string personId)
         {
-            var jobOffers = await _jobOfferRepository.GetActiveJobOffersAsync();
+            var jobOffers = await _jobOfferRepository.GetAllPublishedJobOffersAsync();
 
             var jobOfferListDto = new List<JobOfferListDto>();
 

@@ -22,11 +22,11 @@ namespace InitialDataCreator
             var mongoClient = new MongoClient();
             var database = mongoClient.GetDatabase("JobOfferDatabase");
 
-            var cSharp = new Skill() { Description = "Lenguaje de programación C#", Name = "C#" };
-            var javascript = new Skill() { Description = "Lenguaje de programación Javascript", Name = "Javascript" };
-            var react = new Skill() { Description = "Libreria de UI", Name = "React" };
-            var docker = new Skill() { Description = "Contenedores", Name = "Docker" };
-            var java = new Skill() { Description = "Lenguaje de programación Java", Name = "Java" };
+            var cSharp = new Skill() { Description = "Lenguaje de programación C#", Name = "C#", Id = Guid.NewGuid().ToString() };
+            var javascript = new Skill() { Description = "Lenguaje de programación Javascript", Name = "Javascript", Id = Guid.NewGuid().ToString() };
+            var react = new Skill() { Description = "Libreria de UI", Name = "React", Id = Guid.NewGuid().ToString() };
+            var docker = new Skill() { Description = "Contenedores", Name = "Docker", Id = Guid.NewGuid().ToString() };
+            var java = new Skill() { Description = "Lenguaje de programación Java", Name = "Java", Id = Guid.NewGuid().ToString() };
 
             switch (option)
             {
@@ -128,6 +128,10 @@ namespace InitialDataCreator
 
                         recruiterService.CreateJobOfferAsync(jobOffer3, recruiter.Id).Wait();
 
+                        recruiterService.PublishJobOffer(jobOffer).Wait();
+                        recruiterService.PublishJobOffer(jobOffer2).Wait();
+                        recruiterService.PublishJobOffer(jobOffer3).Wait();
+
                         Console.WriteLine("Agregado correctamente!");
                         Console.ReadKey();
                     }; break;
@@ -141,6 +145,9 @@ namespace InitialDataCreator
                         var account = new Account() { Id = Guid.NewGuid().ToString(), PersonId = person.Id, Email = "a@b.com", Password = "password" };
 
                         aRepo.UpsertAsync(account).Wait();
+
+                        Console.WriteLine("Agregado correctamente!");
+                        Console.ReadKey();
 
                     };break;
             }

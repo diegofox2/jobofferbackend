@@ -54,5 +54,43 @@ namespace JobOfferBackend.Domain.Test
                 Assert.AreEqual(ex.Message, DomainErrorMessages.APPLICANT_ALREADY_REQUESTED_JOB_OFFER);
             }
         }
+
+        [TestMethod]
+        public void AddSkillRequired_ThrowsInvalidOperationException_WhenJobSkillAlreadyExists()
+        {
+            //Arrange
+            var jobOffer = new JobOffer();
+            var skill = new Skill() { Name = "C#", Id = Guid.NewGuid().ToString() };
+
+            jobOffer.AddSkillRequired(new SkillRequired(skill, 3, true));
+
+            //Act
+            try
+            {
+                jobOffer.AddSkillRequired(new SkillRequired(skill, 5, false));
+
+                Assert.Fail("It shouldn't allow to add a repeated skill");
+            }
+            catch(InvalidOperationException ex)
+            {
+                Assert.AreEqual(ex.Message, DomainErrorMessages.SKILL_REQUIRED_ALREADY_EXISTS);
+            }
+        }
+
+        [TestMethod]
+        public void AddSkillRequired_AcceptsSkill_WhenJobSkillDoesNotExists()
+        {
+            //Arrange
+            var jobOffer = new JobOffer();
+            var cSharp = new Skill() { Name = "C#", Id = Guid.NewGuid().ToString() };
+            var javascript = new Skill() { Name = "Javascript", Id = Guid.NewGuid().ToString() };
+
+            jobOffer.AddSkillRequired(new SkillRequired(cSharp, 3, true));
+
+            //Act
+            jobOffer.AddSkillRequired(new SkillRequired(javascript, 5, false));
+
+            Assert.AreEqual(2, jobOffer.SkillsRequired.Count());
+        }
     }
 }

@@ -81,8 +81,6 @@ namespace JobOfferBackend.ApplicationServices
 
         public virtual async Task CreateJobOfferAsync(JobOffer jobOffer, string recruiterId)
         {
-            
-            
             jobOffer.Validate();
 
             if(jobOffer.HasIdCreated)
@@ -92,7 +90,7 @@ namespace JobOfferBackend.ApplicationServices
 
             var recruiter = await _recruiterRepository.GetByIdAsync(recruiterId);
 
-            var jobOffersCreatedByRecruiter = await _jobOfferRepository.GetActiveJobOffers(recruiter);
+            var jobOffersCreatedByRecruiter = await _jobOfferRepository.GetActiveJobOffersByRecruiterAsync(recruiter);
 
             if (jobOffersCreatedByRecruiter.Any(j => j.Company == jobOffer.Company && j.Title == jobOffer.Title))
             {
@@ -101,7 +99,14 @@ namespace JobOfferBackend.ApplicationServices
 
             jobOffer.Recruiter = recruiter;
 
-            jobOffer.IsActive = true;
+            jobOffer.State = JobOfferState.Created;
+
+            await _jobOfferRepository.UpsertAsync(jobOffer);
+        }
+
+        public virtual  async Task PublishJobOffer(JobOffer jobOffer)
+        {
+            jobOffer.Publish();
 
             await _jobOfferRepository.UpsertAsync(jobOffer);
         }
