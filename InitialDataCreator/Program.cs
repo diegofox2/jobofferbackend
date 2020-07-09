@@ -50,8 +50,9 @@ namespace InitialDataCreator
                         var recruiterRepository = new RecruiterRepository(database);
                         var jobOfferRepository = new JobOfferRepository(database);
                         var personRepository = new PersonRepository(database);
+                        var accountRepository = new AccountRepository(database);
 
-                        var recruiterService = new RecruiterService(companyRepository, recruiterRepository, jobOfferRepository, personRepository);
+                        var recruiterService = new RecruiterService(companyRepository, recruiterRepository, jobOfferRepository, personRepository, accountRepository);
 
                         var recruiter = new Recruiter();
                         recruiter.AddClientCompany(new Company("Acme", "Software"));
@@ -64,7 +65,7 @@ namespace InitialDataCreator
 
                         recruiter.SetAbility(new Ability(javascript, 9));
 
-                        var jobOffer = new JobOffer() { Date = DateTime.Now, Title = "Analista programador", Company = new Company("Acme", "software"), Zone = "Palermo" };
+                        var jobOffer = new JobOffer() { Date = DateTime.Now.Date, Title = "Analista programador", Company = new Company("Acme", "software"), Zone = "Palermo" };
 
                         jobOffer.Description = "Para importante empresa ubicada en San Telmo, estamos en búsqueda de desarrollador fullstack con " +
                             "al menos 3 años de experiencia utilizando React y NodeJs.Quien se incorpore estará participando dentro " +
@@ -89,7 +90,7 @@ namespace InitialDataCreator
 
                         //
 
-                        var jobOffer2 = new JobOffer() { Date = DateTime.Now, Title = "JAVA Full Stack Developer", Company = new Company("KaizenRH", "software"), Zone = "Las Cañitas" };
+                        var jobOffer2 = new JobOffer() { Date = DateTime.Now.Date, Title = "JAVA Full Stack Developer", Company = new Company("KaizenRH", "software"), Zone = "Las Cañitas" };
 
                         jobOffer2.Description = "En KaizenRH buscamos Python Developer Junior para trabajar en interesantes proyectos dentro de Startup en expansión LATAM dedicada a la automatización de procesos IT y negocios.";
 
@@ -111,7 +112,7 @@ namespace InitialDataCreator
 
                         //
 
-                        var jobOffer3 = new JobOffer() { Date = DateTime.Now, Title = "Sr. C# Backend Developer/Engineer", Company = new Company("ADN Recursos Humanos", "Seleccion de personal"), Zone = "Microcentro" };
+                        var jobOffer3 = new JobOffer() { Date = DateTime.Now.Date, Title = "Sr. C# Backend Developer/Engineer", Company = new Company("ADN Recursos Humanos", "Seleccion de personal"), Zone = "Microcentro" };
 
                         jobOffer3.Description = "ADN - Recursos Humanos estamos en la búsqueda de un Sr. Python Backend Developer/Engineer, para Importante Empresa de Tecnología";
 

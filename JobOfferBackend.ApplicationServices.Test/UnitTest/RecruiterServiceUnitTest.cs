@@ -16,6 +16,7 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
         private readonly Mock<RecruiterRepository> _recruiterRepositoryMock;
         private readonly Mock<JobOfferRepository> _jobOfferRepositoryMock;
         private readonly Mock<PersonRepository> _personRepositoryMock;
+        private readonly Mock<AccountRepository> _accountRepositoryMock;
         private readonly Mock<IMongoDatabase> _mongoDataBaseMock;
         private readonly RecruiterService _service;
 
@@ -27,8 +28,9 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
             _recruiterRepositoryMock = new Mock<RecruiterRepository>(MockBehavior.Strict, _mongoDataBaseMock.Object);
             _jobOfferRepositoryMock = new Mock<JobOfferRepository>(MockBehavior.Strict, _mongoDataBaseMock.Object);
             _personRepositoryMock = new Mock<PersonRepository>(MockBehavior.Strict, _mongoDataBaseMock.Object);
+            _accountRepositoryMock = new Mock<AccountRepository>(MockBehavior.Strict, _mongoDataBaseMock.Object);
 
-            _service = new RecruiterService(_companyRepositoryMock.Object, _recruiterRepositoryMock.Object, _jobOfferRepositoryMock.Object, _personRepositoryMock.Object);
+            _service = new RecruiterService(_companyRepositoryMock.Object, _recruiterRepositoryMock.Object, _jobOfferRepositoryMock.Object, _personRepositoryMock.Object, _accountRepositoryMock.Object);
         }
 
 

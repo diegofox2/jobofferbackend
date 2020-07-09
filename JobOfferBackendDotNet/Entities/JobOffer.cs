@@ -57,7 +57,7 @@ namespace JobOfferBackend.Domain.Entities
 
         public void AddJobApplicationRequested(Person person)
         {
-            if (_applications.Any(a => a.PersonId == person.Id && a.Progress.Any(p => p.State == ApplicationState.Requested)))
+            if (_applications.Any(a => a.ApplicantId == person.Id && a.Progress.Any(p => p.State == ApplicationState.Requested)))
             {
                 throw new InvalidOperationException(DomainErrorMessages.APPLICANT_ALREADY_REQUESTED_JOB_OFFER);
             }
@@ -71,7 +71,7 @@ namespace JobOfferBackend.Domain.Entities
 
         public void AddJobApplicationOffered(Person person)
         {
-            if (_applications.Any(a => a.PersonId == person.Id && a.Progress.Any(p => p.State == ApplicationState.Offered)))
+            if (_applications.Any(a => a.ApplicantId == person.Id && a.Progress.Any(p => p.State == ApplicationState.Offered)))
             {
                 throw new InvalidOperationException(DomainErrorMessages.APPLICANT_ALREADY_OFFERED);
             }
@@ -85,12 +85,12 @@ namespace JobOfferBackend.Domain.Entities
 
         public void SetJobApplicationAccepted(Person person)
         {
-            if (_applications.Any(a => a.PersonId == person.Id && a.Progress.Any(p => p.State == ApplicationState.Accepted)))
+            if (_applications.Any(a => a.ApplicantId == person.Id && a.Progress.Any(p => p.State == ApplicationState.Accepted)))
             {
                 throw new InvalidOperationException(DomainErrorMessages.APPLICANT_ALREADY_ACCEPTED);
             }
 
-            _applications.Where(a => a.PersonId == person.Id).SingleOrDefault().SetStatusAccepted();
+            _applications.Where(a => a.ApplicantId == person.Id).SingleOrDefault().SetStatusAccepted();
         }
 
         public void Publish()

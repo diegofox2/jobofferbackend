@@ -29,7 +29,7 @@ namespace JobOfferBackend.Domain.Entities
 
             jobOffer.AddJobApplicationOffered(person);
 
-            jobOffer.Applications.Single(a => a.PersonId == person.Id).SetStatusOffered();
+            jobOffer.Applications.Single(a => a.ApplicantId == person.Id).SetStatusOffered();
         }
 
         public void AcceptApplicant(Person person, JobOffer jobOffer)

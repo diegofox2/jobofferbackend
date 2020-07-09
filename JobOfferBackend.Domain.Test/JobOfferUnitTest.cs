@@ -23,7 +23,7 @@ namespace JobOfferBackend.Domain.Test
             //Act
             jobOffer.AddJobApplicationRequested(person);
 
-            var jobApplication = jobOffer.Applications.Where(a => a.PersonId == person.Id).SingleOrDefault();
+            var jobApplication = jobOffer.Applications.Where(a => a.ApplicantId == person.Id).SingleOrDefault();
 
 
             //Assert

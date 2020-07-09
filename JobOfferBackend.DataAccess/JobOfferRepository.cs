@@ -17,6 +17,11 @@ namespace JobOfferBackend.DataAccess
             return await Collection.Find(item => item.State !=  JobOfferState.Finished && item.Recruiter == recruiter).ToListAsync();
         }
 
+        public async Task<IEnumerable<JobOffer>> GetAllJobOffersByRecruiter(Recruiter recruiter)
+        {
+            return await Collection.Find(item => item.Recruiter == recruiter).ToListAsync();
+        }
+
         public async Task<List<JobOffer>> GetAllPublishedJobOffersAsync()
         {
             return await Collection.Find(item => item.State != JobOfferState.Finished).ToListAsync();

@@ -1,12 +1,17 @@
 ﻿using JobOfferBackend.ApplicationServices;
 using JobOfferBackend.Domain.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace JobOfferBackend.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class RecruiterController : ControllerBase
     {
         private readonly RecruiterService _recruiterService;
@@ -28,6 +33,13 @@ namespace JobOfferBackend.WebAPI.Controllers
         public async Task CreateRecruiter([FromBody] Recruiter recruiter)
         {
             await _recruiterService.CreateRecruiterAsync(recruiter);
+        }
+
+        [HttpGet()]
+        [Route("GetJobOffers/{email}")]
+        public async Task<IEnumerable<JobOffer>> GetJobOffers(string email)
+        {
+            return await _recruiterService.GetAllJobOffersAsync(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "AccountId").Value, email);
         }
     }
 }

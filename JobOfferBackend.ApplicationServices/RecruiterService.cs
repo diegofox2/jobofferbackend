@@ -3,6 +3,7 @@ using JobOfferBackend.DataAccess;
 using JobOfferBackend.Domain.Constants;
 using JobOfferBackend.Domain.Entities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,13 +19,15 @@ namespace JobOfferBackend.ApplicationServices
         private readonly RecruiterRepository _recruiterRepository;
         private readonly JobOfferRepository _jobOfferRepository;
         private readonly PersonRepository _personRepository;
+        private readonly AccountRepository _accountRepository;
 
-        public RecruiterService(CompanyRepository companyRepository, RecruiterRepository recruiterRepository, JobOfferRepository jobOfferRepository, PersonRepository personRepository)
+        public RecruiterService(CompanyRepository companyRepository, RecruiterRepository recruiterRepository, JobOfferRepository jobOfferRepository, PersonRepository personRepository, AccountRepository accountRepository)
         {
             _companyRepository = companyRepository;
             _recruiterRepository = recruiterRepository;
             _jobOfferRepository = jobOfferRepository;
             _personRepository = personRepository;
+            _accountRepository = accountRepository;
         }
 
         public virtual async Task<Recruiter> GetRecruiterAsync(Recruiter recruiter)
@@ -32,6 +35,29 @@ namespace JobOfferBackend.ApplicationServices
             return await _recruiterRepository.GetByIdAsync(recruiter.Id);
         }
 
+        public virtual async Task<IEnumerable<JobOffer>> GetAllJobOffersAsync(string accountId, string user)
+        {
+            var account = await _accountRepository.GetByIdAsync(accountId);
+
+            if (account != null)
+            {
+                if (account.Email == user)
+                {
+                    var recruiter = await _recruiterRepository.GetByIdAsync(account.PersonId);
+
+                    if (recruiter != null)
+                    {
+                        return await _jobOfferRepository.GetAllJobOffersByRecruiter(recruiter);
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException(DomainErrorMessages.INVALID_RECRUITER);
+                    }
+                }
+                else throw new Exception();
+            }
+            else throw new Exception();
+        }
 
         public virtual async Task CreateRecruiterAsync(Recruiter recruiter)
         {

@@ -21,7 +21,7 @@ namespace JobOfferBackend.Domain.Test
             //Act
             person.ApplyToJobOffer(jobOffer);
 
-            var jobApplication = jobOffer.Applications.Where(a => a.PersonId == person.Id).SingleOrDefault();
+            var jobApplication = jobOffer.Applications.Where(a => a.ApplicantId == person.Id).SingleOrDefault();
 
             //Assert
             Assert.IsTrue(jobApplication.Progress.Count() == 2);
