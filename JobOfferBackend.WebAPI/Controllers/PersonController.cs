@@ -11,14 +11,6 @@ using System.Threading.Tasks;
 
 namespace JobOfferBackend.WebAPI.Controllers
 {
-    public class ApplyToJobOfferRequest
-    {
-        public string JobOfferId { get; set; }
-
-        public string User { get; set; }
-    }
-
-
     [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PersonController : Controller
@@ -32,10 +24,10 @@ namespace JobOfferBackend.WebAPI.Controllers
 
 
         [HttpPost]
-        [Route("ApplyToJobOffer")]
-        public async Task ApplyToJobOffer([FromBody] ApplyToJobOfferRequest request )
+        [Route("ApplyToJobOffer/{jobOfferId}")]
+        public async Task ApplyToJobOffer(string jobOfferId)
         {
-            await _personService.ApplyToJobOfferAsync(request.JobOfferId, HttpContext.User.Claims.FirstOrDefault(c=> c.Type == "AccountId").Value, request.User);
+            await _personService.ApplyToJobOfferAsync(jobOfferId, HttpContext.User.Claims.FirstOrDefault(c=> c.Type == "jta").Value);
         }
 
         [HttpPost]

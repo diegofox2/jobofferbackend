@@ -49,43 +49,37 @@ namespace JobOfferBackend.ApplicationServices
             }
         }
 
-        public virtual async Task ApplyToJobOfferAsync(string jobOfferId, string accountId, string user)
+        public virtual async Task ApplyToJobOfferAsync(string jobOfferId, string accountId)
         {
             var account = await _accountRepository.GetByIdAsync(accountId);
 
             if (account != null)
             {
-                if (account.Email == user)
-                { 
-                    var jobOffer = await _jobOfferRepository.GetByIdAsync(jobOfferId);
+                var jobOffer = await _jobOfferRepository.GetByIdAsync(jobOfferId);
 
-                    if (jobOffer != null)
+                if (jobOffer != null)
+                {
+                    var person = await _personRepository.GetByIdAsync(account.PersonId);
+
+                    if (person != null)
                     {
-                        var person = await _personRepository.GetByIdAsync(account.PersonId);
+                        person.ApplyToJobOffer(jobOffer);
 
-                        if (person != null)
-                        {
-                            person.ApplyToJobOffer(jobOffer);
+                        await _jobOfferRepository.UpsertAsync(jobOffer);
 
-                            await _jobOfferRepository.UpsertAsync(jobOffer);
-
-                            await _personRepository.UpsertAsync(person);
-                        }
-                        else
-                        {
-                            throw new InvalidOperationException(ServicesErrorMessages.PERSON_DOES_NOT_EXISTS);
-                        }
-
+                        await _personRepository.UpsertAsync(person);
                     }
                     else
                     {
-                        throw new InvalidOperationException(ServicesErrorMessages.INVALID_JOB_OFFER);
+                        throw new InvalidOperationException(ServicesErrorMessages.PERSON_DOES_NOT_EXISTS);
                     }
+
                 }
                 else
                 {
-                    throw new InvalidOperationException(ServicesErrorMessages.INVALID_USER_ACCOUNT);
+                    throw new InvalidOperationException(ServicesErrorMessages.INVALID_JOB_OFFER);
                 }
+                
             }
             else
             {

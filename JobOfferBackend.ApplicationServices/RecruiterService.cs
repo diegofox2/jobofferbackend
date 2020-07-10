@@ -35,14 +35,12 @@ namespace JobOfferBackend.ApplicationServices
             return await _recruiterRepository.GetByIdAsync(recruiter.Id);
         }
 
-        public virtual async Task<IEnumerable<JobOffer>> GetAllJobOffersAsync(string accountId, string user)
+        public virtual async Task<IEnumerable<JobOffer>> GetAllJobOffersAsync(string accountId)
         {
             var account = await _accountRepository.GetByIdAsync(accountId);
 
             if (account != null)
             {
-                if (account.Email == user)
-                {
                     var recruiter = await _recruiterRepository.GetByIdAsync(account.PersonId);
 
                     if (recruiter != null)
@@ -53,8 +51,7 @@ namespace JobOfferBackend.ApplicationServices
                     {
                         throw new InvalidOperationException(DomainErrorMessages.INVALID_RECRUITER);
                     }
-                }
-                else throw new Exception();
+             
             }
             else throw new Exception();
         }

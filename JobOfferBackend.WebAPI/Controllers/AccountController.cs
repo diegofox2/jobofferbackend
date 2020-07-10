@@ -64,11 +64,10 @@ namespace JobOfferBackend.WebAPI.Controllers
             
             var claims = new[] {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("AccountId", accountId),
-                new Claim(JwtRegisteredClaimNames.Email, email),
+                new Claim("jta", accountId),
             };
 
-            var token = new JwtSecurityToken(_configuration["JWT:Issuer"], _configuration["JWT:Audience"], claims, DateTime.Now, DateTime.UtcNow.AddHours(24), signingCredentials);
+            var token = new JwtSecurityToken(_configuration["JWT:Issuer"], _configuration["JWT:Audience"], claims, DateTime.Now, DateTime.UtcNow.AddMinutes(30), signingCredentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }

@@ -36,10 +36,10 @@ namespace JobOfferBackend.WebAPI.Controllers
         }
 
         [HttpGet()]
-        [Route("GetJobOffers/{email}")]
-        public async Task<IEnumerable<JobOffer>> GetJobOffers(string email)
+        [Route("GetJobOffers")]
+        public async Task<IEnumerable<JobOffer>> GetJobOffers()
         {
-            return await _recruiterService.GetAllJobOffersAsync(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "AccountId").Value, email);
+            return await _recruiterService.GetAllJobOffersAsync(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "jta").Value);
         }
     }
 }
