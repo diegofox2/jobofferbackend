@@ -1,5 +1,6 @@
 ﻿using JobOfferBackend.ApplicationServices;
 using JobOfferBackend.Domain.Entities;
+using JobOfferBackend.WebAPI.Dto;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,6 +34,13 @@ namespace JobOfferBackend.WebAPI.Controllers
         public async Task CreateRecruiter([FromBody] Recruiter recruiter)
         {
             await _recruiterService.CreateRecruiterAsync(recruiter);
+        }
+
+        [HttpPost]
+        [Route("updatejoboffer")]
+        public async Task UpdateJobOffer([FromBody] UpdateJobOfferDto updateJobOfferDto)
+        {
+            await _recruiterService.UpdateJobOffer(updateJobOfferDto.NewJobOffer, updateJobOfferDto.PreviousJobOffer, HttpContext.User.Claims.FirstOrDefault(c => c.Type == "jta").Value);
         }
 
         [HttpGet()]

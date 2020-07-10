@@ -127,6 +127,25 @@ namespace JobOfferBackend.ApplicationServices
             await _jobOfferRepository.UpsertAsync(jobOffer);
         }
 
+        public virtual async Task UpdateJobOffer(JobOffer newJobOffer, JobOffer previousJobOffer, string recruiterId)
+        {
+            newJobOffer.Validate();
+
+            var currentJobOffer = await _jobOfferRepository.GetByIdAsync(previousJobOffer.Id);
+
+            if(currentJobOffer.HasSamePropertyValuesThan(previousJobOffer))
+            {
+                throw new InvalidOperationException(DomainErrorMessages.JOBOFFER_WAS_MODIFIED_BEFORE_THIS_UPDATE);
+            }
+
+            if(newJobOffer.Recruiter.Id != recruiterId || previousJobOffer.Recruiter.Id != recruiterId)
+            {
+                throw new InvalidOperationException(DomainErrorMessages.INVALID_RECRUITER);
+            }
+
+            await _jobOfferRepository.UpsertAsync(newJobOffer);
+        }
+
         public virtual  async Task PublishJobOffer(JobOffer jobOffer)
         {
             jobOffer.Publish();

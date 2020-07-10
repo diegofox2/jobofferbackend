@@ -37,7 +37,7 @@ namespace JobOfferBackend.Domain.Common
 
         public override int GetHashCode() => Id.GetHashCode();
 
-        public bool ComparePropertiesTo(T other)
+        public bool HasSamePropertyValuesThan(T other)
         {
             var results = new List<bool>();
 
