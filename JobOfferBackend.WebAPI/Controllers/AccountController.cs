@@ -1,5 +1,6 @@
 ﻿using JobOfferBackend.ApplicationServices;
 using JobOfferBackend.Doman.Security.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -14,6 +15,7 @@ namespace JobOfferBackend.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class AccountController : ControllerBase
     {
         private readonly AccountService _accountService;
@@ -52,6 +54,15 @@ namespace JobOfferBackend.WebAPI.Controllers
             await _accountService.SignUpAsync(email, password, confirmationPassword);
         }
 
+        [HttpPost]
+        [Route("validatetoken")]
+        public ActionResult ValidateToken()
+        {
+            //This method only can be executed whether the token was prevously accepted by the security framework
+            return Ok();
+        }
+        
+
         private string GenerarTokenJWT(string email, string accountId)
         {
             
@@ -67,7 +78,7 @@ namespace JobOfferBackend.WebAPI.Controllers
                 new Claim("jta", accountId),
             };
 
-            var token = new JwtSecurityToken(_configuration["JWT:Issuer"], _configuration["JWT:Audience"], claims, DateTime.Now, DateTime.UtcNow.AddMinutes(30), signingCredentials);
+            var token = new JwtSecurityToken(_configuration["JWT:Issuer"], _configuration["JWT:Audience"], claims, DateTime.Now, DateTime.UtcNow.AddHours(3), signingCredentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
