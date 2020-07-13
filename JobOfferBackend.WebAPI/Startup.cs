@@ -33,10 +33,12 @@ namespace JobOfferBackend.WebAPI
             services.AddScoped<RecruiterRepository>();
             services.AddScoped<AccountRepository>();
             services.AddScoped<PersonRepository>();
+            services.AddScoped<SkillRepository>();
             services.AddScoped<RecruiterService>();
             services.AddScoped<JobOfferService>();
             services.AddScoped<PersonService>();
             services.AddScoped<AccountService>();
+            services.AddScoped<SkillsService>();
             
             services.AddCors(options =>
             {

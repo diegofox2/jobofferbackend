@@ -23,7 +23,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
             _jobOfferRepository = new JobOfferRepository(_database);
             _accountRepository = new AccountRepository(_database);
 
-            _service = new PersonService(_personRepository, _jobOfferRepository,_accountRepository);
+            _service = new PersonService(_personRepository, _jobOfferRepository, _accountRepository);
         }
 
         [TestInitialize]
@@ -39,7 +39,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
             SetupIntegrationTest.OneTimeTearDown();
         }
 
-        
+
         [TestMethod]
         public async Task CreatePerson_SavePersonSuccessfully_WhenPersonDataIsCorrectAndPersonNotExists()
         {
@@ -51,8 +51,8 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
                 IdentityCard = "28123456"
             };
 
-            person.SetPreviousJob(new Job("Accenture", "Sr.Talent Adquision", new DateTime(2015,5,1), true));
-            person.SetPreviousJob(new Job("Accenture", "Sr.Talent Adquision", new DateTime(2014, 1, 1), false, new DateTime(2015,4,30)));
+            person.SetPreviousJob(new Job("Accenture", "Sr.Talent Adquision", new DateTime(2015, 5, 1), true));
+            person.SetPreviousJob(new Job("Accenture", "Sr.Talent Adquision", new DateTime(2014, 1, 1), false, new DateTime(2015, 4, 30)));
 
             person.SetStudy(new Study("UBA", "Lic.Relaciones del Trabajo", StudyStatus.Completed));
 
@@ -103,6 +103,5 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
             //Assert
             Assert.AreEqual("Globant", updatedPerson.JobHistory.Single(j => j == newJob).CompanyName, "Company name of a person was now updated");
         }
-
     }
 }

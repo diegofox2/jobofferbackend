@@ -11,7 +11,7 @@ namespace JobOfferBackend.DataAccess
         {
         }
 
-        public async Task<Company> GetCompanyAsync (string companyName, string activity)
+        public virtual async Task<Company> GetCompanyAsync (string companyName, string activity)
         {
             return await Collection.Find(item => item.Name == companyName && item.Activity == activity).SingleOrDefaultAsync();
         }

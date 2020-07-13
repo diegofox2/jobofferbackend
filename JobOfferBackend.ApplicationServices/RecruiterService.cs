@@ -53,7 +53,10 @@ namespace JobOfferBackend.ApplicationServices
                     }
              
             }
-            else throw new Exception();
+            else
+            {
+                throw new InvalidOperationException(DomainErrorMessages.ACCOUNT_DOES_NOT_EXISTS);
+            }
         }
 
         public virtual async Task CreateRecruiterAsync(Recruiter recruiter)
@@ -115,7 +118,7 @@ namespace JobOfferBackend.ApplicationServices
 
             var jobOffersCreatedByRecruiter = await _jobOfferRepository.GetActiveJobOffersByRecruiterAsync(recruiter);
 
-            if (jobOffersCreatedByRecruiter.Any(j => j.Company == jobOffer.Company && j.Title == jobOffer.Title))
+            if (jobOffersCreatedByRecruiter.Any(j => j.Company == jobOffer.Company && j.Title == jobOffer.Title && j.State != JobOfferState.Finished))
             {
                 throw new InvalidOperationException(DomainErrorMessages.JOBOFFER_ALREADY_EXISTS);
             }

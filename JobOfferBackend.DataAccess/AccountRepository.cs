@@ -13,7 +13,7 @@ namespace JobOfferBackend.DataAccess
         {
         }
 
-        public async Task<Account> GetAccountAsync(string email, string password)
+        public virtual async Task<Account> GetAccountAsync(string email, string password)
         {
             return await Collection.Find(item => item.Email == email && item.Password == password).SingleOrDefaultAsync();
         }

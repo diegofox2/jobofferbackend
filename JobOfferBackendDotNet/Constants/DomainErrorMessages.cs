@@ -35,5 +35,6 @@ namespace JobOfferBackend.Domain.Constants
         public const string PERSON_ALREADY_APLIED_TO_JOB_OFFER = "PERSON_ALREADY_APLIED_TO_JOB_OFFER";
         public const string INVALID_RECRUITER = "INVALID_RECRUITER";
         public const string JOBOFFER_WAS_MODIFIED_BEFORE_THIS_UPDATE = "JOBOFFER_WAS_MODIFIED_BEFORE_THIS_UPDATE";
+        public const string ACCOUNT_DOES_NOT_EXISTS = "ACCOUNT_DOES_NOT_EXISTS";
     }
 }

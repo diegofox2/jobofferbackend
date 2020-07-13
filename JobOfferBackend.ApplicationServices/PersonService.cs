@@ -35,13 +35,14 @@ namespace JobOfferBackend.ApplicationServices
             await _personRepository.UpsertAsync(person);
         }
 
-        public virtual async Task UpdatePersonAsync(Person recruiter)
+        public virtual async Task UpdatePersonAsync(Person person)
         {
-            recruiter.Validate();
 
-            if (await _personRepository.CheckEntityExistsAsync(recruiter.Id))
+            if (await _personRepository.CheckEntityExistsAsync(person.Id))
             {
-                await _personRepository.UpsertAsync(recruiter);
+                person.Validate();
+
+                await _personRepository.UpsertAsync(person);
             }
             else
             {

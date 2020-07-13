@@ -14,6 +14,14 @@ namespace JobOfferBackend.Domain.Entities
         Finished
     }
 
+    public enum LanguageLevel
+    {
+        Nothing,
+        Basic,
+        Intermediate,
+        Advance
+    }
+
     public class JobOffer : BaseEntity<JobOffer>
     {
         private List<JobApplication> _applications = new List<JobApplication>();
@@ -35,7 +43,9 @@ namespace JobOfferBackend.Domain.Entities
 
         public string Language { get; set; }
 
-        public string LanguageLevel { get; set; }
+        public LanguageLevel LanguageLevel { get; set; }
+
+        public bool IsLanguageMandatory { get; set; }
 
         public ContractCondition ContractInformation { get; set; }
 

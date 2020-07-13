@@ -1,7 +1,10 @@
 ﻿using JobOfferBackend.Domain.Common;
+using JobOfferBackend.Domain.Entities;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace JobOfferBackend.DataAccess
@@ -38,14 +41,19 @@ namespace JobOfferBackend.DataAccess
             return await Collection.Find(p => p.Id == id).CountDocumentsAsync() == 1;
         }
 
-        public virtual async Task<ReplaceOneResult> UpsertAsync(T entity)
+        public virtual async Task<IEnumerable<T>> GetAll()
+        {
+            return await Collection.AsQueryable().ToListAsync();
+        }
+
+        public virtual async Task UpsertAsync(T entity)
         {
             if (entity.Id == null)
             {
                 entity.Id = CreateId();
             }
 
-            return await Collection.ReplaceOneAsync(p => p.Id == entity.Id, entity, new ReplaceOptions() { IsUpsert = true });
+            await Collection.ReplaceOneAsync(p => p.Id == entity.Id, entity, new ReplaceOptions() { IsUpsert = true });
 
         }
 

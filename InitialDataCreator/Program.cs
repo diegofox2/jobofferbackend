@@ -22,11 +22,11 @@ namespace InitialDataCreator
             var mongoClient = new MongoClient();
             var database = mongoClient.GetDatabase("JobOfferDatabase");
 
-            var cSharp = new Skill() { Description = "Lenguaje de programación C#", Name = "C#", Id = Guid.NewGuid().ToString() };
-            var javascript = new Skill() { Description = "Lenguaje de programación Javascript", Name = "Javascript", Id = Guid.NewGuid().ToString() };
-            var react = new Skill() { Description = "Libreria de UI", Name = "React", Id = Guid.NewGuid().ToString() };
-            var docker = new Skill() { Description = "Contenedores", Name = "Docker", Id = Guid.NewGuid().ToString() };
-            var java = new Skill() { Description = "Lenguaje de programación Java", Name = "Java", Id = Guid.NewGuid().ToString() };
+            var cSharp = new Skill() { Name = "C#", Id = Guid.NewGuid().ToString() };
+            var javascript = new Skill() { Name = "Javascript", Id = Guid.NewGuid().ToString() };
+            var react = new Skill() { Name = "React", Id = Guid.NewGuid().ToString() };
+            var docker = new Skill() { Name = "Docker", Id = Guid.NewGuid().ToString() };
+            var java = new Skill() { Name = "Java", Id = Guid.NewGuid().ToString() };
 
             switch (option)
             {
@@ -75,7 +75,8 @@ namespace InitialDataCreator
                         jobOffer.AddSkillRequired(new SkillRequired(react, 3));
 
                         jobOffer.Language = "Ingles";
-                        jobOffer.LanguageLevel = "Avanzado";
+                        jobOffer.LanguageLevel = LanguageLevel.Advance;
+                        jobOffer.IsLanguageMandatory = true;
 
                         jobOffer.ContractInformation = new ContractCondition()
                         {
@@ -99,7 +100,7 @@ namespace InitialDataCreator
                         jobOffer2.AddSkillRequired(new SkillRequired(java, 6, true));
 
                         jobOffer2.Language = "Ingles";
-                        jobOffer2.LanguageLevel = "Intermedio";
+                        jobOffer2.LanguageLevel =  LanguageLevel.Intermediate;
 
                         jobOffer2.ContractInformation = new ContractCondition()
                         {

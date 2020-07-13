@@ -7,8 +7,6 @@ namespace JobOfferBackend.Domain.Entities
     {
         public string Name { get; set; }
 
-        public string Description { get; set; }
-
         public override void Validate()
         {
             if (string.IsNullOrEmpty(Name))
