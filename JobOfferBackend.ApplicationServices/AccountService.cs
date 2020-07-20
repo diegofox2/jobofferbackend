@@ -29,6 +29,13 @@ namespace JobOfferBackend.ApplicationServices
                 throw new InvalidOperationException(ServicesErrorMessages.PASSWORD_CONFIRMATION_DOES_NOT_MATCH_WITH_PASSWORD);
             }
 
+            
+
+            if(await _accountRepository.AccountEmailAlreadyExists(email))
+            {
+                throw new InvalidOperationException(ServicesErrorMessages.INVALID_USER_ACCOUNT);
+            }
+
             var account = new Account() { Email = email, Password = password };
 
             await _accountRepository.UpsertAsync(account);

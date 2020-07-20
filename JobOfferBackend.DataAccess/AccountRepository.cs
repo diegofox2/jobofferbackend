@@ -18,5 +18,10 @@ namespace JobOfferBackend.DataAccess
             return await Collection.Find(item => item.Email == email && item.Password == password).SingleOrDefaultAsync();
         }
 
+        public virtual async Task<bool> AccountEmailAlreadyExists(string email)
+        {
+            return await Collection.Find(item => item.Email == email).SingleOrDefaultAsync() != null;
+        }
+
     }
 }
