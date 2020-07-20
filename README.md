@@ -54,10 +54,3 @@ reportgenerator "-reports:D:\TestResults\Coverage\coverage.opencover.xml" "-targ
 
 PAUSE
 
-## How to contribute
-
-If you want to contribute, please see the tab "Project" in the header and there you will find some tasks that I created to extend this project.
-Feel free to create your Fork or clone the repo, create a feature branch and the send pull request directly to this repo.
-
-Thank you very much!
-
