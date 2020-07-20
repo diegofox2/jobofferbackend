@@ -40,12 +40,12 @@ CD C:\Fuentes\JobOffersBackendDotNet\jobofferbackend\JobOfferBackendDotNet
 
 :: REPLACE D:  WITH THE DISK FOR SAVING THE COVERAGE REPORT
 
-dotnet test JobOfferBackendDotNet.sln /p:CollectCoverage=true /p:CoverletOutput=D:\TestResults\Coverage\ /p:MergeWith="D:\TestResults\Coverage\coverage.json" /p:CoverletOutputFormat=\"opencover,json\"
+dotnet test JobOfferBackendDotNet.sln /p:CollectCoverage=true /p:CoverletOutput=D:\TestResults\Coverage\ /p:MergeWith="D:\TestResults\Coverage\coverage.json" /p:CoverletOutputFormat=\"cobertura,json\"
 
 
 :: REPLACE D:  WITH THE DISK FOR READING THE COVERAGE REPORT
 
-reportgenerator "-reports:D:\TestResults\Coverage\coverage.opencover.xml" "-targetdir:D:\TestResults\Coverage\CodeCoverageReport" -reporttypes:HtmlInline
+reportgenerator "-reports:D:\TestResults\Coverage\coverage.cobertura.xml" "-targetdir:D:\TestResults\Coverage\CodeCoverageReport" -reporttypes:HtmlInline
 
 
 :: DEPLACE THE SOURCE OF CHROME.EXE AND THE PATH OF THE REPORT GENERATED
