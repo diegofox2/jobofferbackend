@@ -28,8 +28,6 @@ namespace JobOfferBackend.Domain.Entities
             CheckPersonSkills(person, jobOffer);
 
             jobOffer.AddJobApplicationOffered(person);
-
-            jobOffer.Applications.Single(a => a.ApplicantId == person.Id).SetStatusOffered();
         }
 
         public void AcceptApplicant(Person person, JobOffer jobOffer)
