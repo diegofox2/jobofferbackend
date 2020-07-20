@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\JobOfferBackend.DataAccess\JobOfferBackend.DataAccess.csproj" />
+    <ProjectReference Include="..\JobOfferBackend.Domain\JobOfferBackend.Domain.csproj" />
   </ItemGroup>
 
 </Project>

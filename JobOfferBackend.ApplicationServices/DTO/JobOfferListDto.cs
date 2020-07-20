@@ -1,7 +1,4 @@
 ﻿using JobOfferBackend.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace JobOfferBackend.ApplicationServices.DTO
 {

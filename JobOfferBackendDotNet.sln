@@ -3,29 +3,29 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30104.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOfferBackend.Domain", "JobOfferBackend.Domain.csproj", "{4727AC46-2224-476A-AFEE-BA7B0467D4E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOfferBackend.Domain", "JobOfferBackend.Domain\JobOfferBackend.Domain.csproj", "{4727AC46-2224-476A-AFEE-BA7B0467D4E5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOfferBackend.Domain.Test", "..\JobOfferBackend.Domain.Test\JobOfferBackend.Domain.Test.csproj", "{042E7A61-646C-46B1-94C1-B21DA42CF34F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOfferBackend.Domain.Test", "JobOfferBackend.Domain.Test\JobOfferBackend.Domain.Test.csproj", "{042E7A61-646C-46B1-94C1-B21DA42CF34F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOfferBackend.DataAccess", "..\JobOfferBackend.DataAccess\JobOfferBackend.DataAccess.csproj", "{9DF149BB-5637-405D-863A-53ED4B7284E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOfferBackend.DataAccess", "JobOfferBackend.DataAccess\JobOfferBackend.DataAccess.csproj", "{9DF149BB-5637-405D-863A-53ED4B7284E6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOfferBackend.ApplicationServices", "..\JobOfferBackend.ApplicationServices\JobOfferBackend.ApplicationServices.csproj", "{7A0838A3-7DB2-4C72-A34D-DFA1E2A9BB7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOfferBackend.ApplicationServices", "JobOfferBackend.ApplicationServices\JobOfferBackend.ApplicationServices.csproj", "{7A0838A3-7DB2-4C72-A34D-DFA1E2A9BB7A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOfferBackend.ApplicationServices.Test", "..\JobOfferBackend.ApplicationServices.Test\JobOfferBackend.ApplicationServices.Test.csproj", "{3D2F2725-3FE1-4E5A-9B08-101919F2742A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOfferBackend.ApplicationServices.Test", "JobOfferBackend.ApplicationServices.Test\JobOfferBackend.ApplicationServices.Test.csproj", "{3D2F2725-3FE1-4E5A-9B08-101919F2742A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOfferBackend.WebAPI", "..\JobOfferBackend.WebAPI\JobOfferBackend.WebAPI.csproj", "{076ACE2F-9442-4424-A92F-CF34620CB7F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOfferBackend.WebAPI", "JobOfferBackend.WebAPI\JobOfferBackend.WebAPI.csproj", "{076ACE2F-9442-4424-A92F-CF34620CB7F0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utils", "Utils", "{38314FE1-E4C1-453C-A062-15DE98235AFD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InitialDataCreator", "..\InitialDataCreator\InitialDataCreator.csproj", "{D2958B52-6A73-4162-A75F-1E600888E08A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InitialDataCreator", "InitialDataCreator\InitialDataCreator.csproj", "{D2958B52-6A73-4162-A75F-1E600888E08A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobOfferBackend.Doman.Security", "..\JobOfferBackend.Doman.Security\JobOfferBackend.Doman.Security.csproj", "{0E761FE6-447A-4C90-9619-9852FEC7BF6B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobOfferBackend.Doman.Security", "JobOfferBackend.Doman.Security\JobOfferBackend.Doman.Security.csproj", "{0E761FE6-447A-4C90-9619-9852FEC7BF6B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C815AB97-F997-45E2-9629-48E3C871F1A2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{E94A689C-4A2F-4C37-A439-656EB2F49AF9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobOfferBackend.Domain.Common", "..\JobOfferBackend.Domain.Common\JobOfferBackend.Domain.Common.csproj", "{4960211F-9764-4F9C-ACD0-A38C74770AE5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobOfferBackend.Domain.Common", "JobOfferBackend.Domain.Common\JobOfferBackend.Domain.Common.csproj", "{4960211F-9764-4F9C-ACD0-A38C74770AE5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
