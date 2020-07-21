@@ -19,6 +19,13 @@ This project uses MongoDB as a database engine through [MongoDriver](https://doc
 Nowadays, new projects do not need relational databases to store data. Instead, NoSQL databases like Mongo let you reduce a lot of code because ORM's like both Entity Framework and Dapper are no longer necessary on this paradigm.
 In addition, NoSQL databases are really much faster than relational databases, and most of their important features like Constraints, Triggers, Indexes, Security, Mirror Replication and Load Balance now are available for main NoSQL databases, like MongoDB.
 
+## How to run it
+
+You must to run the console application "InitialDataCreator" so that you have a basic data set preloaded in your mongo database.
+
+After that you can set as startup proyect "JobOfferBackend.WebAPI".
+
+This WebAPI project is running Swagger in order to see and test the endpoints. You only have to open the browser and go to localhost:[your port]/swagger.
 
 ## Code Coverage
 In order to create code coverage reports, this project also uses [Coverlet](https://github.com/coverlet-coverage/coverlet) and [Report Generator](https://danielpalme.github.io/ReportGenerator/), which can be included in some build pipelines like Azure Devops
@@ -40,7 +47,7 @@ CD C:\Fuentes\JobOffersBackendDotNet\jobofferbackend\JobOfferBackendDotNet
 
 :: REPLACE D:  WITH THE DISK FOR SAVING THE COVERAGE REPORT
 
-dotnet test JobOfferBackendDotNet.sln /p:CollectCoverage=true /p:CoverletOutput=D:\TestResults\Coverage\ /p:MergeWith="D:\TestResults\Coverage\coverage.json" /p:CoverletOutputFormat=\"cobertura,json\"
+dotnet test JobOfferBackendDotNet.sln /p:CollectCoverage=true /p:CoverletOutput=D:\TestResults\Coverage\ /p:MergeWith="D:\TestResults\Coverage\coverage.json" /p:CoverletOutputFormat=\"cobertura,json\" -m:1
 
 
 :: REPLACE D:  WITH THE DISK FOR READING THE COVERAGE REPORT
