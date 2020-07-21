@@ -21,6 +21,8 @@ In addition, NoSQL databases are really much faster than relational databases, a
 
 ## How to run it
 
+Download MongoDB and install it with default credentials because the project use it as it is. Otherwise, you will need to update the credentials into the project.
+
 You must to run the console application "InitialDataCreator" so that you have a basic data set preloaded in your mongo database.
 
 After that you can set as startup proyect "JobOfferBackend.WebAPI".
