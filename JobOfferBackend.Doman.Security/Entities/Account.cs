@@ -15,10 +15,12 @@ namespace JobOfferBackend.Doman.Security.Entities
         public override void Validate()
         {
             if (string.IsNullOrEmpty(Email))
-                _errors.Append(DomainErrorMessages.EMAIL_CANT_BE_EMPTY);
+                _errors.AppendLine(DomainErrorMessages.EMAIL_CANT_BE_EMPTY);
 
             if (string.IsNullOrEmpty(Password))
-                _errors.Append(DomainErrorMessages.PASSWORD_CANT_BE_EMPTY);
+                _errors.AppendLine(DomainErrorMessages.PASSWORD_CANT_BE_EMPTY);
+
+            ThrowExceptionIfErrors();
         }
     }
 }

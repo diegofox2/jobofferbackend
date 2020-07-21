@@ -217,7 +217,8 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
                 Recruiter = recruiter,
                 Date = DateTime.Now.Date
             };
-            
+            jobOffer.ContractInformation = new ContractCondition() { KindOfContract = "FullTime", StartingFrom = "As soon as possible", WorkingDays = "Montay to Friday" };
+
             jobOffer.AddSkillRequired(new SkillRequired(skill1, 5,true));
             jobOffer.AddSkillRequired(new SkillRequired(skill2, 4, false));
             jobOffer.AddSkillRequired(new SkillRequired(skill3, 2, false));

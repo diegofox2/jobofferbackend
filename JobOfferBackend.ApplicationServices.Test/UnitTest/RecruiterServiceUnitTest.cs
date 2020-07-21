@@ -151,7 +151,8 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
         {
             //Arrange
 
-            var jobOffer = CreateValidJobOffer();
+            var jobOffer = new JobOffer();
+            jobOffer.ContractInformation = new ContractCondition() { KindOfContract = "FullTime", StartingFrom = "As soon as possible", WorkingDays = "Montay to Friday" };
 
             _recruiterRepositoryMock.Setup(mock => mock.GetByIdAsync(It.IsAny<string>())).ReturnsAsync(new Recruiter());
 
@@ -174,7 +175,7 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
         {
             //Arrange
             var jobOffer = new JobOffer() { Id = Guid.NewGuid().ToString() };
-
+            jobOffer.ContractInformation = new ContractCondition() { KindOfContract = "FullTime", StartingFrom = "As soon as possible", WorkingDays = "Montay to Friday" };
             //Act
             try
             {
@@ -201,6 +202,7 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
             var jobOffer = new JobOffer();
             jobOffer.Title = "Some Job";
             jobOffer.Company = company;
+            jobOffer.ContractInformation = new ContractCondition() { KindOfContract = "FullTime", StartingFrom = "As soon as possible", WorkingDays = "Montay to Friday" };
 
             _recruiterRepositoryMock.Setup(mock => mock.GetByIdAsync(It.IsAny<string>())).ReturnsAsync(new Recruiter());
 
@@ -221,11 +223,5 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
             }
         }
 
-        private JobOffer CreateValidJobOffer()
-        {
-            var jobOffer = new JobOffer();
-
-            return jobOffer;
-        }
     }
 }

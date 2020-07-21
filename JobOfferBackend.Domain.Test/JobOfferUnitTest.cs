@@ -20,6 +20,7 @@ namespace JobOfferBackend.Domain.Test
             var jobOffer = new JobOffer();
             jobOffer.AddSkillRequired(new SkillRequired(new Skill() { Name = "C#" }, 3, true));
 
+
             //Act
             jobOffer.AddJobApplicationRequested(person);
 

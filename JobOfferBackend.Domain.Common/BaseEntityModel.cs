@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace JobOfferBackend.Domain.Common
@@ -62,7 +63,14 @@ namespace JobOfferBackend.Domain.Common
         {
             if (_errors != null && !string.IsNullOrEmpty(_errors.ToString()))
             {
-                throw new InvalidOperationException($"Error: {_errors}");
+                var exception = new InvalidOperationException("Error. See property 'Data' to get errors details");
+             
+                foreach(string error in _errors.ToString().TrimEnd().Split("\r\n"))
+                {
+                    exception.Data.Add(error, error);
+                }
+
+                throw exception;
             }
         }
 
