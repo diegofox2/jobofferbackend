@@ -12,12 +12,12 @@ namespace JobOfferBackend.WebAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class JobsOfferController : ControllerBase
+    public class JobOffersController : ControllerBase
     {
         private readonly JobOfferService _jobOfferService;
         private readonly SkillsService _skillsService;
 
-        public JobsOfferController(JobOfferService jobOfferService, SkillsService skillsService)
+        public JobOffersController(JobOfferService jobOfferService, SkillsService skillsService)
         {
             _jobOfferService = jobOfferService;
             _skillsService = skillsService;

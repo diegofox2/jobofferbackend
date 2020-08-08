@@ -108,13 +108,13 @@ namespace JobOfferBackend.Domain.Entities
         public override void Validate()
         {
             if (string.IsNullOrEmpty(IdentityCard))
-                _errors.AppendLine(DomainErrorMessages.IDENTITY_CARD_REQUIRED);
+                _errorLines.AppendLine(DomainErrorMessages.IDENTITY_CARD_REQUIRED);
 
             if (string.IsNullOrEmpty(FirstName))
-                _errors.AppendLine(DomainErrorMessages.FIRST_NAME_REQUIRED);
+                _errorLines.AppendLine(DomainErrorMessages.FIRST_NAME_REQUIRED);
 
             if (string.IsNullOrEmpty(LastName))
-                _errors.AppendLine(DomainErrorMessages.LAST_NAME_REQUIRED);
+                _errorLines.AppendLine(DomainErrorMessages.LAST_NAME_REQUIRED);
 
             _jobHistory?.ForEach(item => item.Validate());
 

@@ -2,6 +2,8 @@ using JobOfferBackend.Domain.Security.Constants;
 using JobOfferBackend.Doman.Security.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace JobOfferBackend.Domain.Security.Test
 {
@@ -27,7 +29,7 @@ namespace JobOfferBackend.Domain.Security.Test
             {
                 //Assert
                 Assert.AreEqual(1, ex.Data.Count);
-                Assert.IsTrue(ex.Data.Contains(DomainErrorMessages.EMAIL_CANT_BE_EMPTY));
+                Assert.IsTrue(ex.Data.Values.Cast<string>().Contains(DomainErrorMessages.EMAIL_CANT_BE_EMPTY));
             }
         }
 
@@ -49,7 +51,7 @@ namespace JobOfferBackend.Domain.Security.Test
             {
                 //Assert
                 Assert.AreEqual(1, ex.Data.Count);
-                Assert.IsTrue(ex.Data.Contains(DomainErrorMessages.PASSWORD_CANT_BE_EMPTY));
+                Assert.IsTrue(ex.Data.Values.Cast<string>().Contains(DomainErrorMessages.PASSWORD_CANT_BE_EMPTY));
             }
         }
 
@@ -71,8 +73,8 @@ namespace JobOfferBackend.Domain.Security.Test
             {
                 //Assert
                 Assert.AreEqual(2, ex.Data.Count);
-                Assert.IsTrue(ex.Data.Contains(DomainErrorMessages.EMAIL_CANT_BE_EMPTY));
-                Assert.IsTrue(ex.Data.Contains(DomainErrorMessages.PASSWORD_CANT_BE_EMPTY));
+                Assert.IsTrue(ex.Data.Values.Cast<string>().Contains(DomainErrorMessages.EMAIL_CANT_BE_EMPTY));
+                Assert.IsTrue(ex.Data.Values.Cast<string>().Contains(DomainErrorMessages.PASSWORD_CANT_BE_EMPTY));
             }
         }
     }

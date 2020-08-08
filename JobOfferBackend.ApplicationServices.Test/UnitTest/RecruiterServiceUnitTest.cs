@@ -81,7 +81,7 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
 
         [TestMethod]
         [TestCategory("UnitTest")]
-        public async Task GetAllJobsOfferAsync_ReturnsJobOffers_WhenBothAccountAndRecruiterExists()
+        public async Task GetAllJobOffersAsync_ReturnsJobOffers_WhenBothAccountAndRecruiterExists()
         {
             //Arrange
             _accountRepositoryMock.Setup(mock => mock.GetByIdAsync(It.IsAny<string>())).ReturnsAsync(new Account());
@@ -101,7 +101,7 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
 
         [TestMethod]
         [TestCategory("UnitTest")]
-        public async Task GetAllJobsOfferAsync_ThrowsInvalidOperationException_WhenAccountDoesNotExists()
+        public async Task GetAllJobOffersAsync_ThrowsInvalidOperationException_WhenAccountDoesNotExists()
         {
             //Arrange
             _accountRepositoryMock.Setup(mock => mock.GetByIdAsync(It.IsAny<string>())).ReturnsAsync((Account)null);
@@ -123,7 +123,7 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
 
         [TestMethod]
         [TestCategory("UnitTest")]
-        public async Task GetAllJobsOfferAsync_ThrowsInvalidOperationException_WhenRecruiterDoesNotExists()
+        public async Task GetAllJobOffersAsync_ThrowsInvalidOperationException_WhenRecruiterDoesNotExists()
         {
             //Arrange
             _accountRepositoryMock.Setup(mock => mock.GetByIdAsync(It.IsAny<string>())).ReturnsAsync(new Account());

@@ -11,7 +11,7 @@ namespace JobOfferBackend.Domain.Common
 
         public bool HasIdCreated { get => !string.IsNullOrEmpty(Id); }
 
-        protected StringBuilder _errors = new StringBuilder();
+        protected StringBuilder _errorLines = new StringBuilder();
 
         public static bool operator ==(BaseEntity<T> source, BaseEntity<T> reference)
         {
@@ -61,13 +61,15 @@ namespace JobOfferBackend.Domain.Common
 
         protected void ThrowExceptionIfErrors()
         {
-            if (_errors != null && !string.IsNullOrEmpty(_errors.ToString()))
+            if (_errorLines != null && !string.IsNullOrEmpty(_errorLines.ToString()))
             {
                 var exception = new InvalidOperationException("Error. See property 'Data' to get errors details");
-             
-                foreach(string error in _errors.ToString().TrimEnd().Split("\r\n"))
+
+                var listErrors = _errorLines.ToString().TrimEnd().Split("\r\n");
+
+                for(int a = 0; a<listErrors.Length; a++ )
                 {
-                    exception.Data.Add(error, error);
+                    exception.Data.Add(a, listErrors[a]);
                 }
 
                 throw exception;

@@ -111,7 +111,7 @@ namespace JobOfferBackend.Domain.Entities
         public override void Validate()
         {
             if (ContractInformation == null)
-                _errors.AppendLine(DomainErrorMessages.CONTRACT_INFORMATION_EMPTY);
+                _errorLines.AppendLine(DomainErrorMessages.CONTRACT_INFORMATION_EMPTY);
 
 
             ThrowExceptionIfErrors();
