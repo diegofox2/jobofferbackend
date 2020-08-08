@@ -235,5 +235,55 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
 
         }
 
+        [TestMethod]
+        public async Task UpdateJobOffer_UpdatesAJobOfferSuccessfuly()
+        {
+            //Arrange
+            var recruiter = new Recruiter() { FirstName = "Maidana", LastName = "Patricia", IdentityCard = "28123456" };
+
+            await _recruiterRepository.UpsertAsync(recruiter);
+
+            var company = new Company("Acme", "Software");
+
+            recruiter.AddClientCompany(company);
+
+            var skill1 = new Skill() { Name = "C#" };
+            var skill2 = new Skill() { Name = "Javascript" };
+            var skill3 = new Skill() { Name = "React" };
+
+            await _skillRepository.UpsertAsync(skill1);
+            await _skillRepository.UpsertAsync(skill2);
+            await _skillRepository.UpsertAsync(skill3);
+
+            var jobOffer = new JobOffer()
+            {
+                Title = "Analista Funcional",
+                Description = "Se necesita analista funcional con bla bla bla",
+                Recruiter = recruiter,
+                Date = DateTime.Now.Date
+            };
+            jobOffer.ContractInformation = new ContractCondition() { KindOfContract = "FullTime", StartingFrom = "As soon as possible", WorkingDays = "Montay to Friday" };
+
+            jobOffer.AddSkillRequired(new SkillRequired(skill1, 5, true));
+            jobOffer.AddSkillRequired(new SkillRequired(skill2, 4, false));
+            jobOffer.AddSkillRequired(new SkillRequired(skill3, 2, false));
+
+            await _service.CreateJobOfferAsync(jobOffer, recruiter.Id);
+
+            var newJobOffer = await _jobOfferRepository.GetByIdAsync(jobOffer.Id);
+
+
+            //Act
+
+            newJobOffer.Title = "New JobOffer";
+
+            await _service.UpdateJobOffer(newJobOffer, jobOffer, recruiter.Id);
+
+            var jobOfferUpdated = await _jobOfferRepository.GetByIdAsync(newJobOffer.Id);
+
+            //Assert
+            Assert.AreEqual(newJobOffer.Title, jobOfferUpdated.Title, "Job offer was not updated successfully");
+            
+        }
     }
 }
