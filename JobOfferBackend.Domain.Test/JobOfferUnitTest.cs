@@ -2,6 +2,7 @@
 using JobOfferBackend.Domain.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace JobOfferBackend.Domain.Test
@@ -92,6 +93,31 @@ namespace JobOfferBackend.Domain.Test
             jobOffer.AddSkillRequired(new SkillRequired(javascript, 5, false));
 
             Assert.AreEqual(2, jobOffer.SkillsRequired.Count());
+        }
+
+        [TestMethod]
+        public void Validate_ThrowsException_WhenThereIsASkillRequiredRepeated()
+        {
+            //Arrange
+            var contractCondition = new ContractCondition() { KindOfContract = "a", StartingFrom = "b", WorkingDays = "c" };
+            var jobOffer = new JobOffer() { Title = "Some title", ContractInformation = contractCondition };
+            var javascript = new Skill();
+            var skillRequired = new SkillRequired(javascript, 1);
+
+            jobOffer.SkillsRequired = new List<SkillRequired>() { skillRequired, skillRequired };
+
+            //Act
+            try
+            {
+                jobOffer.Validate();
+            }
+            catch(InvalidOperationException ex)
+            {
+                Assert.AreEqual(1, ex.Data.Count);
+                Assert.IsTrue(ex.Data.Values.Cast<string>().Contains(DomainErrorMessages.SKILL_REQUIRED_ALREADY_EXISTS));
+            }
+
+
         }
     }
 }

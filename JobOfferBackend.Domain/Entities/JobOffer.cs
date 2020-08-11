@@ -4,6 +4,7 @@ using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace JobOfferBackend.Domain.Entities
 {
@@ -55,7 +56,7 @@ namespace JobOfferBackend.Domain.Entities
 
         public void AddSkillRequired(SkillRequired skillRequired)
         {
-            if(_skillsRequired.Any(s => s.Skill == skillRequired.Skill))
+            if (_skillsRequired.Any(s => s.Skill == skillRequired.Skill))
             {
                 throw new InvalidOperationException(DomainErrorMessages.SKILL_REQUIRED_ALREADY_EXISTS);
             }
@@ -113,8 +114,17 @@ namespace JobOfferBackend.Domain.Entities
             if (ContractInformation == null)
                 _errorLines.AppendLine(DomainErrorMessages.CONTRACT_INFORMATION_EMPTY);
 
+            ValidateSkillsRequired();
 
             ThrowExceptionIfErrors();
+        }
+
+        private void ValidateSkillsRequired()
+        {
+            if (_skillsRequired.GroupBy(item => item.Skill.Name).Any(item=> item.Count() > 1))
+            {
+                _errorLines.AppendLine(DomainErrorMessages.SKILL_REQUIRED_ALREADY_EXISTS);
+            }
         }
     }
 }

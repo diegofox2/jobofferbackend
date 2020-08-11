@@ -65,7 +65,7 @@ namespace JobOfferBackend.Domain.Common
             {
                 var exception = new InvalidOperationException("Error. See property 'Data' to get errors details");
 
-                var listErrors = _errorLines.ToString().TrimEnd().Split("\r\n");
+                var listErrors = _errorLines.ToString().TrimEnd().Split("\n");
 
                 for(int a = 0; a<listErrors.Length; a++ )
                 {
