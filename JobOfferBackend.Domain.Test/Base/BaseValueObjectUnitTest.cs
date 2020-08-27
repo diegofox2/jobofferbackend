@@ -1,5 +1,6 @@
 ﻿using JobOfferBackend.Domain.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 
 namespace JobOfferBackend.Domain.Test.Base
 {
@@ -20,6 +21,8 @@ namespace JobOfferBackend.Domain.Test.Base
             public int SomeIntProp { get; set; }
 
             public SomeClass SomeClassProperty { get; set; }
+
+            public List<SomeClass> SomeClassList { get; set; }
 
             public override void Validate()
             {
@@ -139,37 +142,5 @@ namespace JobOfferBackend.Domain.Test.Base
             //Assert
             Assert.IsTrue(a != b);
         }
-
-
-        [TestMethod]
-        public void GetHashCode_ReturnsSameValue_WhenTwoValueObjectAreEquals()
-        {
-            //Arrange
-            var a = new SomeValueObject() { SomeIntProp = 1, SomeStringProp = "MyString" };
-
-            var c = new ValueObjectWithAnotherValueObject() { MyProp = "MyString", SomeValueObjectProperty = a };
-
-            var d = new ValueObjectWithAnotherValueObject() { MyProp = "MyString", SomeValueObjectProperty = a };
-
-            //Assert
-            Assert.AreEqual(c.GetHashCode(), d.GetHashCode());
-        }
-
-        [TestMethod]
-        public void GetHashCode_ReturnsDifferentValues_WhenTwoValueObjectAreNotEquals()
-        {
-            //Arrange
-            var a = new SomeValueObject() { SomeIntProp = 1, SomeStringProp = "MyString" };
-
-            var b = new SomeValueObject() { SomeIntProp = 1, SomeStringProp = "MyString" };
-
-            var c = new ValueObjectWithAnotherValueObject() { MyProp = "MyString", SomeValueObjectProperty = a };
-
-            var d = new ValueObjectWithAnotherValueObject() { SomeValueObjectProperty = b };
-
-            //Assert
-            Assert.AreNotEqual(c.GetHashCode(), d.GetHashCode());
-        }
-
     }
 }

@@ -91,7 +91,7 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
             _jobOfferRepositoryMock.Setup(mock => mock.GetAllJobOffersByRecruiter(It.IsAny<Recruiter>())).ReturnsAsync(new List<JobOffer>());
 
             //Act
-            await _service.GetAllJobOffersAsync(It.IsAny<string>());
+            await _service.GetAllJobOffersCreatedByAccountAsync(It.IsAny<string>());
 
             //Assert
             _accountRepositoryMock.VerifyAll();
@@ -109,7 +109,7 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
             //Act
             try
             {
-                await _service.GetAllJobOffersAsync(It.IsAny<string>());
+                await _service.GetAllJobOffersCreatedByAccountAsync(It.IsAny<string>());
 
                 //Assert
                 Assert.Fail("It should throw an exception when account does not exists");
@@ -133,7 +133,7 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
             //Act
             try
             {
-                await _service.GetAllJobOffersAsync(It.IsAny<string>());
+                await _service.GetAllJobOffersCreatedByAccountAsync(It.IsAny<string>());
 
                 //Assert
                 Assert.Fail("It should throw an exception when recruiter does not exists");

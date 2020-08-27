@@ -35,7 +35,7 @@ namespace JobOfferBackend.ApplicationServices
             return await _recruiterRepository.GetByIdAsync(recruiter.Id);
         }
 
-        public virtual async Task<IEnumerable<JobOffer>> GetAllJobOffersAsync(string accountId)
+        public virtual async Task<IEnumerable<JobOffer>> GetAllJobOffersCreatedByAccountAsync(string accountId)
         {
             var account = await _accountRepository.GetByIdAsync(accountId);
 
@@ -135,11 +135,6 @@ namespace JobOfferBackend.ApplicationServices
             newJobOffer.Validate();
 
             var currentJobOffer = await _jobOfferRepository.GetByIdAsync(previousJobOffer.Id);
-
-            if(currentJobOffer.HasSamePropertyValuesThan(previousJobOffer))
-            {
-                throw new InvalidOperationException(DomainErrorMessages.JOBOFFER_WAS_MODIFIED_BEFORE_THIS_UPDATE);
-            }
 
             if(newJobOffer.Recruiter.Id != recruiterId || previousJobOffer.Recruiter.Id != recruiterId)
             {

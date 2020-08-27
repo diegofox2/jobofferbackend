@@ -13,13 +13,13 @@ namespace JobOfferBackend.ApplicationServices
     public class PersonService
     {
         private readonly PersonRepository _personRepository;
-        private readonly JobOfferRepository _jobOfferRepository;
+        private readonly JobOfferRepository _jobOffersRepository;
         private readonly AccountRepository _accountRepository;
 
         public PersonService(PersonRepository personRepository, JobOfferRepository jobOfferRepository, AccountRepository accountRepository)
         {
             _personRepository = personRepository;
-            _jobOfferRepository = jobOfferRepository;
+            _jobOffersRepository = jobOfferRepository;
             _accountRepository = accountRepository;
         }
 
@@ -56,7 +56,7 @@ namespace JobOfferBackend.ApplicationServices
 
             if (account != null)
             {
-                var jobOffer = await _jobOfferRepository.GetByIdAsync(jobOfferId);
+                var jobOffer = await _jobOffersRepository.GetByIdAsync(jobOfferId);
 
                 if (jobOffer != null)
                 {
@@ -66,7 +66,7 @@ namespace JobOfferBackend.ApplicationServices
                     {
                         person.ApplyToJobOffer(jobOffer);
 
-                        await _jobOfferRepository.UpsertAsync(jobOffer);
+                        await _jobOffersRepository.UpsertAsync(jobOffer);
 
                         await _personRepository.UpsertAsync(person);
                     }

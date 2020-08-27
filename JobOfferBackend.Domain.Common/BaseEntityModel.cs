@@ -1,11 +1,12 @@
-﻿using System;
+﻿using KellermanSoftware.CompareNetObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace JobOfferBackend.Domain.Common
 {
-    public abstract class BaseEntity<T> : IIdentity<T>
+    public abstract class BaseEntity<T> : IIdentity<T> where T : class
     {
         public string Id { get; set; }
 
@@ -36,25 +37,10 @@ namespace JobOfferBackend.Domain.Common
             return Id == ((BaseEntity<T>)obj).Id;
         }
 
-        public override int GetHashCode() => Id.GetHashCode();
-
         public bool HasSamePropertyValuesThan(T other)
         {
-            var results = new List<bool>();
-
-            foreach (var property in this.GetType().GetProperties())
-            {
-                if (property.GetValue(this) == null && other.GetType().GetProperty(property.Name).GetValue(other) == null)
-                {
-                    results.Add(true);
-                }
-                else
-                {
-                    results.Add(property.GetValue(this).Equals(other.GetType().GetProperty(property.Name).GetValue(other)));
-                }
-            }
-
-            return results.TrueForAll(value => value == true);
+            CompareLogic compareLogic = new CompareLogic();
+            return compareLogic.Compare(this, other).AreEqual;
         }
 
         public abstract void Validate();
@@ -65,11 +51,12 @@ namespace JobOfferBackend.Domain.Common
             {
                 var exception = new InvalidOperationException("Error. See property 'Data' to get errors details");
 
-                var listErrors = _errorLines.ToString().TrimEnd().Split("\n");
+                var listErrors = _errorLines.ToString().TrimEnd().Split("\r\n");
 
                 for(int a = 0; a<listErrors.Length; a++ )
                 {
-                    exception.Data.Add(a, listErrors[a]);
+                    string value = listErrors[a];
+                    exception.Data.Add(a, value);
                 }
 
                 throw exception;

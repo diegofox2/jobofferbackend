@@ -282,7 +282,9 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
             var jobOfferUpdated = await _jobOfferRepository.GetByIdAsync(newJobOffer.Id);
 
             //Assert
-            Assert.AreEqual(newJobOffer.Title, jobOfferUpdated.Title, "Job offer was not updated successfully");
+            Assert.AreEqual(jobOfferUpdated, newJobOffer);
+            Assert.IsTrue(jobOfferUpdated.HasSamePropertyValuesThan(newJobOffer));
+            
             
         }
     }

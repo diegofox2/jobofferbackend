@@ -74,7 +74,7 @@ namespace JobOfferBackend.Domain.Entities
             }
             else
             {
-                if(abilityToReplace != null && _abilities.Exists(a => a.GetHashCode() == abilityToReplace.GetHashCode()))
+                if(abilityToReplace != null && _abilities.Exists(a => a == abilityToReplace))
                 {
                     _abilities.Remove(abilityToReplace);
                 }

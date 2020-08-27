@@ -61,21 +61,6 @@ namespace JobOfferBackend.Domain.Common
             return this == (BaseValueObject)obj;
         }
 
-        public override int GetHashCode()
-        {
-            int hashCode = 0;
-
-            foreach (var property in this.GetType().GetProperties())
-            {
-                if (property.GetValue(this) != null)
-                {
-                    hashCode += property.GetValue(this).GetHashCode();
-                }
-            }
-
-            return hashCode;
-        }
-
         public object Clone()
         {
             return this.MemberwiseClone();

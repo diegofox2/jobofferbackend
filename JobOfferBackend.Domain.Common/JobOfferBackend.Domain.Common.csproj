@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CompareNETObjects" Version="4.66.0" />
     <PackageReference Include="MongoDB.Driver.Core" Version="2.10.4" />
   </ItemGroup>
 
