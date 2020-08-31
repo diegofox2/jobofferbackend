@@ -16,7 +16,7 @@ namespace JobOfferBackend.Domain.Test
 
             var skillCSharp = new Skill() { Name = "C#", Id = Guid.NewGuid().ToString() };
 
-            var person = new Person() { FirstName = "Pepe", LastName = "Lopez", Id = Guid.NewGuid().ToString() };
+            var person = new Person() { FirstName = "Pepe", LastName = "Lopez", Id = Guid.NewGuid().ToString(), IdentityCard ="123" };
             person.SetAbility(new Ability(skillCSharp, 5));
 
             var jobOffer = new JobOffer() { Id = Guid.NewGuid().ToString() };
@@ -46,7 +46,7 @@ namespace JobOfferBackend.Domain.Test
             //Arrange
             var skillCSharp = new Skill() { Name = "C#", Id = Guid.NewGuid().ToString() };
 
-            var person = new Person() { FirstName = "Pepe", LastName = "Lopez", Id = Guid.NewGuid().ToString() };
+            var person = new Person() { FirstName = "Pepe", LastName = "Lopez", Id = Guid.NewGuid().ToString(), IdentityCard = "123" };
             person.SetAbility(new Ability(skillCSharp, 5));
 
             var jobOffer = new JobOffer() { Id = Guid.NewGuid().ToString() };

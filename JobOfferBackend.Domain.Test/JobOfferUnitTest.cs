@@ -15,7 +15,7 @@ namespace JobOfferBackend.Domain.Test
         public void RecieveApplicant_CreatesJobApplication_WhenItIsTheFirstAttemptToApply()
         {
             //Arrange
-            var person = new Person() { FirstName = "Pepe", LastName = "Lopez" };
+            var person = new Person() { FirstName = "Pepe", LastName = "Lopez", IdentityCard = "123" };
             person.SetAbility(new Ability(new Skill() { Name = "C#" }, 5));
 
             var jobOffer = new JobOffer();
@@ -36,7 +36,7 @@ namespace JobOfferBackend.Domain.Test
         public void RecieveApplicant_ThrowsInvalidOperationException_WhenApplicantAlreadyExists()
         {
             //Arrange
-            var person = new Person() { FirstName = "Pepe", LastName = "Lopez" };
+            var person = new Person() { FirstName = "Pepe", LastName = "Lopez", IdentityCard = "123" };
             person.SetAbility(new Ability(new Skill() { Name = "C#" }, 5));
 
             var jobOffer = new JobOffer();

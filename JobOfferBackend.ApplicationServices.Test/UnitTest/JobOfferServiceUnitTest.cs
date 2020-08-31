@@ -43,7 +43,7 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
 
             var jobOffers = new List<JobOffer>() { jobOffer1, jobOffer2 };
 
-            var person = new Person() { Id = Guid.NewGuid().ToString() };
+            var person = new Person() { Id = Guid.NewGuid().ToString(), IdentityCard = "123", FirstName = "Pepe", LastName = "Lopez" };
 
             person.SetAbility(new Ability(cSharp, 3));
 

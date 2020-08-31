@@ -29,19 +29,17 @@ namespace JobOfferBackend.Domain.Entities
 
         public void SetPreviousJob(Job job, Job jobToReplace = default)
         {
-            if (_jobHistory.Any(item => item == job))
-            {
-                throw new InvalidOperationException(DomainErrorMessages.JOB_REPEATED);
-            }
-            else
-            {
-                if (jobToReplace != null && _jobHistory.Exists(s => s.GetHashCode() == jobToReplace.GetHashCode()))
-                {
-                    _jobHistory.Remove(jobToReplace);
-                }
+            Validate();
 
-                _jobHistory.Add(job);
+            job.Validate();
+
+            if (jobToReplace != null && _jobHistory.Exists(s => s == jobToReplace))
+            {
+                _jobHistory.Remove(jobToReplace);
             }
+
+            _jobHistory.Add(job);
+            
         }
 
 
@@ -49,38 +47,30 @@ namespace JobOfferBackend.Domain.Entities
         {
             study.Validate();
 
-            if (_studies.Any(item => item == study))
-            {
-                throw new InvalidOperationException(DomainErrorMessages.STUDY_REPEATED);
-            }
-            else
-            {
-                if (studyToReplace != null && _studies.Exists(s => s.GetHashCode() == studyToReplace.GetHashCode()))
-                {
-                    _studies.Remove(studyToReplace);
-                }
+            Validate();
 
-                _studies.Add(study); 
+            if (studyToReplace != null && _studies.Exists(s => s.GetHashCode() == studyToReplace.GetHashCode()))
+            {
+                _studies.Remove(studyToReplace);
             }
+
+            _studies.Add(study);
+            
         }
 
         public void SetAbility(Ability ability, Ability abilityToReplace = default)
         {
             ability.Validate();
 
-            if (_abilities.Any(item => item == ability))
-            {
-                throw new InvalidOperationException(DomainErrorMessages.ABILITY_REPEATED);
-            }
-            else
-            {
-                if(abilityToReplace != null && _abilities.Exists(a => a == abilityToReplace))
-                {
-                    _abilities.Remove(abilityToReplace);
-                }
+            Validate();
 
-                _abilities.Add(ability);
+            if (abilityToReplace != null && _abilities.Exists(a => a == abilityToReplace))
+            {
+                _abilities.Remove(abilityToReplace);
             }
+
+            _abilities.Add(ability);
+            
         }
 
         public void ApplyToJobOffer(JobOffer jobOffer)
@@ -122,6 +112,12 @@ namespace JobOfferBackend.Domain.Entities
 
             _abilities?.ForEach(item => item.Validate());
 
+            CheckJobHistoryDuplications();
+
+            CheckAbilityDuplications();
+
+            CheckStudyDuplications();
+
             ThrowExceptionIfErrors();
         }
 
@@ -139,6 +135,30 @@ namespace JobOfferBackend.Domain.Entities
             }
 
             return result;
+        }
+
+        private void CheckJobHistoryDuplications()
+        {
+            if (_jobHistory.GroupBy(item => new { item.CompanyName, item.From }).Any(g => g.Count() > 1))
+            {
+                _errorLines.AppendLine(DomainErrorMessages.JOB_HISTORY_REPEATED);
+            }
+        }
+
+        private void CheckAbilityDuplications()
+        {
+            if (_abilities.GroupBy(item => new { item.Skill }).Any(g => g.Count() > 1))
+            {
+                _errorLines.AppendLine(DomainErrorMessages.ABILITY_REPEATED);
+            }
+        }
+
+        private void CheckStudyDuplications()
+        {
+            if (_studies.GroupBy(item => new { item.Institution, item.Title }).Any(g => g.Count() > 1))
+            {
+                _errorLines.AppendLine(DomainErrorMessages.STUDY_REPEATED);
+            }
         }
     }
 }

@@ -46,8 +46,7 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
 
             _jobOfferRepositoryMock.Setup(mock => mock.GetByIdAsync(It.IsAny<string>())).ReturnsAsync(jobOffer);
 
-            var person = new Person();
-            person.Id = Guid.NewGuid().ToString();
+            var person = new Person() { IdentityCard = "123", Id = Guid.NewGuid().ToString(), FirstName = "Pepe", LastName = "Lopez" };
             person.SetAbility(new Ability(cSharp, 5));
             person.SetAbility(new Ability(mongoDB, 1));
 

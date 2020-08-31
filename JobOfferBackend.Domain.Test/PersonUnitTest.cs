@@ -12,7 +12,7 @@ namespace JobOfferBackend.Domain.Test
         public void ApplyToJobOffer_CreatesNewJobApplication_OnAJobOffer()
         {
             //Arrange
-            var person = new Person() { FirstName = "Pepe", LastName = "Lopez" };
+            var person = new Person() { FirstName = "Pepe", LastName = "Lopez", IdentityCard = "123" };
             person.SetAbility(new Ability(new Skill() { Name = "C#" }, 5));
 
             var jobOffer = new JobOffer();

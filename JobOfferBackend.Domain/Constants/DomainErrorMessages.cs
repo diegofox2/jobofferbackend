@@ -15,7 +15,7 @@ namespace JobOfferBackend.Domain.Constants
         public const string POSITION_REQUIRED = "POSITION_REQUIRED";
         public const string FROM_REQUIRED = "FROM_REQUIRED";
         public const string TO_REQUIRED_WHEN_ISNOT_CURRENT_JOB = "TO_REQUIRED_WHEN_ISNOT_CURRENT_JOB";
-        public const string JOB_REPEATED = "JOB_REPEATED";
+        public const string JOB_HISTORY_REPEATED = "JOB__HISTORY_REPEATED";
         public const string JOB_DOES_NOT_EXISTS = "JOB_DOES_NOT_EXISTS";
         public const string STUDY_REPEATED = "STUDY_REPEATED";
         public const string ABILITY_REPEATED = "ABILITY_REPEATED";
