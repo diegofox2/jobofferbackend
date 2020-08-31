@@ -13,7 +13,7 @@ namespace JobOfferBackend.Domain.Entities
         public IEnumerable<Company> ClientCompanies { get => _clientCompanies; set => _clientCompanies = (List<Company>)value; }
 
 
-        public void AddClientCompany(Company company)
+        public void AddClient(Company company)
         {
             if (_clientCompanies.Any(item => item.Name == company.Name))
             {

@@ -40,7 +40,7 @@ namespace InitialDataCreator
             var recruiterService = new RecruiterService(companyRepository, recruiterRepository, jobOfferRepository, personRepository, accountRepository);
 
             var recruiter = new Recruiter();
-            recruiter.AddClientCompany(new Company("Acme", "Software"));
+            recruiter.AddClient(new Company("Acme", "Software"));
 
             recruiter.IdentityCard = "28.999.999";
             recruiter.FirstName = "Patricia";

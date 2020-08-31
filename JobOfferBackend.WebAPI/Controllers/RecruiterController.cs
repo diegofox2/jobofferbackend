@@ -38,9 +38,9 @@ namespace JobOfferBackend.WebAPI.Controllers
 
         [HttpPost]
         [Route("updatejoboffer")]
-        public async Task UpdateJobOffer([FromBody] UpdateJobOfferDto updateJobOfferDto)
+        public async Task UpdateJobOffer([FromBody] JobOffer jobOffer)
         {
-            await _recruiterService.UpdateJobOffer(updateJobOfferDto.NewJobOffer, updateJobOfferDto.PreviousJobOffer, HttpContext.User.Claims.FirstOrDefault(c => c.Type == "jta").Value);
+            await _recruiterService.UpdateJobOffer(jobOffer, HttpContext.User.Claims.FirstOrDefault(c => c.Type == "jta").Value);
         }
 
         [HttpGet()]

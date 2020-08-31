@@ -130,13 +130,11 @@ namespace JobOfferBackend.ApplicationServices
             await _jobOfferRepository.UpsertAsync(jobOffer);
         }
 
-        public virtual async Task UpdateJobOffer(JobOffer newJobOffer, JobOffer previousJobOffer, string recruiterId)
+        public virtual async Task UpdateJobOffer(JobOffer newJobOffer, string recruiterId)
         {
             newJobOffer.Validate();
 
-            var currentJobOffer = await _jobOfferRepository.GetByIdAsync(previousJobOffer.Id);
-
-            if(newJobOffer.Recruiter.Id != recruiterId || previousJobOffer.Recruiter.Id != recruiterId)
+            if(newJobOffer.Recruiter.Id != recruiterId)
             {
                 throw new InvalidOperationException(DomainErrorMessages.INVALID_RECRUITER);
             }

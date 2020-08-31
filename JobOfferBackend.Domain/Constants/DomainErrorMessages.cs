@@ -15,7 +15,7 @@ namespace JobOfferBackend.Domain.Constants
         public const string POSITION_REQUIRED = "POSITION_REQUIRED";
         public const string FROM_REQUIRED = "FROM_REQUIRED";
         public const string TO_REQUIRED_WHEN_ISNOT_CURRENT_JOB = "TO_REQUIRED_WHEN_ISNOT_CURRENT_JOB";
-        public const string JOB_HISTORY_REPEATED = "JOB__HISTORY_REPEATED";
+        public const string JOB_HISTORY_REPEATED = "JOB__HISTORY_REPEATED";        
         public const string JOB_DOES_NOT_EXISTS = "JOB_DOES_NOT_EXISTS";
         public const string STUDY_REPEATED = "STUDY_REPEATED";
         public const string ABILITY_REPEATED = "ABILITY_REPEATED";
@@ -29,6 +29,7 @@ namespace JobOfferBackend.Domain.Constants
         public const string APPLICANT_ALREADY_ACCEPTED = "APPLICANT_ALREADY_ACCEPTED";
         public const string APPLICANT_ALREADY_OFFERED = "APPLICANT_ALREADY_OFFERED";
         public const string APPLICANT_DOES_NOT_EXISTS = "APPLICANT_DOES_NOT_EXISTS";
+        public const string APPLICANT_DUPLICATED = "APPLICANT_DUPLICATED";
         public const string SKILL_REQUIRED_ALREADY_EXISTS = "SKILL_REQUIRED_ALREADY_EXISTS";
         public const string PERSON_DOES_NOT_HAVE_ALL_MANDATORY_SKILLS = "PERSON_DOES_NOT_HAVE_ALL_MANDATORY_SKILLS";
         public const string JOBOFFER_ALREADY_EXISTS = "JOBOFFER_ALREADY_EXISTS";

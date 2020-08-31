@@ -116,8 +116,6 @@ namespace JobOfferBackend.Domain.Test
                 Assert.AreEqual(1, ex.Data.Count);
                 Assert.IsTrue(ex.Data.Values.Cast<string>().Contains(DomainErrorMessages.SKILL_REQUIRED_ALREADY_EXISTS));
             }
-
-
         }
     }
 }

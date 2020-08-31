@@ -114,16 +114,26 @@ namespace JobOfferBackend.Domain.Entities
             if (ContractInformation == null)
                 _errorLines.AppendLine(DomainErrorMessages.CONTRACT_INFORMATION_EMPTY);
 
-            ValidateSkillsRequired();
+            CheckNoDuplicatedSkillsRequired();
+
+            CheckNoCandidatesDuplication();
 
             ThrowExceptionIfErrors();
         }
 
-        private void ValidateSkillsRequired()
+        private void CheckNoDuplicatedSkillsRequired()
         {
             if (_skillsRequired.GroupBy(item => item.Skill.Name).Any(item=> item.Count() > 1))
             {
                 _errorLines.AppendLine(DomainErrorMessages.SKILL_REQUIRED_ALREADY_EXISTS);
+            }
+        }
+
+        private void CheckNoCandidatesDuplication()
+        {
+            if (_applications.GroupBy(item => new { item.ApplicantId, item.Progress }).Count() > 1)
+            {
+                _errorLines.AppendLine(DomainErrorMessages.APPLICANT_DUPLICATED);
             }
         }
     }

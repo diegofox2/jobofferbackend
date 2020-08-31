@@ -1,10 +1,13 @@
 ﻿using JobOfferBackend.ApplicationServices.Constants;
 using JobOfferBackend.ApplicationServices.Test.Base;
 using JobOfferBackend.DataAccess;
+using JobOfferBackend.Domain.Constants;
 using JobOfferBackend.Domain.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
@@ -102,7 +105,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
                 IdentityCard = "28123456"
             };
 
-            recruiter.AddClientCompany(new Company("Acme", "Software"));
+            recruiter.AddClient(new Company("Acme", "Software"));
 
             recruiter.SetPreviousJob(new Job("Accenture", "Sr.Talent Adquision", new DateTime(2015,5,1), true));
             recruiter.SetPreviousJob(new Job("Accenture", "Sr.Talent Adquision", new DateTime(2014, 1, 1), false, new DateTime(2015,4,30)));
@@ -141,7 +144,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
                 IdentityCard = "28123456"
             };
 
-            recruiter.AddClientCompany(new Company("Acme", "Software"));
+            recruiter.AddClient(new Company("Acme", "Software"));
 
             recruiter.SetPreviousJob(new Job("Accenture", "Sr.Talent Adquision", new DateTime(2015, 5, 1), true));
             recruiter.SetPreviousJob(new Job("Accenture", "Sr.Talent Adquision", new DateTime(2014, 1, 1), false, new DateTime(2015, 4, 30)));
@@ -200,7 +203,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
 
             var company = new Company("Acme", "Software");
 
-            recruiter.AddClientCompany(company);
+            recruiter.AddClient(company);
             
             var skill1 = new Skill() { Name = "C#" };
             var skill2 = new Skill() { Name = "Javascript" };
@@ -236,7 +239,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
         }
 
         [TestMethod]
-        public async Task UpdateJobOffer_UpdatesAJobOfferSuccessfuly()
+        public async Task UpdateJobOffer_UpdatesAJobOfferSuccessfuly_WhenJobOfferHasValidInformation()
         {
             //Arrange
             var recruiter = new Recruiter() { FirstName = "Maidana", LastName = "Patricia", IdentityCard = "28123456" };
@@ -245,7 +248,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
 
             var company = new Company("Acme", "Software");
 
-            recruiter.AddClientCompany(company);
+            recruiter.AddClient(company);
 
             var skill1 = new Skill() { Name = "C#" };
             var skill2 = new Skill() { Name = "Javascript" };
@@ -277,15 +280,131 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
 
             newJobOffer.Title = "New JobOffer";
 
-            await _service.UpdateJobOffer(newJobOffer, jobOffer, recruiter.Id);
+            await _service.UpdateJobOffer(newJobOffer, recruiter.Id);
 
             var jobOfferUpdated = await _jobOfferRepository.GetByIdAsync(newJobOffer.Id);
 
             //Assert
             Assert.AreEqual(jobOfferUpdated, newJobOffer);
             Assert.IsTrue(jobOfferUpdated.HasSamePropertyValuesThan(newJobOffer));
-            
-            
+        }
+
+        [TestMethod]
+        public async Task UpdateJobOffer_ThrowsInvalidOperationException_WhenJobOfferWasNotCreatedByTheRecruiterIsDoingTheUpdate()
+        {
+            //Arrange
+            var recruiter = new Recruiter() { FirstName = "Maidana", LastName = "Patricia", IdentityCard = "28123456" };
+
+            await _recruiterRepository.UpsertAsync(recruiter);
+
+            var company = new Company("Acme", "Software");
+
+            recruiter.AddClient(company);
+
+            var skill1 = new Skill() { Name = "C#" };
+            var skill2 = new Skill() { Name = "Javascript" };
+            var skill3 = new Skill() { Name = "React" };
+
+            await _skillRepository.UpsertAsync(skill1);
+            await _skillRepository.UpsertAsync(skill2);
+            await _skillRepository.UpsertAsync(skill3);
+
+            var jobOffer = new JobOffer()
+            {
+                Title = "Analista Funcional",
+                Description = "Se necesita analista funcional con bla bla bla",
+                Recruiter = recruiter,
+                Date = DateTime.Now.Date
+            };
+            jobOffer.ContractInformation = new ContractCondition() { KindOfContract = "FullTime", StartingFrom = "As soon as possible", WorkingDays = "Montay to Friday" };
+
+            jobOffer.AddSkillRequired(new SkillRequired(skill1, 5, true));
+            jobOffer.AddSkillRequired(new SkillRequired(skill2, 4, false));
+            jobOffer.AddSkillRequired(new SkillRequired(skill3, 2, false));
+
+            await _service.CreateJobOfferAsync(jobOffer, recruiter.Id);
+
+            var newJobOffer = await _jobOfferRepository.GetByIdAsync(jobOffer.Id);
+
+            try
+            {
+                //Act
+
+                newJobOffer.Title = "New JobOffer";
+
+                await _service.UpdateJobOffer(newJobOffer, "AnotherId");
+
+                Assert.Fail("A job offer shouldn be modified by another recruiter thant the once who created it");
+            }
+            catch(InvalidOperationException ex)
+            {
+                //Assert
+
+                Assert.AreEqual(DomainErrorMessages.INVALID_RECRUITER, ex.Message);
+            }
+        }
+
+        [TestMethod]
+        public async Task UpdateJobOffer_ThrowsInvalidOperationException_WhenJobOfferHasAnApplicantInDuplicatedState()
+        {
+            //Arrange
+            var recruiter = new Recruiter() { FirstName = "Maidana", LastName = "Patricia", IdentityCard = "28123456" };
+
+            await _recruiterRepository.UpsertAsync(recruiter);
+
+            var company = new Company("Acme", "Software");
+
+            recruiter.AddClient(company);
+
+            var skill1 = new Skill() { Name = "C#" };
+            var skill2 = new Skill() { Name = "Javascript" };
+            var skill3 = new Skill() { Name = "React" };
+
+            await _skillRepository.UpsertAsync(skill1);
+            await _skillRepository.UpsertAsync(skill2);
+            await _skillRepository.UpsertAsync(skill3);
+
+            var jobOffer = new JobOffer()
+            {
+                Title = "Analista Funcional",
+                Description = "Se necesita analista funcional con bla bla bla",
+                Recruiter = recruiter,
+                Date = DateTime.Now.Date
+            };
+            jobOffer.ContractInformation = new ContractCondition() { KindOfContract = "FullTime", StartingFrom = "As soon as possible", WorkingDays = "Montay to Friday" };
+
+            jobOffer.AddSkillRequired(new SkillRequired(skill1, 5, true));
+            jobOffer.AddSkillRequired(new SkillRequired(skill2, 4, false));
+            jobOffer.AddSkillRequired(new SkillRequired(skill3, 2, false));
+
+            await _service.CreateJobOfferAsync(jobOffer, recruiter.Id);
+
+            var newJobOffer = await _jobOfferRepository.GetByIdAsync(jobOffer.Id);
+
+            var appicationsWithRepeatedApplicantState = new List<JobApplication>()
+            {
+                new JobApplication("a", new DateTime(2020, 1, 1)),
+                new JobApplication("a", new DateTime(2020, 1, 1))
+            };
+
+            try
+            {
+                //Act
+
+                newJobOffer.Title = "New JobOffer";
+
+                newJobOffer.Applications = appicationsWithRepeatedApplicantState;
+
+                await _service.UpdateJobOffer(newJobOffer, newJobOffer.Recruiter.Id);
+
+                Assert.Fail("A job offer shouldn be modified when it has an applicant in duplicated state");
+            }
+            catch (InvalidOperationException ex)
+            {
+                //Assert
+
+                Assert.IsTrue(ex.Data.Values.Cast<string>().Contains(DomainErrorMessages.APPLICANT_DUPLICATED));
+            }
         }
     }
 }
