@@ -12,16 +12,10 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.1.101
+    - uses: actions/checkout@v2    
     - name: Build
       run: dotnet build JobOfferBackendDotNet.sln --configuration Release
-      working-directory: .\
-    - name: Installing MongoDB
-      run: choco install mongodb
+      working-directory: .\    
     - name: Runnig Tests
       run: dotnet test .\JobOfferBackendDotNet.sln
     

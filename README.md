@@ -37,22 +37,29 @@ In order to create code coverage reports, this project also uses [Coverlet](http
 
 > Remember to replace the things required in this script. This script runs on Windows
 
-dotnet tool install --global coverlet.console :: THIS INSTALL COVERLET AS GLOBAL
+:: THIS INSTALL COVERLET AS GLOBAL
 
-dotnet tool install -g dotnet-reportgenerator-globaltool :: THIS INSTALL REPORT GENERATOR AS GLOBAL
+dotnet tool install --global coverlet.console 
+
+:: THIS INSTALL REPORT GENERATOR AS GLOBAL
+
+dotnet tool install -g dotnet-reportgenerator-globaltool 
+
+:: THIS INSTALL COVERALLS.NET
+
+dotnet tool install -g coveralls.net --version 1.0.0 
 
 
 :: REPLACE USING THE FOLDER OF THE SOLUTION
 
-CD C:\Fuentes\JobOffersBackendDotNet\jobofferbackend\JobOfferBackendDotNet
+CD C:\Fuentes\JobOffersBackendDotNet\jobofferbackend
 
 
-:: REPLACE D:  WITH THE DISK FOR SAVING THE COVERAGE REPORT
+:: REPLACE D: WITH THE DISK FOR SAVING THE COVERAGE REPORT
 
 dotnet test JobOfferBackendDotNet.sln /p:CollectCoverage=true /p:CoverletOutput=D:\TestResults\Coverage\ /p:MergeWith="D:\TestResults\Coverage\coverage.json" /p:CoverletOutputFormat=\"cobertura,json\" -m:1
 
-
-:: REPLACE D:  WITH THE DISK FOR READING THE COVERAGE REPORT
+:: REPLACE D: WITH THE DISK FOR READING THE COVERAGE REPORT
 
 reportgenerator "-reports:D:\TestResults\Coverage\coverage.cobertura.xml" "-targetdir:D:\TestResults\Coverage\CodeCoverageReport" -reporttypes:HtmlInline
 
@@ -62,4 +69,3 @@ reportgenerator "-reports:D:\TestResults\Coverage\coverage.cobertura.xml" "-targ
 "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" "D:\TestResults\Coverage\CodeCoverageReport\index.htm"
 
 PAUSE
-
