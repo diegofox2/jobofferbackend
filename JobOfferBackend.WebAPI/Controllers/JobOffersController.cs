@@ -15,12 +15,10 @@ namespace JobOfferBackend.WebAPI.Controllers
     public class JobOffersController : ControllerBase
     {
         private readonly JobOfferService _jobOfferService;
-        private readonly SkillsService _skillsService;
 
-        public JobOffersController(JobOfferService jobOfferService, SkillsService skillsService)
+        public JobOffersController(JobOfferService jobOfferService)
         {
             _jobOfferService = jobOfferService;
-            _skillsService = skillsService;
         }
 
         // GET api/jobsoffer
@@ -38,12 +36,5 @@ namespace JobOfferBackend.WebAPI.Controllers
         {
             return await _jobOfferService.GetJobOffer(id);
         }
-
-        [HttpGet("getskills")]
-        public async Task<IEnumerable<Skill>> GetSkills()
-        {
-            return await _skillsService.GetAllSkillsAsync();
-        }
-
     }
 }

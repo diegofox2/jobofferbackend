@@ -58,7 +58,7 @@ namespace JobOfferBackend.WebAPI.Controllers
         [Route("validatetoken")]
         public ActionResult ValidateToken()
         {
-            //This method only can be executed whether the token was prevously accepted by the security framework
+            //This method only can be executed if the token was previously accepted by the security framework
             return Ok();
         }
         

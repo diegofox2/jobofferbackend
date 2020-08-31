@@ -20,5 +20,12 @@ namespace JobOfferBackend.ApplicationServices
         {
             return await _skillRepository.GetAll();
         }
+
+        public async Task CreateSkill(Skill skill)
+        {
+            skill.Validate();
+
+            await _skillRepository.UpsertAsync(skill);
+        }
     }
 }
