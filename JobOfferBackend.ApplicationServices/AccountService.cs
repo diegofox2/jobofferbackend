@@ -15,14 +15,12 @@ namespace JobOfferBackend.ApplicationServices
             _accountRepository = accountRepository;
         }
 
-        public async Task<string> SignInAsync(string email, string password)
+        public async Task<Account> SignInAsync(string email, string password)
         {
-            var account = await _accountRepository.GetAccountAsync(email, password);
-
-            return account?.Id;
+            return await _accountRepository.GetAccountAsync(email, password);
         }
 
-        public async Task SignUpAsync(string email, string password, string confirmedPassword)
+        public async Task SignUpAsync(string email, string password, string confirmedPassword, bool isRecruiter)
         {
             if(password != confirmedPassword)
             {
@@ -36,7 +34,7 @@ namespace JobOfferBackend.ApplicationServices
                 throw new InvalidOperationException(ServicesErrorMessages.INVALID_USER_ACCOUNT);
             }
 
-            var account = new Account() { Email = email, Password = password };
+            var account = new Account() { Email = email, Password = password, IsRecruiter = isRecruiter };
 
             await _accountRepository.UpsertAsync(account);
         }

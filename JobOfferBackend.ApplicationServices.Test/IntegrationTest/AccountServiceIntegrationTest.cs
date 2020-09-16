@@ -37,7 +37,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
         public async Task SignUpAsync_CreatesANewAccount_WhenPasswordMatches()
         {
             //Act
-            await _accountService.SignUpAsync("a@b.com", "test", "test");
+            await _accountService.SignUpAsync("a@b.com", "test", "test", true);
 
 
             //Assert
@@ -52,7 +52,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
             try
             {
                 //Act
-                await _accountService.SignUpAsync("a@b.com", "test", "dsada");
+                await _accountService.SignUpAsync("a@b.com", "test", "dsada", false);
 
                 Assert.Fail("Creating a new account should fail when password does not match");
             }
@@ -68,12 +68,12 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
         {
             //Arrange
 
-            await _accountService.SignUpAsync("a@b.com", "test", "test");
+            await _accountService.SignUpAsync("a@b.com", "test", "test", false);
 
             try
             {
                 //Act
-                await _accountService.SignUpAsync("a@b.com", "rere", "rere");
+                await _accountService.SignUpAsync("a@b.com", "rere", "rere", false);
 
                 Assert.Fail("Creating a new account should fail when email account already exists");
             }

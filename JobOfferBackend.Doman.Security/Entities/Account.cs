@@ -11,6 +11,8 @@ namespace JobOfferBackend.Doman.Security.Entities
 
         public string Password { get; set; }
 
+        public bool IsRecruiter { get; set; }
+
 
         public override void Validate()
         {

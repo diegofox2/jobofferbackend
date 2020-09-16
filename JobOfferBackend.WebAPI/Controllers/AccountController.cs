@@ -33,11 +33,11 @@ namespace JobOfferBackend.WebAPI.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> SignIn([FromBody] Account account)
         {
-            var accountId = await _accountService.SignInAsync(account.Email, account.Password);
+            var currentAccount = await _accountService.SignInAsync(account.Email, account.Password);
 
-            if(!string.IsNullOrEmpty(accountId))
+            if(!string.IsNullOrEmpty(currentAccount.Id))
             {
-                return Ok(new { token = GenerarTokenJWT(account.Email, accountId) });
+                return Ok(new { token = GenerarTokenJWT(currentAccount.Email, currentAccount.Id), isRecruiter = currentAccount.IsRecruiter });
             }
             else
             {
@@ -49,9 +49,9 @@ namespace JobOfferBackend.WebAPI.Controllers
         [HttpPost]
         [Route("signup")]
         [AllowAnonymous]
-        public async Task SignUp( string email, string password, string confirmationPassword)
+        public async Task SignUp( string email, string password, string confirmationPassword, bool isRecruiter)
         {
-            await _accountService.SignUpAsync(email, password, confirmationPassword);
+            await _accountService.SignUpAsync(email, password, confirmationPassword, isRecruiter);
         }
 
         [HttpPost]
