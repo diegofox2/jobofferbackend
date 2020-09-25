@@ -114,9 +114,10 @@ namespace InitialDataCreator
 
             recruiterService.CreateJobOfferAsync(jobOffer3, recruiter.Id).Wait();
 
-            recruiterService.PublishJobOffer(jobOffer).Wait();
+            
             recruiterService.PublishJobOffer(jobOffer2).Wait();
             recruiterService.PublishJobOffer(jobOffer3).Wait();
+            recruiterService.FinishJobOffer(jobOffer3).Wait();
 
             var pRepo = new RecruiterRepository(database);
             var aRepo = new AccountRepository(database);

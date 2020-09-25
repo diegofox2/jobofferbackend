@@ -148,5 +148,12 @@ namespace JobOfferBackend.ApplicationServices
 
             await _jobOfferRepository.UpsertAsync(jobOffer);
         }
+
+        public virtual async Task FinishJobOffer(JobOffer jobOffer)
+        {
+            jobOffer.Finish();
+
+            await _jobOfferRepository.UpsertAsync(jobOffer);
+        }
     }
 }

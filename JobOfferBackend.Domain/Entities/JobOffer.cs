@@ -109,6 +109,11 @@ namespace JobOfferBackend.Domain.Entities
             State = JobOfferState.Published;
         }
 
+        public void Finish()
+        {
+            State = JobOfferState.Finished;
+        }
+
         public override void Validate()
         {
             if (ContractInformation == null)
