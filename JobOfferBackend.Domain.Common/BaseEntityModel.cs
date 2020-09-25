@@ -51,12 +51,16 @@ namespace JobOfferBackend.Domain.Common
             {
                 var exception = new InvalidOperationException("Error. See property 'Data' to get errors details");
 
-                var listErrors = _errorLines.ToString().TrimEnd().Split("\r\n");
+                var listErrors = _errorLines.ToString().TrimEnd().Split(new char[0]);
 
                 for(int a = 0; a<listErrors.Length; a++ )
                 {
                     string value = listErrors[a];
-                    exception.Data.Add(a, value);
+
+                    if (!string.IsNullOrEmpty(value))
+                    {
+                        exception.Data.Add(a, value);
+                    }                    
                 }
 
                 throw exception;
