@@ -36,7 +36,7 @@ namespace JobOfferBackend.WebAPI.Controllers
         {
             var currentAccount = await _accountService.SignInAsync(account.Email, account.Password);
 
-            if(!string.IsNullOrEmpty(currentAccount.Id))
+            if(currentAccount != null && !string.IsNullOrEmpty(currentAccount.Id))
             {
                 return Ok(new { token = GenerarTokenJWT(currentAccount.Email, currentAccount.Id), isRecruiter = currentAccount.IsRecruiter });
             }
