@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -56,10 +57,11 @@ namespace JobOfferBackend.WebAPI.Controllers
 
         [HttpPost]
         [Route("validatetoken")]
-        public ActionResult ValidateToken()
+        public async Task<IActionResult> ValidateToken()
         {
+            var isRecruiter = await _accountService.UserIsRecruiter(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "jta").Value);
             //This method only can be executed if the token was previously accepted by the security framework
-            return Ok();
+            return Ok(new { isRecruiter });
         }
         
 

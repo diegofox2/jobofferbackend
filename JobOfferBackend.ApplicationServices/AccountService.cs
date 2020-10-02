@@ -38,5 +38,12 @@ namespace JobOfferBackend.ApplicationServices
 
             await _accountRepository.UpsertAsync(account);
         }
+
+        public async Task<bool> UserIsRecruiter(string accountId)
+        {
+            var user = await _accountRepository.GetByIdAsync(accountId);
+
+            return user.IsRecruiter;
+        }
     }
 }

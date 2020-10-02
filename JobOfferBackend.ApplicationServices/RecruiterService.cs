@@ -1,9 +1,11 @@
 ﻿using JobOfferBackend.ApplicationServices.Constants;
+using JobOfferBackend.ApplicationServices.DTO;
 using JobOfferBackend.DataAccess;
 using JobOfferBackend.Domain.Constants;
 using JobOfferBackend.Domain.Entities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -35,7 +37,7 @@ namespace JobOfferBackend.ApplicationServices
             return await _recruiterRepository.GetByIdAsync(recruiter.Id);
         }
 
-        public virtual async Task<IEnumerable<JobOffer>> GetAllJobOffersCreatedByAccountAsync(string accountId)
+        public virtual async Task<IEnumerable<JobOfferListDto>> GetAllJobOffersCreatedByAccountAsync(string accountId)
         {
             var account = await _accountRepository.GetByIdAsync(accountId);
 
@@ -45,7 +47,16 @@ namespace JobOfferBackend.ApplicationServices
 
                     if (recruiter != null)
                     {
-                        return await _jobOfferRepository.GetAllJobOffersByRecruiter(recruiter);
+                        var jobOfferDtoList = new List<JobOfferListDto>();
+                        var jobOffers = await _jobOfferRepository.GetAllJobOffersByRecruiter(recruiter);
+
+                        jobOffers.ToList().ForEach(item =>
+                        {
+                            jobOfferDtoList.Add(new JobOfferListDto() { AlreadyApplied = false, JobOffer = item });
+                        });
+
+
+                        return jobOfferDtoList;
                     }
                     else
                     {

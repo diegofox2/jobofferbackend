@@ -1,4 +1,5 @@
 ﻿using JobOfferBackend.ApplicationServices;
+using JobOfferBackend.ApplicationServices.DTO;
 using JobOfferBackend.Domain.Entities;
 using JobOfferBackend.WebAPI.Dto;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -45,7 +46,7 @@ namespace JobOfferBackend.WebAPI.Controllers
 
         [HttpGet()]
         [Route("GetJobOffers")]
-        public async Task<IEnumerable<JobOffer>> GetJobOffers()
+        public async Task<IEnumerable<JobOfferListDto>> GetJobOffers()
         {
             return await _recruiterService.GetAllJobOffersCreatedByAccountAsync(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "jta").Value);
         }

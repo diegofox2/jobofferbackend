@@ -8,6 +8,7 @@ using MongoDB.Driver;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace JobOfferBackend.ApplicationServices.Test.UnitTest
@@ -88,15 +89,22 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
 
             _recruiterRepositoryMock.Setup(mock => mock.GetByIdAsync(It.IsAny<string>())).ReturnsAsync(new Recruiter());
 
-            _jobOfferRepositoryMock.Setup(mock => mock.GetAllJobOffersByRecruiter(It.IsAny<Recruiter>())).ReturnsAsync(new List<JobOffer>());
+            var jobOfferList = new List<JobOffer>
+            {
+                new JobOffer(), new JobOffer()
+            };
+
+            _jobOfferRepositoryMock.Setup(mock => mock.GetAllJobOffersByRecruiter(It.IsAny<Recruiter>())).ReturnsAsync(jobOfferList);
 
             //Act
-            await _service.GetAllJobOffersCreatedByAccountAsync(It.IsAny<string>());
+            var result = await _service.GetAllJobOffersCreatedByAccountAsync(It.IsAny<string>());
 
             //Assert
             _accountRepositoryMock.VerifyAll();
             _recruiterRepositoryMock.VerifyAll();
-            _jobOfferRepositoryMock.VerifyAll();
+
+            Assert.IsTrue(result.ToList().Count == 2);
+            Assert.IsTrue(result.ToList().All(item => item.AlreadyApplied == false));
         }
 
         [TestMethod]
