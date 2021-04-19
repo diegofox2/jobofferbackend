@@ -25,7 +25,7 @@ Download MongoDB and install it with default credentials because the project use
 
 You must to run the console application "InitialDataCreator" so that you have a basic data set preloaded in your mongo database.
 
-After that you can set as startup proyect "JobOfferBackend.WebAPI".
+Before you set as startup proyect "JobOfferBackend.WebAPI" and run it, you have to be sure you have [installed .Net Core SDK 2.2](https://dotnet.microsoft.com/download/dotnet/thank-you/sdk-2.2.207-windows-x64-installer)
 
 This WebAPI project is running Swagger in order to see and test the endpoints. You only have to open the browser and go to localhost:[your port]/swagger.
 
