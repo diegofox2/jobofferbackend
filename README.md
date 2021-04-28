@@ -57,7 +57,7 @@ CD C:\Fuentes\JobOffersBackendDotNet\jobofferbackend
 
 :: REPLACE D: WITH THE DISK FOR SAVING THE COVERAGE REPORT
 
-dotnet test JobOfferBackendDotNet.sln /p:CollectCoverage=true /p:CoverletOutput=D:\TestResults\Coverage\ /p:MergeWith="D:\TestResults\Coverage\coverage.json" /p:CoverletOutputFormat=\"cobertura,json\" -m:1
+dotnet test JobOfferBackendDotNet.sln /p:CollectCoverage=true /p:CoverletOutput=D:\TestResults\Coverage\ /p:MergeWith="D:\TestResults\Coverage\coverage.json" /p:CoverletOutputFormat=\\"cobertura,json\\" -m:1
 
 :: REPLACE D: WITH THE DISK FOR READING THE COVERAGE REPORT
 
