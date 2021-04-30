@@ -72,7 +72,7 @@ namespace InitialDataCreator
 
             recruiterService.CreateRecruiterAsync(recruiter).Wait();
 
-            recruiterService.CreateJobOfferAsync(jobOffer, recruiter.Id).Wait();
+            recruiterService.SaveJobOfferAsync(jobOffer, recruiter.Id).Wait();
 
             //
 
@@ -94,7 +94,7 @@ namespace InitialDataCreator
                 WorkingDays = "Lunes a viernes 9 a 18"
             };
 
-            recruiterService.CreateJobOfferAsync(jobOffer2, recruiter.Id).Wait();
+            recruiterService.SaveJobOfferAsync(jobOffer2, recruiter.Id).Wait();
 
             //
 
@@ -112,7 +112,7 @@ namespace InitialDataCreator
                 WorkingDays = "Lunes a viernes 9 a 18"
             };
 
-            recruiterService.CreateJobOfferAsync(jobOffer3, recruiter.Id).Wait();
+            recruiterService.SaveJobOfferAsync(jobOffer3, recruiter.Id).Wait();
 
             
             recruiterService.PublishJobOffer(jobOffer2).Wait();

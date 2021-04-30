@@ -38,7 +38,7 @@ namespace JobOfferBackend.DataAccess
 
         public virtual async Task<bool> CheckEntityExistsAsync(string id)
         {
-            return await Collection.Find(p => p.Id == id).CountDocumentsAsync() == 1;
+            return await Collection.CountDocumentsAsync(p => p.Id == id) == 1;
         }
 
         public virtual async Task<IEnumerable<T>> GetAll()

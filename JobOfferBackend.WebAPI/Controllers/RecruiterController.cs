@@ -24,10 +24,10 @@ namespace JobOfferBackend.WebAPI.Controllers
         }
 
         [HttpPost]
-        [Route("AddJobOffer")]
-        public async Task CreateJobOffer([FromBody] JobOffer jobOffer, string recruiterId)
+        [Route("SaveJobOffer")]
+        public async Task SaveJobOffer([FromBody] JobOffer jobOffer, string recruiterId)
         {
-            await _recruiterService.CreateJobOfferAsync(jobOffer, recruiterId);
+            await _recruiterService.SaveJobOfferAsync(jobOffer, recruiterId);
         }
 
         [HttpPost]
@@ -35,13 +35,6 @@ namespace JobOfferBackend.WebAPI.Controllers
         public async Task CreateRecruiter([FromBody] Recruiter recruiter)
         {
             await _recruiterService.CreateRecruiterAsync(recruiter);
-        }
-
-        [HttpPost]
-        [Route("updatejoboffer")]
-        public async Task UpdateJobOffer([FromBody] JobOffer jobOffer)
-        {
-            await _recruiterService.UpdateJobOffer(jobOffer, HttpContext.User.Claims.FirstOrDefault(c => c.Type == "jta").Value);
         }
 
         [HttpGet()]

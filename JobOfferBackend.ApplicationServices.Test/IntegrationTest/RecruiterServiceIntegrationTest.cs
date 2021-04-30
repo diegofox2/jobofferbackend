@@ -194,7 +194,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
         }
 
         [TestMethod]
-        public async Task CreateJobOffer_SaveSuccessfully_WhenJobOfferDataIsCorrect()
+        public async Task SaveJobOffer_CreatesSuccessfullyANewJobOffer_WhenJobOfferDataIsCorrect()
         {
             //Arrange
             var recruiter = new Recruiter() { FirstName = "Maidana", LastName = "Patricia", IdentityCard = "28123456" };
@@ -228,7 +228,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
             
 
             //Act
-            await _service.CreateJobOfferAsync(jobOffer, recruiter.Id);
+            await _service.SaveJobOfferAsync(jobOffer, recruiter.Id);
 
             var jobOfferCreated = await _jobOfferRepository.GetByIdAsync(jobOffer.Id);
 
@@ -239,7 +239,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
         }
 
         [TestMethod]
-        public async Task UpdateJobOffer_UpdatesAJobOfferSuccessfuly_WhenJobOfferHasValidInformation()
+        public async Task SaveJobOffer_UpdatesAJobOfferSuccessfuly_WhenJobOfferHasValidInformation()
         {
             //Arrange
             var recruiter = new Recruiter() { FirstName = "Maidana", LastName = "Patricia", IdentityCard = "28123456" };
@@ -271,7 +271,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
             jobOffer.AddSkillRequired(new SkillRequired(skill2, 4, false));
             jobOffer.AddSkillRequired(new SkillRequired(skill3, 2, false));
 
-            await _service.CreateJobOfferAsync(jobOffer, recruiter.Id);
+            await _service.SaveJobOfferAsync(jobOffer, recruiter.Id);
 
             var newJobOffer = await _jobOfferRepository.GetByIdAsync(jobOffer.Id);
 
@@ -280,7 +280,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
 
             newJobOffer.Title = "New JobOffer";
 
-            await _service.UpdateJobOffer(newJobOffer, recruiter.Id);
+            await _service.SaveJobOfferAsync(newJobOffer, recruiter.Id);
 
             var jobOfferUpdated = await _jobOfferRepository.GetByIdAsync(newJobOffer.Id);
 
@@ -290,7 +290,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
         }
 
         [TestMethod]
-        public async Task UpdateJobOffer_ThrowsInvalidOperationException_WhenJobOfferWasNotCreatedByTheRecruiterIsDoingTheUpdate()
+        public async Task SaveJobOffer_ThrowsInvalidOperationException_WhenJobOfferWasNotCreatedByTheRecruiterIsDoingTheUpdate()
         {
             //Arrange
             var recruiter = new Recruiter() { FirstName = "Maidana", LastName = "Patricia", IdentityCard = "28123456" };
@@ -322,17 +322,17 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
             jobOffer.AddSkillRequired(new SkillRequired(skill2, 4, false));
             jobOffer.AddSkillRequired(new SkillRequired(skill3, 2, false));
 
-            await _service.CreateJobOfferAsync(jobOffer, recruiter.Id);
+            await _service.SaveJobOfferAsync(jobOffer, recruiter.Id);
 
-            var newJobOffer = await _jobOfferRepository.GetByIdAsync(jobOffer.Id);
+            var jobOfferSaved = await _jobOfferRepository.GetByIdAsync(jobOffer.Id);
 
             try
             {
                 //Act
 
-                newJobOffer.Title = "New JobOffer";
+                jobOfferSaved.Title = "New JobOffer";
 
-                await _service.UpdateJobOffer(newJobOffer, "AnotherId");
+                await _service.SaveJobOfferAsync(jobOfferSaved, "AnotherId");
 
                 Assert.Fail("A job offer shouldn be modified by another recruiter thant the once who created it");
             }
@@ -345,7 +345,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
         }
 
         [TestMethod]
-        public async Task UpdateJobOffer_ThrowsInvalidOperationException_WhenJobOfferHasAnApplicantInDuplicatedState()
+        public async Task SaveJobOffer_ThrowsInvalidOperationException_WhenJobOfferHasAnApplicantInDuplicatedState()
         {
             //Arrange
             var recruiter = new Recruiter() { FirstName = "Maidana", LastName = "Patricia", IdentityCard = "28123456" };
@@ -377,7 +377,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
             jobOffer.AddSkillRequired(new SkillRequired(skill2, 4, false));
             jobOffer.AddSkillRequired(new SkillRequired(skill3, 2, false));
 
-            await _service.CreateJobOfferAsync(jobOffer, recruiter.Id);
+            await _service.SaveJobOfferAsync(jobOffer, recruiter.Id);
 
             var newJobOffer = await _jobOfferRepository.GetByIdAsync(jobOffer.Id);
 
@@ -395,7 +395,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
 
                 newJobOffer.Applications = appicationsWithRepeatedApplicantState;
 
-                await _service.UpdateJobOffer(newJobOffer, newJobOffer.Recruiter.Id);
+                await _service.SaveJobOfferAsync(newJobOffer, newJobOffer.Recruiter.Id);
 
                 Assert.Fail("A job offer shouldn be modified when it has an applicant in duplicated state");
             }

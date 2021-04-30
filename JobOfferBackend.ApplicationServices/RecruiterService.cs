@@ -116,41 +116,39 @@ namespace JobOfferBackend.ApplicationServices
             }
         }
 
-        public virtual async Task CreateJobOfferAsync(JobOffer jobOffer, string recruiterId)
+        public virtual async Task SaveJobOfferAsync(JobOffer jobOfferToSave, string recruiterId)
         {
-            jobOffer.Validate();
-
-            if(jobOffer.HasIdCreated)
-            {
-                throw new InvalidOperationException(DomainErrorMessages.JOBOFFER_ALREADY_EXISTS);
-            }
+            jobOfferToSave.Validate();
 
             var recruiter = await _recruiterRepository.GetByIdAsync(recruiterId);
 
-            var jobOffersCreatedByRecruiter = await _jobOfferRepository.GetActiveJobOffersByRecruiterAsync(recruiter);
-
-            if (jobOffersCreatedByRecruiter.Any(j => j.Company == jobOffer.Company && j.Title == jobOffer.Title && j.State != JobOfferState.Finished))
-            {
-                throw new InvalidOperationException(DomainErrorMessages.JOBOFFER_ALREADY_EXISTS);
-            }
-
-            jobOffer.Recruiter = recruiter;
-
-            jobOffer.State = JobOfferState.Created;
-
-            await _jobOfferRepository.UpsertAsync(jobOffer);
-        }
-
-        public virtual async Task UpdateJobOffer(JobOffer newJobOffer, string recruiterId)
-        {
-            newJobOffer.Validate();
-
-            if(newJobOffer.Recruiter.Id != recruiterId)
+            if(recruiter is null)
             {
                 throw new InvalidOperationException(DomainErrorMessages.INVALID_RECRUITER);
             }
 
-            await _jobOfferRepository.UpsertAsync(newJobOffer);
+            if (!jobOfferToSave.HasIdCreated)
+            {
+                var jobOffersCreatedByRecruiter = await _jobOfferRepository.GetActiveJobOffersByRecruiterAsync(recruiter);
+
+                if (jobOffersCreatedByRecruiter.Any(j => j.Company == jobOfferToSave.Company && j.Title == jobOfferToSave.Title && j.State != JobOfferState.Finished))
+                {
+                    throw new InvalidOperationException(DomainErrorMessages.JOBOFFER_ALREADY_EXISTS);
+                }
+
+                jobOfferToSave.Recruiter = recruiter;
+
+                jobOfferToSave.State = JobOfferState.Created;
+            }
+            else
+            {
+                if (!await _jobOfferRepository.JobOfferBelongsTo(jobOfferToSave, recruiter))
+                {
+                    throw new InvalidOperationException(DomainErrorMessages.INVALID_RECRUITER);
+                }
+            }
+
+            await _jobOfferRepository.UpsertAsync(jobOfferToSave);
         }
 
         public virtual  async Task PublishJobOffer(JobOffer jobOffer)
