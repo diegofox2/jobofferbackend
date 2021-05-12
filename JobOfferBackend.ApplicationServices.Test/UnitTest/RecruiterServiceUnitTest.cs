@@ -87,14 +87,14 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
             //Arrange
             _accountRepositoryMock.Setup(mock => mock.GetByIdAsync(It.IsAny<string>())).ReturnsAsync(new Account());
 
-            _recruiterRepositoryMock.Setup(mock => mock.GetByIdAsync(It.IsAny<string>())).ReturnsAsync(new Recruiter());
+            _recruiterRepositoryMock.Setup(mock => mock.CheckEntityExistsAsync(It.IsAny<string>())).ReturnsAsync(true);
 
             var jobOfferList = new List<JobOffer>
             {
                 new JobOffer(), new JobOffer()
             };
 
-            _jobOfferRepositoryMock.Setup(mock => mock.GetAllJobOffersByRecruiter(It.IsAny<Recruiter>())).ReturnsAsync(jobOfferList);
+            _jobOfferRepositoryMock.Setup(mock => mock.GetAllJobOffersByRecruiter(It.IsAny<string>())).ReturnsAsync(jobOfferList);
 
             //Act
             var result = await _service.GetAllJobOffersCreatedByAccountAsync(It.IsAny<string>());
@@ -136,7 +136,7 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
             //Arrange
             _accountRepositoryMock.Setup(mock => mock.GetByIdAsync(It.IsAny<string>())).ReturnsAsync(new Account());
 
-            _recruiterRepositoryMock.Setup(mock => mock.GetByIdAsync(It.IsAny<string>())).ReturnsAsync((Recruiter)null);
+            _recruiterRepositoryMock.Setup(mock => mock.CheckEntityExistsAsync(It.IsAny<string>())).ReturnsAsync(false);
 
             //Act
             try
@@ -159,12 +159,18 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
         {
             //Arrange
 
-            var jobOffer = new JobOffer();
-            jobOffer.ContractInformation = new ContractCondition() { KindOfContract = "FullTime", StartingFrom = "As soon as possible", WorkingDays = "Montay to Friday" };
+            var jobOffer = new JobOffer
+            {
+                ContractInformation = new ContractCondition() { KindOfContract = "FullTime", StartingFrom = "As soon as possible", WorkingDays = "Montay to Friday" },
+                RecruiterId = Guid.NewGuid().ToString(),
+                CompanyId = Guid.NewGuid().ToString()
+            };
 
-            _recruiterRepositoryMock.Setup(mock => mock.GetByIdAsync(It.IsAny<string>())).ReturnsAsync(new Recruiter());
+            _recruiterRepositoryMock.Setup(mock => mock.CheckEntityExistsAsync(It.IsAny<string>())).ReturnsAsync(true);
 
-            _jobOfferRepositoryMock.Setup(mock => mock.GetActiveJobOffersByRecruiterAsync(It.IsAny<Recruiter>())).ReturnsAsync(new List<JobOffer>());
+            _companyRepositoryMock.Setup(mock => mock.CheckEntityExistsAsync(It.IsAny<string>())).ReturnsAsync(true);
+
+            _jobOfferRepositoryMock.Setup(mock => mock.GetActiveJobOffersByRecruiterAsync(It.IsAny<string>())).ReturnsAsync(new List<JobOffer>());
 
             _jobOfferRepositoryMock.Setup(mock => mock.UpsertAsync(It.IsAny<JobOffer>())).Returns(Task.CompletedTask);
 
@@ -182,13 +188,13 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
         public async Task SaveJobOfferAsync_ThrowsInvalidOperationException_WhenJobOfferAlreadyExists()
         {
             //Arrange
-            var jobOffer = new JobOffer() { Id = Guid.NewGuid().ToString() };
+            var jobOffer = new JobOffer() { Id = Guid.NewGuid().ToString(), CompanyId = Guid.NewGuid().ToString() };
             
             jobOffer.ContractInformation = new ContractCondition() { KindOfContract = "FullTime", StartingFrom = "As soon as possible", WorkingDays = "Montay to Friday" };
-            
-            _recruiterRepositoryMock.Setup(mock => mock.GetByIdAsync(It.IsAny<string>())).ReturnsAsync((Recruiter)null);
 
-            _jobOfferRepositoryMock.Setup(mock => mock.JobOfferBelongsTo(It.IsAny<JobOffer>(), It.IsAny<Recruiter>())).ReturnsAsync(false);
+            _recruiterRepositoryMock.Setup(mock => mock.CheckEntityExistsAsync(It.IsAny<string>())).ReturnsAsync(false);
+
+            _jobOfferRepositoryMock.Setup(mock => mock.JobOfferBelongsToRecruiter(It.IsAny<JobOffer>(), It.IsAny<string>())).ReturnsAsync(false);
 
             //Act
             try
@@ -196,7 +202,7 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
                 await _service.SaveJobOfferAsync(jobOffer, It.IsAny<string>());
 
                 //Assert
-                Assert.Fail("It should throw an exception when job offer already exists but the recruiter is not the owner");
+                Assert.Fail("It should throw an exception when the recruiter does not exists");
             }
             catch (InvalidOperationException ex)
             {
@@ -215,12 +221,14 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
 
             var jobOffer = new JobOffer();
             jobOffer.Title = "Some Job";
-            jobOffer.Company = company;
+            jobOffer.CompanyId = company.Id;
             jobOffer.ContractInformation = new ContractCondition() { KindOfContract = "FullTime", StartingFrom = "As soon as possible", WorkingDays = "Montay to Friday" };
 
-            _recruiterRepositoryMock.Setup(mock => mock.GetByIdAsync(It.IsAny<string>())).ReturnsAsync(new Recruiter());
+            _recruiterRepositoryMock.Setup(mock => mock.CheckEntityExistsAsync(It.IsAny<string>())).ReturnsAsync(true);
 
-            _jobOfferRepositoryMock.Setup(mock => mock.GetActiveJobOffersByRecruiterAsync(It.IsAny<Recruiter>())).ReturnsAsync(new List<JobOffer>() { jobOffer });
+            _companyRepositoryMock.Setup(mock => mock.CheckEntityExistsAsync(It.IsAny<string>())).ReturnsAsync(true);
+
+            _jobOfferRepositoryMock.Setup(mock => mock.GetActiveJobOffersByRecruiterAsync(It.IsAny<string>())).ReturnsAsync(new List<JobOffer>() { jobOffer });
 
             //Act
             try

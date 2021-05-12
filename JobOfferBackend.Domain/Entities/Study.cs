@@ -30,10 +30,10 @@ namespace JobOfferBackend.Domain.Entities
         public override void Validate()
         {
             if (string.IsNullOrEmpty(Institution))
-                _errors.AppendLine(DomainErrorMessages.INSTITUTION_REQUIRED);
+                _errorLines.AppendLine(DomainErrorMessages.INSTITUTION_REQUIRED);
 
             if (string.IsNullOrEmpty(Title))
-                _errors.AppendLine(DomainErrorMessages.TITLE_REQUIRED);
+                _errorLines.AppendLine(DomainErrorMessages.TITLE_REQUIRED);
             
             ThrowExceptionIfErrors();
         }

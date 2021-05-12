@@ -15,11 +15,14 @@ namespace JobOfferBackend.Domain.Test
         public void RecieveApplicant_CreatesJobApplication_WhenItIsTheFirstAttemptToApply()
         {
             //Arrange
+
+            var skill = new Skill() { Name = "C#", Id = Guid.NewGuid().ToString() };
+
             var person = new Person() { FirstName = "Pepe", LastName = "Lopez", IdentityCard = "123" };
-            person.SetAbility(new Ability(new Skill() { Name = "C#" }, 5));
+            person.SetAbility(new Ability(skill, 5));
 
             var jobOffer = new JobOffer();
-            jobOffer.AddSkillRequired(new SkillRequired(new Skill() { Name = "C#" }, 3, true));
+            jobOffer.AddSkillRequired(new SkillRequired(skill, 3, true));
 
 
             //Act
@@ -36,11 +39,14 @@ namespace JobOfferBackend.Domain.Test
         public void RecieveApplicant_ThrowsInvalidOperationException_WhenApplicantAlreadyExists()
         {
             //Arrange
+
+            var skill = new Skill() { Name = "C#", Id = Guid.NewGuid().ToString() };
+
             var person = new Person() { FirstName = "Pepe", LastName = "Lopez", IdentityCard = "123" };
-            person.SetAbility(new Ability(new Skill() { Name = "C#" }, 5));
+            person.SetAbility(new Ability(skill, 5));
 
             var jobOffer = new JobOffer();
-            jobOffer.AddSkillRequired(new SkillRequired(new Skill() { Name = "C#" }, 3, true));
+            jobOffer.AddSkillRequired(new SkillRequired(skill, 3, true));
             
             jobOffer.AddJobApplicationRequested(person);
 
@@ -96,25 +102,25 @@ namespace JobOfferBackend.Domain.Test
         }
 
         [TestMethod]
-        public void Validate_ThrowsException_WhenThereIsASkillRequiredRepeated()
+        public void AddSkillRequired_ThrowsException_WhenThereIsASkillRequiredRepeated()
         {
             //Arrange
             var contractCondition = new ContractCondition() { KindOfContract = "a", StartingFrom = "b", WorkingDays = "c" };
             var jobOffer = new JobOffer() { Title = "Some title", ContractInformation = contractCondition };
-            var javascript = new Skill();
+            var javascript = new Skill() { Id = Guid.NewGuid().ToString(), Name = "Javascript" };
             var skillRequired = new SkillRequired(javascript, 1);
 
-            jobOffer.SkillsRequired = new List<SkillRequired>() { skillRequired, skillRequired };
+            jobOffer.AddSkillRequired(skillRequired);
+            
 
             //Act
             try
             {
-                jobOffer.Validate();
+                jobOffer.AddSkillRequired(skillRequired);
             }
             catch(InvalidOperationException ex)
             {
-                Assert.AreEqual(1, ex.Data.Count);
-                Assert.IsTrue(ex.Data.Values.Cast<string>().Contains(DomainErrorMessages.SKILL_REQUIRED_ALREADY_EXISTS));
+                Assert.AreEqual(ex.Message, DomainErrorMessages.SKILL_REQUIRED_ALREADY_EXISTS);
             }
         }
     }

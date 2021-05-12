@@ -7,7 +7,7 @@ namespace JobOfferBackend.Domain.Common
 {
     public abstract class BaseValueObject 
     {
-        protected StringBuilder _errors = new StringBuilder();
+        protected StringBuilder _errorLines = new StringBuilder();
 
         public static bool operator ==(BaseValueObject source, BaseValueObject reference)
         {
@@ -70,9 +70,9 @@ namespace JobOfferBackend.Domain.Common
 
         protected void ThrowExceptionIfErrors()
         {
-            if (_errors != null && !string.IsNullOrEmpty(_errors.ToString()))
+            if (_errorLines != null && !string.IsNullOrEmpty(_errorLines.ToString()))
             {
-                throw new InvalidOperationException($"Error: {_errors}");
+                throw new InvalidOperationException($"Error: {_errorLines}");
             }
         }
     }

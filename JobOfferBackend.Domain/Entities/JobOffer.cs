@@ -36,9 +36,9 @@ namespace JobOfferBackend.Domain.Entities
 
         public IEnumerable<JobApplication> Applications { get => _applications; set => _applications = (List<JobApplication>)value; }
 
-        public Company Company { get; set; }
+        public string CompanyId { get; set; }
 
-        public Recruiter Recruiter { get; set; }
+        public string RecruiterId { get; set; }
 
         public JobOfferState State { get; set; }
 
@@ -56,7 +56,7 @@ namespace JobOfferBackend.Domain.Entities
 
         public void AddSkillRequired(SkillRequired skillRequired)
         {
-            if (_skillsRequired.Any(s => s.Skill == skillRequired.Skill))
+            if (_skillsRequired.Any(s => s.SkillId == skillRequired.SkillId))
             {
                 throw new InvalidOperationException(DomainErrorMessages.SKILL_REQUIRED_ALREADY_EXISTS);
             }
@@ -119,27 +119,37 @@ namespace JobOfferBackend.Domain.Entities
             if (ContractInformation == null)
                 _errorLines.AppendLine(DomainErrorMessages.CONTRACT_INFORMATION_EMPTY);
 
+            if (string.IsNullOrEmpty(CompanyId))
+                _errorLines.AppendLine(DomainErrorMessages.COMPANY_REQUIRED);
+
             CheckNoDuplicatedSkillsRequired();
 
-            CheckNoCandidatesDuplication();
+            CheckNoSkillsRequiredInvalid();
+
+            CheckNoInvalidApplications();
 
             ThrowExceptionIfErrors();
         }
 
+        private void CheckNoSkillsRequiredInvalid()
+        {
+            foreach(var skillRequired in SkillsRequired)
+            {
+                skillRequired.Validate();
+            }
+        }
+
         private void CheckNoDuplicatedSkillsRequired()
         {
-            if (_skillsRequired.GroupBy(item => item.Skill.Name).Any(item=> item.Count() > 1))
+            if (_skillsRequired.GroupBy(item => item.SkillId).Any(item=> item.Count() > 1))
             {
                 _errorLines.AppendLine(DomainErrorMessages.SKILL_REQUIRED_ALREADY_EXISTS);
             }
         }
 
-        private void CheckNoCandidatesDuplication()
+        private void CheckNoInvalidApplications()
         {
-            if (_applications.GroupBy(item => new { item.ApplicantId, item.Progress }).Count() > 1)
-            {
-                _errorLines.AppendLine(DomainErrorMessages.APPLICANT_DUPLICATED);
-            }
+            _applications.ForEach(application => application.Validate());
         }
     }
 }

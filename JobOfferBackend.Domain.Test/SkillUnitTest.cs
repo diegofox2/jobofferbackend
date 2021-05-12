@@ -27,7 +27,7 @@ namespace JobOfferBackend.Domain.Test
             {
                 //Assert
                 Assert.AreEqual(1, ex.Data.Count);
-                Assert.IsTrue(ex.Data.Values.Cast<string>().Contains(DomainErrorMessages.NAME_REQUIRED));
+                Assert.IsTrue(ex.Data.Values.Cast<string>().Contains(DomainErrorMessages.SKILL_NAME_REQUIRED));
             }
 
         }

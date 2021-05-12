@@ -5,7 +5,6 @@ using JobOfferBackend.Domain.Constants;
 using JobOfferBackend.Domain.Entities;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -43,12 +42,12 @@ namespace JobOfferBackend.ApplicationServices
 
             if (account != null)
             {
-                    var recruiter = await _recruiterRepository.GetByIdAsync(account.PersonId);
+                    var recruiterExists = await _recruiterRepository.CheckEntityExistsAsync(account.PersonId);
 
-                    if (recruiter != null)
+                    if (recruiterExists)
                     {
                         var jobOfferDtoList = new List<JobOfferListDto>();
-                        var jobOffers = await _jobOfferRepository.GetAllJobOffersByRecruiter(recruiter);
+                        var jobOffers = await _jobOfferRepository.GetAllJobOffersByRecruiter(account.PersonId);
 
                         jobOffers.ToList().ForEach(item =>
                         {
@@ -74,16 +73,11 @@ namespace JobOfferBackend.ApplicationServices
         {
             recruiter.Validate();
 
-            recruiter.ClientCompanies.ToList().ForEach(async company =>
-            {
-                if (!company.HasIdCreated)
-                {
-                    await _companyRepository.UpsertAsync(company);
-                }
-            });
+            //This should be transactional and integration tests should validate all these repositories 
 
             await _personRepository.UpsertAsync(recruiter);
             await _recruiterRepository.UpsertAsync(recruiter);
+            //
         }
 
         public virtual async Task UpdateRecruiterAsync(Recruiter recruiter)
@@ -100,49 +94,62 @@ namespace JobOfferBackend.ApplicationServices
             }
         }
 
-        public virtual async Task CreateCompanyAsync(Company company)
+        public virtual async Task AddClientAsync(Company company, string recruiterId)
         {
             company.Validate();
 
             var existingCompany = await _companyRepository.GetCompanyAsync(company.Name, company.Activity);
 
-            if (existingCompany != null)
-            {
-                throw new InvalidOperationException(ServicesErrorMessages.COMPANY_ALREADY_EXISTS);
-            }
-            else
+            //This should be transactional
+
+            if(existingCompany == null)
             {
                 await _companyRepository.UpsertAsync(company);
             }
+
+            var recruiter = await _recruiterRepository.GetByIdAsync(recruiterId);
+
+            recruiter.AddClient(company);
+
+            await _recruiterRepository.UpsertAsync(recruiter);
+
+            /////////////////////////////////////////////////////////
         }
 
         public virtual async Task SaveJobOfferAsync(JobOffer jobOfferToSave, string recruiterId)
         {
             jobOfferToSave.Validate();
 
-            var recruiter = await _recruiterRepository.GetByIdAsync(recruiterId);
+            var recruiterExists = await _recruiterRepository.CheckEntityExistsAsync(recruiterId);
 
-            if(recruiter is null)
+            if(!recruiterExists)
             {
                 throw new InvalidOperationException(DomainErrorMessages.INVALID_RECRUITER);
             }
 
+            var companyExists = await _companyRepository.CheckEntityExistsAsync(jobOfferToSave.CompanyId);
+
+            if (!companyExists)
+            {
+                throw new InvalidOperationException(DomainErrorMessages.COMPANY_INVALID);
+            }
+
             if (!jobOfferToSave.HasIdCreated)
             {
-                var jobOffersCreatedByRecruiter = await _jobOfferRepository.GetActiveJobOffersByRecruiterAsync(recruiter);
+                var jobOffersCreatedByRecruiter = await _jobOfferRepository.GetActiveJobOffersByRecruiterAsync(recruiterId);
 
-                if (jobOffersCreatedByRecruiter.Any(j => j.Company == jobOfferToSave.Company && j.Title == jobOfferToSave.Title && j.State != JobOfferState.Finished))
+                if (jobOffersCreatedByRecruiter.Any(j => j.CompanyId == jobOfferToSave.CompanyId && j.Title == jobOfferToSave.Title && j.State != JobOfferState.Finished))
                 {
                     throw new InvalidOperationException(DomainErrorMessages.JOBOFFER_ALREADY_EXISTS);
                 }
 
-                jobOfferToSave.Recruiter = recruiter;
+                jobOfferToSave.RecruiterId = recruiterId;
 
                 jobOfferToSave.State = JobOfferState.Created;
             }
             else
             {
-                if (!await _jobOfferRepository.JobOfferBelongsTo(jobOfferToSave, recruiter))
+                if (!await _jobOfferRepository.JobOfferBelongsToRecruiter(jobOfferToSave, recruiterId))
                 {
                     throw new InvalidOperationException(DomainErrorMessages.INVALID_RECRUITER);
                 }

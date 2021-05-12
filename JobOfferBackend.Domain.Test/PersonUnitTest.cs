@@ -1,5 +1,6 @@
 ﻿using JobOfferBackend.Domain.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Linq;
 
 namespace JobOfferBackend.Domain.Test
@@ -12,11 +13,14 @@ namespace JobOfferBackend.Domain.Test
         public void ApplyToJobOffer_CreatesNewJobApplication_OnAJobOffer()
         {
             //Arrange
+
+            var skill = new Skill() { Name = "C#", Id = Guid.NewGuid().ToString() };
+
             var person = new Person() { FirstName = "Pepe", LastName = "Lopez", IdentityCard = "123" };
-            person.SetAbility(new Ability(new Skill() { Name = "C#" }, 5));
+            person.SetAbility(new Ability(skill, 5));
 
             var jobOffer = new JobOffer();
-            jobOffer.AddSkillRequired(new SkillRequired(new Skill() { Name = "C#" }, 3, true));
+            jobOffer.AddSkillRequired(new SkillRequired(skill, 3, true));
 
             //Act
             person.ApplyToJobOffer(jobOffer);

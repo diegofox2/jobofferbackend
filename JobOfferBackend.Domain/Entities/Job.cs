@@ -30,16 +30,16 @@ namespace JobOfferBackend.Domain.Entities
         public override void Validate()
         {
             if (string.IsNullOrEmpty(CompanyName))
-                _errors.AppendLine(DomainErrorMessages.COMPANY_REQUIRED);
+                _errorLines.AppendLine(DomainErrorMessages.COMPANY_REQUIRED);
 
             if (string.IsNullOrEmpty(Position))
-                _errors.AppendLine(DomainErrorMessages.POSITION_REQUIRED);
+                _errorLines.AppendLine(DomainErrorMessages.POSITION_REQUIRED);
 
             if (From.Year == 1900)
-                _errors.AppendLine(DomainErrorMessages.FROM_REQUIRED);
+                _errorLines.AppendLine(DomainErrorMessages.FROM_REQUIRED);
 
             if (!IsCurrentJob && To.Year == 1900)
-                _errors.AppendLine(DomainErrorMessages.TO_REQUIRED_WHEN_ISNOT_CURRENT_JOB);
+                _errorLines.AppendLine(DomainErrorMessages.TO_REQUIRED_WHEN_ISNOT_CURRENT_JOB);
 
             ThrowExceptionIfErrors();
         }

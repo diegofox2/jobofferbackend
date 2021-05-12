@@ -17,19 +17,19 @@ namespace InitialDataCreator
             mongoClient.DropDatabase("JobOfferDatabase");
             var database = mongoClient.GetDatabase("JobOfferDatabase");
 
-            var cSharp = new Skill() { Name = "C#", Id = Guid.NewGuid().ToString() };
-            var javascript = new Skill() { Name = "Javascript", Id = Guid.NewGuid().ToString() };
-            var react = new Skill() { Name = "React", Id = Guid.NewGuid().ToString() };
-            var docker = new Skill() { Name = "Docker", Id = Guid.NewGuid().ToString() };
-            var java = new Skill() { Name = "Java", Id = Guid.NewGuid().ToString() };
+            var cSharp = new Skill() { Name = "C#"};
+            var javascript = new Skill() { Name = "Javascript" };
+            var react = new Skill() { Name = "React" };
+            var docker = new Skill() { Name = "Docker" };
+            var java = new Skill() { Name = "Java" };
 
             var skillRepository = new SkillRepository(database);
 
-            Task.Run(async () => await skillRepository.UpsertAsync(cSharp));
-            Task.Run(async () => await skillRepository.UpsertAsync(javascript));
-            Task.Run(async () => await skillRepository.UpsertAsync(react));
-            Task.Run(async () => await skillRepository.UpsertAsync(docker));
-            Task.Run(async () => await skillRepository.UpsertAsync(java));
+            Task.Run(async () => await skillRepository.UpsertAsync(cSharp)).Wait();
+            Task.Run(async () => await skillRepository.UpsertAsync(javascript)).Wait();
+            Task.Run(async () => await skillRepository.UpsertAsync(react)).Wait();
+            Task.Run(async () => await skillRepository.UpsertAsync(docker)).Wait();
+            Task.Run(async () => await skillRepository.UpsertAsync(java)).Wait();
 
             var companyRepository = new CompanyRepository(database);
             var recruiterRepository = new RecruiterRepository(database);
@@ -50,7 +50,11 @@ namespace InitialDataCreator
 
             recruiter.SetAbility(new Ability(javascript, 9));
 
-            var jobOffer = new JobOffer() { Date = DateTime.Now.Date, Title = "Analista programador", Company = new Company("Acme", "software"), Zone = "Palermo" };
+            var company1 = new Company("Acme", "software");
+
+            companyRepository.UpsertAsync(company1).Wait();
+
+            var jobOffer = new JobOffer() { Date = DateTime.Now.Date, Title = "Analista programador", CompanyId = company1.Id, Zone = "Palermo" };
 
             jobOffer.Description = "Para importante empresa ubicada en San Telmo, estamos en búsqueda de desarrollador fullstack con " +
                 "al menos 3 años de experiencia utilizando React y NodeJs.Quien se incorpore estará participando dentro " +
@@ -76,7 +80,11 @@ namespace InitialDataCreator
 
             //
 
-            var jobOffer2 = new JobOffer() { Date = DateTime.Now.Date, Title = "JAVA Full Stack Developer", Company = new Company("KaizenRH", "software"), Zone = "Las Cañitas" };
+            var company2 = new Company("KaizenRH", "software");
+
+            companyRepository.UpsertAsync(company2).Wait();
+
+            var jobOffer2 = new JobOffer() { Date = DateTime.Now.Date, Title = "JAVA Full Stack Developer", CompanyId = company2.Id, Zone = "Las Cañitas" };
 
             jobOffer2.Description = "En KaizenRH buscamos Python Developer Junior para trabajar en interesantes proyectos dentro de Startup en expansión LATAM dedicada a la automatización de procesos IT y negocios.";
 
@@ -98,7 +106,11 @@ namespace InitialDataCreator
 
             //
 
-            var jobOffer3 = new JobOffer() { Date = DateTime.Now.Date, Title = "Sr. C# Backend Developer/Engineer", Company = new Company("ADN Recursos Humanos", "Seleccion de personal"), Zone = "Microcentro" };
+            var company3 = new Company("ADN Recursos Humanos", "Seleccion de personal");
+
+            companyRepository.UpsertAsync(company3).Wait();
+
+            var jobOffer3 = new JobOffer() { Date = DateTime.Now.Date, Title = "Sr. C# Backend Developer/Engineer", CompanyId = company3.Id, Zone = "Microcentro" };
 
             jobOffer3.Description = "ADN - Recursos Humanos estamos en la búsqueda de un Sr. Python Backend Developer/Engineer, para Importante Empresa de Tecnología";
 

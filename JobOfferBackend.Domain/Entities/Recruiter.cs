@@ -8,43 +8,40 @@ namespace JobOfferBackend.Domain.Entities
 {
     public class Recruiter : Person, IIdentity<Recruiter>
     {
-        private List<Company> _clientCompanies = new List<Company>();
+        private List<string> _clientCompaniesId = new List<string>();
 
-        public IEnumerable<Company> ClientCompanies { get => _clientCompanies; set => _clientCompanies = (List<Company>)value; }
-
+        public IEnumerable<string> ClientCompanies { get => _clientCompaniesId; set => _clientCompaniesId = (List<string>)value; }
 
         public void AddClient(Company company)
         {
-            if (_clientCompanies.Any(item => item.Name == company.Name))
+            if (_clientCompaniesId.Any(item => item == company.Id))
             {
                 throw new InvalidOperationException(DomainErrorMessages.COMPANY_REPEATED);
             }
 
-            _clientCompanies.Add(company);
+            _clientCompaniesId.Add(company.Id);
         }
 
         public void OfferEmployment(JobOffer jobOffer, Person person)
         {
-            CheckPersonSkills(person, jobOffer);
+            CheckPersonSkillsAndYearsOfExperience(person, jobOffer);
 
             jobOffer.AddJobApplicationOffered(person);
         }
 
         public void AcceptApplicant(Person person, JobOffer jobOffer)
         {
-            CheckPersonSkills(person, jobOffer);
+            CheckPersonSkillsAndYearsOfExperience(person, jobOffer);
 
             jobOffer.SetJobApplicationAccepted(person);
             
         }
 
-        private void CheckPersonSkills(Person person, JobOffer jobOffer)
+        private void CheckPersonSkillsAndYearsOfExperience(Person person, JobOffer jobOffer)
         {
-            var mandatorySkills = jobOffer.SkillsRequired.Where(s => s.IsMandatory).Select(s => s.Skill);
+            var mandatorySkills = jobOffer.SkillsRequired.Where(s => s.IsMandatory);
 
-            var personSkills = person.Abilities.Select(h => h.Skill);
-
-            if (!mandatorySkills.All(ms => personSkills.Any(ps => ps.Id == ms.Id)))
+            if (!mandatorySkills.All(mandatorySkill => person.Abilities.Any(ability => ability.SkillId == mandatorySkill.SkillId && ability.Years >= mandatorySkill.Years )))
             {
                 throw new InvalidOperationException(DomainErrorMessages.PERSON_DOES_NOT_HAVE_ALL_MANDATORY_SKILLS);
             }

@@ -18,7 +18,7 @@ namespace JobOfferBackend.ApplicationServices
 
         public async Task<IEnumerable<Skill>> GetAllSkillsAsync()
         {
-            return await _skillRepository.GetAll();
+            return await _skillRepository.GetAllAsync();
         }
 
         public async Task CreateSkill(Skill skill)

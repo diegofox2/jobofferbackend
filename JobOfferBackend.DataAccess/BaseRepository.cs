@@ -41,14 +41,14 @@ namespace JobOfferBackend.DataAccess
             return await Collection.CountDocumentsAsync(p => p.Id == id) == 1;
         }
 
-        public virtual async Task<IEnumerable<T>> GetAll()
+        public virtual async Task<IEnumerable<T>> GetAllAsync()
         {
             return await Collection.AsQueryable().ToListAsync();
         }
 
         public virtual async Task UpsertAsync(T entity)
         {
-            if (entity.Id == null)
+            if (!entity.HasIdCreated)
             {
                 entity.Id = CreateId();
             }

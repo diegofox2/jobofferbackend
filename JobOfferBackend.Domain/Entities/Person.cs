@@ -42,7 +42,6 @@ namespace JobOfferBackend.Domain.Entities
             
         }
 
-
         public void SetStudy(Study study, Study studyToReplace = default)
         {
             study.Validate();
@@ -75,9 +74,9 @@ namespace JobOfferBackend.Domain.Entities
 
         public void ApplyToJobOffer(JobOffer jobOffer)
         {
-            var mandatorySkills = jobOffer.SkillsRequired.Where(s => s.IsMandatory).Select(s => s.Skill );
+            var mandatorySkills = jobOffer.SkillsRequired.Where(s => s.IsMandatory).ToList();
 
-            if(HasAnyMandatorySkills(mandatorySkills))
+            if(MeetsSomeRequiredSkillsAndHasSameOrMoreYearsOfExperience(mandatorySkills))
             {
                 _myJobApplications.Add(jobOffer.Id);
 
@@ -121,20 +120,9 @@ namespace JobOfferBackend.Domain.Entities
             ThrowExceptionIfErrors();
         }
 
-
-        private bool HasAnyMandatorySkills(IEnumerable<Skill> skillsRequired)
+        private bool MeetsSomeRequiredSkillsAndHasSameOrMoreYearsOfExperience(List<SkillRequired> skillsRequired)
         {
-            var result = false;
-
-            for (int s = 0; s < skillsRequired.Count(); s++)
-            {
-                if (_abilities.Any(a => a.Skill == skillsRequired.ElementAt(s)))
-                {
-                    return true;
-                }
-            }
-
-            return result;
+            return skillsRequired.Any(skill => _abilities.Any(ability => ability.SkillId == skill.SkillId && ability.Years >= skill.Years));
         }
 
         private void CheckJobHistoryDuplications()
@@ -147,7 +135,7 @@ namespace JobOfferBackend.Domain.Entities
 
         private void CheckAbilityDuplications()
         {
-            if (_abilities.GroupBy(item => new { item.Skill }).Any(g => g.Count() > 1))
+            if (_abilities.GroupBy(item => new { item.SkillId }).Any(g => g.Count() > 1))
             {
                 _errorLines.AppendLine(DomainErrorMessages.ABILITY_REPEATED);
             }

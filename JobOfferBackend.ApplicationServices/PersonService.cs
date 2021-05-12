@@ -66,6 +66,8 @@ namespace JobOfferBackend.ApplicationServices
                     {
                         person.ApplyToJobOffer(jobOffer);
 
+                        //This should be transactional
+
                         await _jobOffersRepository.UpsertAsync(jobOffer);
 
                         await _personRepository.UpsertAsync(person);

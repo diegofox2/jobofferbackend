@@ -11,14 +11,14 @@ namespace JobOfferBackend.DataAccess
         {
         }
 
-        public virtual async Task<List<JobOffer>> GetActiveJobOffersByRecruiterAsync(Recruiter recruiter)
+        public virtual async Task<List<JobOffer>> GetActiveJobOffersByRecruiterAsync(string recruiterId)
         {
-            return await Collection.Find(item => item.State !=  JobOfferState.Finished && item.Recruiter == recruiter).ToListAsync();
+            return await Collection.Find(item => item.State !=  JobOfferState.Finished && item.RecruiterId == recruiterId).ToListAsync();
         }
 
-        public virtual async Task<IEnumerable<JobOffer>> GetAllJobOffersByRecruiter(Recruiter recruiter)
+        public virtual async Task<IEnumerable<JobOffer>> GetAllJobOffersByRecruiter(string recruiterId)
         {
-            return await Collection.Find(item => item.Recruiter == recruiter).ToListAsync();
+            return await Collection.Find(item => item.RecruiterId == recruiterId).ToListAsync();
         }
 
         public virtual async Task<List<JobOffer>> GetAllPublishedJobOffersAsync()
@@ -26,9 +26,9 @@ namespace JobOfferBackend.DataAccess
             return await Collection.Find(item => item.State != JobOfferState.Finished).ToListAsync();
         }
 
-        public virtual async Task<bool> JobOfferBelongsTo(JobOffer jobOffer, Recruiter recruiter)
+        public virtual async Task<bool> JobOfferBelongsToRecruiter(JobOffer jobOffer, string recruiterId)
         {
-           return await Collection.CountDocumentsAsync(item => item.Recruiter == recruiter && item.Id == jobOffer.Id) == 1;
+           return await Collection.CountDocumentsAsync(item => item.RecruiterId == recruiterId && item.Id == jobOffer.Id) == 1;
         }
     }
 }

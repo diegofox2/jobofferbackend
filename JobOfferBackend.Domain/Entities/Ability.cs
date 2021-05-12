@@ -6,7 +6,7 @@ namespace JobOfferBackend.Domain.Entities
 {
     public class Ability : BaseValueObject
     {
-        public Skill Skill { get; set; }
+        public string SkillId { get; set; }
 
         public byte Years { get; set; }
 
@@ -14,7 +14,8 @@ namespace JobOfferBackend.Domain.Entities
 
         public Ability(Skill skill, byte years, string comment = default)
         {
-            Skill = skill;
+            skill.Validate();
+            SkillId = skill.Id;
             Years = years;
             Comment = comment;
 
@@ -23,11 +24,11 @@ namespace JobOfferBackend.Domain.Entities
 
         public override void Validate()
         {
-            if (Skill == null)
-                _errors.AppendLine(DomainErrorMessages.SKILL_REQUIRED);
+            if (string.IsNullOrEmpty(SkillId))
+                _errorLines.AppendLine(DomainErrorMessages.SKILL_REQUIRED);
 
             if (Years == 0)
-                _errors.AppendLine(DomainErrorMessages.YEAR_REQUIRED);
+                _errorLines.AppendLine(DomainErrorMessages.YEAR_REQUIRED);
 
             ThrowExceptionIfErrors();
         }

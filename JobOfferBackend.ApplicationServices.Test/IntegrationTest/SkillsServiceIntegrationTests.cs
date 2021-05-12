@@ -55,5 +55,28 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
             Assert.AreEqual(cSharp, skills.First());
             Assert.AreEqual(javascript, skills.Last());
         }
+
+        [TestMethod]
+        public async Task UpsertAsync_ThrowsInvalidOperationExceptions_WhenSkillNameAlreadyExists()
+        {
+            //Arrange
+            var cSharp = new Skill() { Id = Guid.NewGuid().ToString(), Name = "C#" };
+            var repeatedSkillName = new Skill() { Id = Guid.NewGuid().ToString(), Name = "C#" };
+
+            //Act
+            try
+            {
+                await _skillRepository.UpsertAsync(cSharp);
+                await _skillRepository.UpsertAsync(repeatedSkillName);
+
+                Assert.Fail("It shoudn't allow to save two skills with same name");
+            }
+            catch(InvalidOperationException ex)
+            {
+                Assert.AreEqual(Domain.Constants.DomainErrorMessages.SKILL_NAME_ALREADY_EXISTS, ex.Message);
+            }
+
+
+        }
     }
 }

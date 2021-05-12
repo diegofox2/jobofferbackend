@@ -11,7 +11,7 @@ namespace JobOfferBackend.Domain.Entities
         {
             if (string.IsNullOrEmpty(Name))
             {
-                _errorLines.AppendLine(DomainErrorMessages.NAME_REQUIRED);
+                _errorLines.AppendLine(DomainErrorMessages.SKILL_NAME_REQUIRED);
             }
 
             ThrowExceptionIfErrors();

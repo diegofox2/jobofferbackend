@@ -1,4 +1,5 @@
 ﻿using JobOfferBackend.Domain.Common;
+using JobOfferBackend.Domain.Constants;
 using System;
 using System.Collections.Generic;
 
@@ -42,7 +43,11 @@ namespace JobOfferBackend.Domain.Entities
 
         public override void Validate()
         {
-            throw new System.NotImplementedException();
+            if (string.IsNullOrEmpty(ApplicantId))
+                _errorLines.AppendLine(DomainErrorMessages.APPLICANT_REQUIRED);
+
+            if (Date.Year == 1900)
+                _errorLines.AppendLine(DomainErrorMessages.DATE_REQUIRED);
         }
     }
 }

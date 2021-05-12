@@ -33,7 +33,7 @@ namespace JobOfferBackend.Domain.Entities
         public override void Validate()
         {
             if (Date.Year == 1900)
-                _errors.AppendLine(DomainErrorMessages.DATE_REQUIRED);
+                _errorLines.AppendLine(DomainErrorMessages.DATE_REQUIRED);
 
             ThrowExceptionIfErrors();
         }
