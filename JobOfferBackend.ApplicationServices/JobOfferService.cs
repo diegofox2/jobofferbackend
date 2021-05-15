@@ -59,7 +59,7 @@ namespace JobOfferBackend.ApplicationServices
             return jobOfferListDto;
         }
 
-        public async Task<JobOffer> GetJobOffer(string id)
+        public async Task<JobOffer> GetJobOfferAsync(string id)
         {
             return await _jobOfferRepository.GetByIdAsync(id);
         }

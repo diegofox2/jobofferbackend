@@ -13,7 +13,7 @@ namespace JobOfferBackend.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class PersonController : Controller
+    public class PersonController : ControllerBase
     {
         private readonly PersonService _personService;
 

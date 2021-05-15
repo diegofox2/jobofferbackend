@@ -34,7 +34,7 @@ namespace JobOfferBackend.WebAPI.Controllers
         [AllowAnonymous]
         public async Task<JobOffer> GetById(string id)
         {
-            return await _jobOfferService.GetJobOffer(id);
+            return await _jobOfferService.GetJobOfferAsync(id);
         }
     }
 }
