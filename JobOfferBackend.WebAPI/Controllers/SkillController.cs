@@ -10,7 +10,6 @@ namespace JobOfferBackend.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class SkillController : ControllerBase
     {
         private readonly SkillsService _skillsService;
