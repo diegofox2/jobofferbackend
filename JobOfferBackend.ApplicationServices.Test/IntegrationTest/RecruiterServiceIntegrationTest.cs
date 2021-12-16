@@ -240,13 +240,12 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
 
             await _recruiterService.AddClientAsync(company, recruiter.Id);
 
-            var jobOffer = new JobOffer() 
-            { 
-                Title = "Analista Funcional", 
-                Description = "Se necesita analista funcional con bla bla bla",
-                RecruiterId = recruiter.Id,
-                Date = DateTime.Now.Date
-            };
+            var jobOffer = await _recruiterService.GetNewJobOffer(recruiter.Id);
+            jobOffer.Title = "Analista Funcional";
+            jobOffer.Description = "Se necesita analista funcional con bla bla bla";
+            jobOffer.RecruiterId = recruiter.Id;
+            jobOffer.Date = DateTime.Now.Date;
+
             jobOffer.ContractInformation = new ContractCondition() { KindOfContract = "FullTime", StartingFrom = "As soon as possible", WorkingDays = "Montay to Friday" };
 
             jobOffer.AddSkillRequired(new SkillRequired(skill1, 5,true));
@@ -255,7 +254,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
             jobOffer.CompanyId = company.Id;
 
             //Act
-            await _recruiterService.SaveJobOfferAsync(jobOffer, recruiter.Id);
+            await _recruiterService.SaveJobOfferAsync(jobOffer);
 
             var jobOfferSaved = await _jobOfferRepository.GetByIdAsync(jobOffer.Id);
             var companySaved = await _companyRepository.GetCompanyAsync(company.Name, company.Activity);
@@ -263,7 +262,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
             //Assert
             Assert.AreEqual(companySaved.Id, jobOfferSaved.CompanyId, "The company created is different than the one assigned to the job offer");
             Assert.AreEqual(jobOffer, jobOfferSaved, "Job offer was not saved" );
-            Assert.AreEqual(JobOfferState.Created, jobOfferSaved.State, "Job offer created has a wrong state");
+            Assert.AreEqual(JobOfferState.WorkInProgress, jobOfferSaved.State, "Job offer created has a wrong state");
             Assert.AreEqual(recruiter.Id, jobOfferSaved.RecruiterId);
 
         }
@@ -286,13 +285,12 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
             await _skillRepository.UpsertAsync(skill2);
             await _skillRepository.UpsertAsync(skill3);
 
-            var jobOffer = new JobOffer()
-            {
-                Title = "Analista Funcional",
-                Description = "Se necesita analista funcional con bla bla bla",
-                RecruiterId = recruiter.Id,
-                Date = DateTime.Now.Date
-            };
+            var jobOffer = await _recruiterService.GetNewJobOffer(recruiter.Id);
+            jobOffer.Title = "Analista Funcional";
+            jobOffer.Description = "Se necesita analista funcional con bla bla bla";
+            jobOffer.RecruiterId = recruiter.Id;
+            jobOffer.Date = DateTime.Now.Date;
+
             jobOffer.ContractInformation = new ContractCondition() { KindOfContract = "FullTime", StartingFrom = "As soon as possible", WorkingDays = "Montay to Friday" };
 
             jobOffer.AddSkillRequired(new SkillRequired(skill1, 5, true));
@@ -300,7 +298,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
             jobOffer.AddSkillRequired(new SkillRequired(skill3, 2, false));
             jobOffer.CompanyId = company.Id;
 
-            await _recruiterService.SaveJobOfferAsync(jobOffer, recruiter.Id);
+            await _recruiterService.SaveJobOfferAsync(jobOffer);
 
             var jobOfferSaved = await _jobOfferRepository.GetByIdAsync(jobOffer.Id);
 
@@ -310,7 +308,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
 
             jobOfferSaved.Title = newTitle;
 
-            await _recruiterService.SaveJobOfferAsync(jobOfferSaved, recruiter.Id);
+            await _recruiterService.SaveJobOfferAsync(jobOfferSaved);
 
             var jobOfferUpdated = await _jobOfferRepository.GetByIdAsync(jobOfferSaved.Id);
 
@@ -318,61 +316,5 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
             Assert.AreEqual(newTitle, jobOfferSaved.Title);
             
         }
-
-        [TestMethod]
-        public async Task SaveJobOffer_ThrowsInvalidOperationException_WhenJobOfferWasNotCreatedByTheRecruiterIsDoingTheUpdate()
-        {
-            //Arrange
-            var recruiter = new Recruiter() { FirstName = "Maidana", LastName = "Patricia", IdentityCard = "28123456" };
-
-            await _recruiterService.CreateRecruiterAsync(recruiter);
-
-            var company = new Company("Acme", "Software");
-
-            await _recruiterService.AddClientAsync(company, recruiter.Id);
-
-            var skill1 = new Skill() { Name = "C#", Id = Guid.NewGuid().ToString() };
-            var skill2 = new Skill() { Name = "Javascript", Id = Guid.NewGuid().ToString() };
-            var skill3 = new Skill() { Name = "React", Id = Guid.NewGuid().ToString() };
-
-            await _skillRepository.UpsertAsync(skill1);
-            await _skillRepository.UpsertAsync(skill2);
-            await _skillRepository.UpsertAsync(skill3);
-
-            var jobOffer = new JobOffer()
-            {
-                Title = "Analista Funcional",
-                Description = "Se necesita analista funcional con bla bla bla",
-                RecruiterId = recruiter.Id,
-                Date = DateTime.Now.Date
-            };
-            jobOffer.ContractInformation = new ContractCondition() { KindOfContract = "FullTime", StartingFrom = "As soon as possible", WorkingDays = "Montay to Friday" };
-
-            jobOffer.AddSkillRequired(new SkillRequired(skill1, 5, true));
-            jobOffer.AddSkillRequired(new SkillRequired(skill2, 4, false));
-            jobOffer.AddSkillRequired(new SkillRequired(skill3, 2, false));
-            jobOffer.CompanyId = company.Id;
-
-            await _recruiterService.SaveJobOfferAsync(jobOffer, recruiter.Id);
-
-            var jobOfferSaved = await _jobOfferRepository.GetByIdAsync(jobOffer.Id);
-
-            try
-            {
-                //Act
-
-                jobOfferSaved.Title = "New JobOffer";
-
-                await _recruiterService.SaveJobOfferAsync(jobOfferSaved, "AnotherId");
-
-                Assert.Fail("A job offer shouldn be modified by another recruiter thant the once who created it");
-            }
-            catch(InvalidOperationException ex)
-            {
-                //Assert
-                Assert.AreEqual(DomainErrorMessages.INVALID_RECRUITER, ex.Message);
-            }
-        }
-
     }
 }

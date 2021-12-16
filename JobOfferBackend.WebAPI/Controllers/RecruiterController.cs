@@ -23,11 +23,26 @@ namespace JobOfferBackend.WebAPI.Controllers
             _recruiterService = recruiterService;
         }
 
+        [HttpGet]
+        [Route("GetNewJobOffer")]
+        public async Task<JobOffer> GetNewJobOffer(string recruiterId)
+        {
+            return await _recruiterService.GetNewJobOffer(recruiterId);
+        }
+
+
         [HttpPost]
         [Route("SaveJobOffer")]
-        public async Task SaveJobOffer([FromBody] JobOffer jobOffer, string recruiterId)
+        public async Task SaveJobOffer([FromBody] JobOffer jobOffer)
         {
-            await _recruiterService.SaveJobOfferAsync(jobOffer, recruiterId);
+            await _recruiterService.SaveJobOfferAsync(jobOffer);
+        }
+
+        [HttpPost]
+        [Route("PublishJobOffer")]
+        public async Task PublishJobOffer([FromBody] JobOffer jobOffer)
+        {
+            await _recruiterService.PublishJobOffer(jobOffer);
         }
 
         [HttpPost]

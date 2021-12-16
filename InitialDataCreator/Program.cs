@@ -54,7 +54,12 @@ namespace InitialDataCreator
 
             companyRepository.UpsertAsync(company1).Wait();
 
-            var jobOffer = new JobOffer() { Date = DateTime.Now.Date, Title = "Analista programador", CompanyId = company1.Id, Zone = "Palermo" };
+            var jobOffer = Task.Run(() => recruiterService.GetNewJobOffer(recruiter.Id)).Result;
+
+            jobOffer.Date = DateTime.Now.Date;
+            jobOffer.Title = "Analista programador";
+            jobOffer.CompanyId = company1.Id;
+            jobOffer.Zone = "Palermo";
 
             jobOffer.Description = "Para importante empresa ubicada en San Telmo, estamos en búsqueda de desarrollador fullstack con " +
                 "al menos 3 años de experiencia utilizando React y NodeJs.Quien se incorpore estará participando dentro " +
@@ -76,7 +81,7 @@ namespace InitialDataCreator
 
             recruiterService.CreateRecruiterAsync(recruiter).Wait();
 
-            recruiterService.SaveJobOfferAsync(jobOffer, recruiter.Id).Wait();
+            recruiterService.SaveJobOfferAsync(jobOffer).Wait();
 
             //
 
@@ -84,7 +89,11 @@ namespace InitialDataCreator
 
             companyRepository.UpsertAsync(company2).Wait();
 
-            var jobOffer2 = new JobOffer() { Date = DateTime.Now.Date, Title = "JAVA Full Stack Developer", CompanyId = company2.Id, Zone = "Las Cañitas" };
+            var jobOffer2 = Task.Run(() => recruiterService.GetNewJobOffer(recruiter.Id)).Result;
+            jobOffer2.Date = DateTime.Now.Date;
+            jobOffer2.Title = "JAVA Full Stack Developer";
+            jobOffer2.CompanyId = company2.Id;
+            jobOffer2.Zone = "Las Cañitas";
 
             jobOffer2.Description = "En KaizenRH buscamos Python Developer Junior para trabajar en interesantes proyectos dentro de Startup en expansión LATAM dedicada a la automatización de procesos IT y negocios.";
 
@@ -102,7 +111,7 @@ namespace InitialDataCreator
                 WorkingDays = "Lunes a viernes 9 a 18"
             };
 
-            recruiterService.SaveJobOfferAsync(jobOffer2, recruiter.Id).Wait();
+            recruiterService.SaveJobOfferAsync(jobOffer2).Wait();
 
             //
 
@@ -110,7 +119,11 @@ namespace InitialDataCreator
 
             companyRepository.UpsertAsync(company3).Wait();
 
-            var jobOffer3 = new JobOffer() { Date = DateTime.Now.Date, Title = "Sr. C# Backend Developer/Engineer", CompanyId = company3.Id, Zone = "Microcentro" };
+            var jobOffer3 = Task.Run(() => recruiterService.GetNewJobOffer(recruiter.Id)).Result;
+            jobOffer3.Date = DateTime.Now.Date;
+            jobOffer3.Title = "Sr. C# Backend Developer/Engineer";
+            jobOffer3.CompanyId = company3.Id;
+            jobOffer3.Zone = "Microcentro";
 
             jobOffer3.Description = "ADN - Recursos Humanos estamos en la búsqueda de un Sr. Python Backend Developer/Engineer, para Importante Empresa de Tecnología";
 
@@ -124,7 +137,7 @@ namespace InitialDataCreator
                 WorkingDays = "Lunes a viernes 9 a 18"
             };
 
-            recruiterService.SaveJobOfferAsync(jobOffer3, recruiter.Id).Wait();
+            recruiterService.SaveJobOfferAsync(jobOffer3).Wait();
 
             
             recruiterService.PublishJobOffer(jobOffer2).Wait();

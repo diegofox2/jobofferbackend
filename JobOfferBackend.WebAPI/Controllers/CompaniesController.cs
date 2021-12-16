@@ -21,7 +21,7 @@ namespace JobOfferBackend.WebAPI.Controllers
         [HttpGet()]
         public async Task<IEnumerable<Company>> GetAll()
         {
-            return await _companiesService.GetAllCompanies();
+            return await _companiesService.GetAllCompanies();   
         }
     }
 }

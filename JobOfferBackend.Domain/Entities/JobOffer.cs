@@ -9,8 +9,7 @@ namespace JobOfferBackend.Domain.Entities
 {
     public enum JobOfferState
     {
-        Created,
-        Updated,
+        WorkInProgress,
         Published,
         Finished
     }
@@ -106,7 +105,17 @@ namespace JobOfferBackend.Domain.Entities
 
         public void Publish()
         {
-            State = JobOfferState.Published;
+            if(State == JobOfferState.WorkInProgress)
+            {
+                State = JobOfferState.Published;
+
+                Validate();
+            }
+            else
+            {
+                throw new InvalidOperationException(DomainErrorMessages.ONLY_WORKINPROGRESS_JOBOFFERS_CAN_BE_PUBLISHED);
+            }
+
         }
 
         public void Finish()
@@ -116,22 +125,33 @@ namespace JobOfferBackend.Domain.Entities
 
         public override void Validate()
         {
-            if (ContractInformation == null)
-                _errorLines.AppendLine(DomainErrorMessages.CONTRACT_INFORMATION_EMPTY);
+            if(State != JobOfferState.WorkInProgress)
+            {
+                if (ContractInformation == null)
+                    _errorLines.AppendLine(DomainErrorMessages.CONTRACT_INFORMATION_EMPTY);
 
-            if (string.IsNullOrEmpty(CompanyId))
-                _errorLines.AppendLine(DomainErrorMessages.COMPANY_REQUIRED);
+                if (string.IsNullOrEmpty(CompanyId))
+                    _errorLines.AppendLine(DomainErrorMessages.COMPANY_REQUIRED);
 
-            CheckNoDuplicatedSkillsRequired();
+                if (string.IsNullOrEmpty(RecruiterId))
+                    _errorLines.AppendLine(DomainErrorMessages.RECRUITER_REQUIRED);
 
-            CheckNoSkillsRequiredInvalid();
+                CheckingNoDuplicatedSkillsRequired();
 
-            CheckNoInvalidApplications();
+                CheckingNoMissingSkillsRequired();
 
-            ThrowExceptionIfErrors();
+                CheckingNoInvalidApplications();
+
+                if(_errorLines.Length > 0)
+                {
+                    State = JobOfferState.WorkInProgress;
+                }
+
+                ThrowExceptionIfErrors();
+            }
         }
 
-        private void CheckNoSkillsRequiredInvalid()
+        private void CheckingNoMissingSkillsRequired()
         {
             foreach(var skillRequired in SkillsRequired)
             {
@@ -139,7 +159,7 @@ namespace JobOfferBackend.Domain.Entities
             }
         }
 
-        private void CheckNoDuplicatedSkillsRequired()
+        private void CheckingNoDuplicatedSkillsRequired()
         {
             if (_skillsRequired.GroupBy(item => item.SkillId).Any(item=> item.Count() > 1))
             {
@@ -147,7 +167,7 @@ namespace JobOfferBackend.Domain.Entities
             }
         }
 
-        private void CheckNoInvalidApplications()
+        private void CheckingNoInvalidApplications()
         {
             _applications.ForEach(application => application.Validate());
         }

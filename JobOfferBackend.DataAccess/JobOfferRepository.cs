@@ -26,9 +26,9 @@ namespace JobOfferBackend.DataAccess
             return await Collection.Find(item => item.State != JobOfferState.Finished).ToListAsync();
         }
 
-        public virtual async Task<bool> JobOfferBelongsToRecruiter(JobOffer jobOffer, string recruiterId)
+        public virtual async Task<bool> JobOfferBelongsToRecruiter(JobOffer jobOffer)
         {
-           return await Collection.CountDocumentsAsync(item => item.RecruiterId == recruiterId && item.Id == jobOffer.Id) == 1;
+           return await Collection.CountDocumentsAsync(item => item.RecruiterId == jobOffer.RecruiterId && item.Id == jobOffer.Id) == 1;
         }
     }
 }

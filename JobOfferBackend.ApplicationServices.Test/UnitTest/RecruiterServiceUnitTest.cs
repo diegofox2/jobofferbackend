@@ -155,7 +155,171 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
 
         [TestMethod]
         [TestCategory("UnitTest")]
-        public async Task SaveJobOfferAsync_CreatesANewJobOffer_WhenJobOfferIsValidAndItDoesNotExistsPreviously()
+        public async Task GetNewJobOffer_ReturnsNewJobOffer_WhenRecruiterExists()
+        {
+            //Arrange
+            _recruiterRepositoryMock.Setup(mock => mock.CheckEntityExistsAsync(It.IsAny<string>())).ReturnsAsync(true);
+
+            //Act
+            var newJobOffer = await _service.GetNewJobOffer("someId");
+
+            //Assert
+            Assert.IsTrue(!string.IsNullOrWhiteSpace(newJobOffer.Id), "The jobOfferId should not be empty");
+            Assert.AreEqual("someId", newJobOffer.RecruiterId, "The recruiterId should be the same than the recruiter sent by param");
+            Assert.AreEqual(JobOfferState.WorkInProgress, newJobOffer.State, $"The initial state should be {JobOfferState.WorkInProgress.ToString()}");
+        }
+
+        [TestMethod]
+        [TestCategory("UnitTest")]
+        public async Task GetNewJobOffer_ThrowsInvalidOperationException_WhenRecruiterDoesNotExists()
+        {
+            //Arrange
+            _recruiterRepositoryMock.Setup(mock => mock.CheckEntityExistsAsync(It.IsAny<string>())).ReturnsAsync(false);
+
+            //Act
+            try
+            {
+                var newJobOffer = await _service.GetNewJobOffer("someId");
+
+                Assert.Fail("It shouldn't create a new job offer if the recruiter does not exists");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Assert.AreEqual(ServicesErrorMessages.RECRUITER_DOES_NOT_EXISTS, ex.Message);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("UnitTest")]
+        public async Task Publish_ChangeTheJobOfferState_WhenItIsWorkingProgress()
+        {
+            //Arrange
+            var jobOffer = new JobOffer
+            {
+                ContractInformation = new ContractCondition() { KindOfContract = "FullTime", StartingFrom = "As soon as possible", WorkingDays = "Montay to Friday" },
+                RecruiterId = Guid.NewGuid().ToString(),
+                CompanyId = Guid.NewGuid().ToString(),
+                State = JobOfferState.WorkInProgress
+            };
+
+            _jobOfferRepositoryMock.Setup(mock => mock.UpsertAsync(It.IsAny<JobOffer>())).Returns(Task.CompletedTask);
+
+            //Act
+             await _service.PublishJobOffer(jobOffer);
+
+            //Assert
+            Assert.AreEqual(JobOfferState.Published, jobOffer.State);
+            _jobOfferRepositoryMock.Verify(mock => mock.UpsertAsync(It.IsAny<JobOffer>()), Times.Once);
+
+        }
+
+        [TestMethod]
+        [TestCategory("UnitTest")]
+        public async Task Publish_ThrowsInvalidOperationException_WhenItIsNotInWorkingProgress()
+        {
+            //Arrange
+            var jobOffer = new JobOffer
+            {
+                ContractInformation = new ContractCondition() { KindOfContract = "FullTime", StartingFrom = "As soon as possible", WorkingDays = "Montay to Friday" },
+                RecruiterId = Guid.NewGuid().ToString(),
+                CompanyId = Guid.NewGuid().ToString(),
+                State = JobOfferState.Published
+            };
+
+            //Act
+            try
+            {
+                await _service.PublishJobOffer(jobOffer);
+
+                Assert.Fail("A job offer shouldn't be published if it isn't in working progress");
+            }
+            catch(InvalidOperationException ex)
+            {
+                Assert.AreEqual(DomainErrorMessages.ONLY_WORKINPROGRESS_JOBOFFERS_CAN_BE_PUBLISHED, ex.Message);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("UnitTest")]
+        public async Task Publish_ThrowsInvalidOperationException_WhenTheJobOfferHasNotACompanyAssignedTo()
+        {
+            //Arrange
+            var jobOffer = new JobOffer
+            {
+                ContractInformation = new ContractCondition() { KindOfContract = "FullTime", StartingFrom = "As soon as possible", WorkingDays = "Montay to Friday" },
+                RecruiterId = Guid.NewGuid().ToString(),
+                State = JobOfferState.WorkInProgress
+            };
+
+            //Act
+            try
+            {
+                await _service.PublishJobOffer(jobOffer);
+
+                Assert.Fail("A job offer shouldn't be published when it is invalid");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Assert.IsTrue(ex.Data[0].ToString() == DomainErrorMessages.COMPANY_REQUIRED);
+                Assert.AreEqual(JobOfferState.WorkInProgress, jobOffer.State);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("UnitTest")]
+        public async Task Publish_ThrowsInvalidOperationException_WhenTheJobOfferHasNotARecruiterAssignedTo()
+        {
+            //Arrange
+            var jobOffer = new JobOffer
+            {
+                ContractInformation = new ContractCondition() { KindOfContract = "FullTime", StartingFrom = "As soon as possible", WorkingDays = "Montay to Friday" },
+                CompanyId = Guid.NewGuid().ToString(),
+                State = JobOfferState.WorkInProgress
+            };
+
+            //Act
+            try
+            {
+                await _service.PublishJobOffer(jobOffer);
+
+                Assert.Fail("A job offer shouldn't be published when it is invalid");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Assert.IsTrue(ex.Data[0].ToString() == DomainErrorMessages.RECRUITER_REQUIRED);
+                Assert.AreEqual(JobOfferState.WorkInProgress, jobOffer.State);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("UnitTest")]
+        public async Task Publish_ThrowsInvalidOperationException_WhenTheJobOfferHasNotContractInformation()
+        {
+            //Arrange
+            var jobOffer = new JobOffer
+            {
+                CompanyId = Guid.NewGuid().ToString(),
+                RecruiterId = Guid.NewGuid().ToString(),
+                State = JobOfferState.WorkInProgress
+            };
+
+            //Act
+            try
+            {
+                await _service.PublishJobOffer(jobOffer);
+
+                Assert.Fail("A job offer shouldn't be published when it is invalid");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Assert.IsTrue(ex.Data[0].ToString() == DomainErrorMessages.CONTRACT_INFORMATION_EMPTY);
+                Assert.AreEqual(JobOfferState.WorkInProgress, jobOffer.State);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("UnitTest")]
+        public async Task SaveJobOfferAsync_StoreDataInDB_WhenJobOfferIsValid()
         {
             //Arrange
 
@@ -170,36 +334,38 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
 
             _companyRepositoryMock.Setup(mock => mock.CheckEntityExistsAsync(It.IsAny<string>())).ReturnsAsync(true);
 
-            _jobOfferRepositoryMock.Setup(mock => mock.GetActiveJobOffersByRecruiterAsync(It.IsAny<string>())).ReturnsAsync(new List<JobOffer>());
+            _jobOfferRepositoryMock.Setup(mock => mock.JobOfferBelongsToRecruiter(It.IsAny<JobOffer>())).Returns(Task.FromResult<bool>(true));
+
+            _jobOfferRepositoryMock.Setup(mock => mock.CheckEntityExistsAsync(It.IsAny<string>())).ReturnsAsync(true);
 
             _jobOfferRepositoryMock.Setup(mock => mock.UpsertAsync(It.IsAny<JobOffer>())).Returns(Task.CompletedTask);
 
             //Act
-            await _service.SaveJobOfferAsync(jobOffer, It.IsAny<string>());
+            await _service.SaveJobOfferAsync(jobOffer);
 
             //Assert
-            _recruiterRepositoryMock.VerifyAll();
             _jobOfferRepositoryMock.VerifyAll();
 
         }
 
         [TestMethod]
         [TestCategory("UnitTest")]
-        public async Task SaveJobOfferAsync_ThrowsInvalidOperationException_WhenJobOfferAlreadyExists()
+        public async Task SaveJobOfferAsync_ThrowsInvalidOperationException_WhenRecruiterDoesNotExists()
         {
             //Arrange
-            var jobOffer = new JobOffer() { Id = Guid.NewGuid().ToString(), CompanyId = Guid.NewGuid().ToString() };
-            
-            jobOffer.ContractInformation = new ContractCondition() { KindOfContract = "FullTime", StartingFrom = "As soon as possible", WorkingDays = "Montay to Friday" };
+            var jobOffer = new JobOffer
+            {
+                ContractInformation = new ContractCondition() { KindOfContract = "FullTime", StartingFrom = "As soon as possible", WorkingDays = "Montay to Friday" },
+                RecruiterId = Guid.NewGuid().ToString(),
+                CompanyId = Guid.NewGuid().ToString()
+            };
 
             _recruiterRepositoryMock.Setup(mock => mock.CheckEntityExistsAsync(It.IsAny<string>())).ReturnsAsync(false);
-
-            _jobOfferRepositoryMock.Setup(mock => mock.JobOfferBelongsToRecruiter(It.IsAny<JobOffer>(), It.IsAny<string>())).ReturnsAsync(false);
 
             //Act
             try
             {
-                await _service.SaveJobOfferAsync(jobOffer, It.IsAny<string>());
+                await _service.SaveJobOfferAsync(jobOffer);
 
                 //Assert
                 Assert.Fail("It should throw an exception when the recruiter does not exists");
@@ -213,35 +379,67 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
 
         [TestMethod]
         [TestCategory("UnitTest")]
-        public async Task SaveJobOfferAsync_ThrowsInvalidOperationException_WhenJobOfferWithSameTitleAndCompanyAlreadyExistsAndItIsNotFinished()
+        public async Task SaveJobOfferAsync_ThrowsInvalidOperationException_WhenCompanyDoesNotExists()
         {
             //Arrange
+            var jobOffer = new JobOffer
+            {
+                ContractInformation = new ContractCondition() { KindOfContract = "FullTime", StartingFrom = "As soon as possible", WorkingDays = "Montay to Friday" },
+                RecruiterId = Guid.NewGuid().ToString(),
+                CompanyId = Guid.NewGuid().ToString()
+            };
 
-            var company = new Company( "Accenture", "IT"){ Id = Guid.NewGuid().ToString() };
+            _recruiterRepositoryMock.Setup(mock => mock.CheckEntityExistsAsync(It.IsAny<string>())).ReturnsAsync(true);
 
-            var jobOffer = new JobOffer();
-            jobOffer.Title = "Some Job";
-            jobOffer.CompanyId = company.Id;
-            jobOffer.ContractInformation = new ContractCondition() { KindOfContract = "FullTime", StartingFrom = "As soon as possible", WorkingDays = "Montay to Friday" };
+            _companyRepositoryMock.Setup(mock => mock.CheckEntityExistsAsync(It.IsAny<string>())).ReturnsAsync(false);
+
+            //Act
+            try
+            {
+                await _service.SaveJobOfferAsync(jobOffer);
+
+                //Assert
+                Assert.Fail("It should throw an exception when the company does not exists");
+            }
+            catch (InvalidOperationException ex)
+            {
+                //Assert
+                Assert.AreEqual(DomainErrorMessages.COMPANY_INVALID, ex.Message);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("UnitTest")]
+        public async Task SaveJobOfferAsync_ThrowsInvalidOperationException_WhenJobOfferWasNotCreatedByTheOriginalRecruiter()
+        {
+            //Arrange
+            var jobOffer = new JobOffer
+            {
+                ContractInformation = new ContractCondition() { KindOfContract = "FullTime", StartingFrom = "As soon as possible", WorkingDays = "Montay to Friday" },
+                RecruiterId = Guid.NewGuid().ToString(),
+                CompanyId = Guid.NewGuid().ToString()
+            };
 
             _recruiterRepositoryMock.Setup(mock => mock.CheckEntityExistsAsync(It.IsAny<string>())).ReturnsAsync(true);
 
             _companyRepositoryMock.Setup(mock => mock.CheckEntityExistsAsync(It.IsAny<string>())).ReturnsAsync(true);
 
-            _jobOfferRepositoryMock.Setup(mock => mock.GetActiveJobOffersByRecruiterAsync(It.IsAny<string>())).ReturnsAsync(new List<JobOffer>() { jobOffer });
+            _jobOfferRepositoryMock.Setup(mock => mock.CheckEntityExistsAsync(It.IsAny<string>())).ReturnsAsync(true);
+
+            _jobOfferRepositoryMock.Setup(mock => mock.JobOfferBelongsToRecruiter(It.IsAny<JobOffer>())).Returns(Task.FromResult<bool>(false));
 
             //Act
             try
             {
-                await _service.SaveJobOfferAsync(jobOffer, It.IsAny<string>());
+                await _service.SaveJobOfferAsync(jobOffer);
 
                 //Assert
-                Assert.Fail("It should throw an exception when a job offer with the same title, for the same company, already exists and the offer is not finished");
+                Assert.Fail("It should throw an exception when the recruiter that is saving is not the same than the one who created it");
             }
             catch (InvalidOperationException ex)
             {
                 //Assert
-                Assert.AreEqual(DomainErrorMessages.JOBOFFER_ALREADY_EXISTS, ex.Message);
+                Assert.AreEqual(DomainErrorMessages.RECRUITER_WHO_SAVE_THE_JOBOFFER_SHOULD_BE_THE_SAME_THAN_CREATED_IT, ex.Message);
             }
         }
 

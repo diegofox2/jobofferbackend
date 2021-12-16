@@ -26,7 +26,7 @@ namespace JobOfferBackend.DataAccess
 
         protected IMongoCollection<T> Collection { get; set; }
 
-        protected string CreateId()
+        public string CreateId()
         {
             return ObjectId.GenerateNewId(DateTime.UtcNow).ToString();
         }

@@ -116,11 +116,9 @@ namespace JobOfferBackend.ApplicationServices
             /////////////////////////////////////////////////////////
         }
 
-        public virtual async Task SaveJobOfferAsync(JobOffer jobOfferToSave, string recruiterId)
+        public virtual async Task SaveJobOfferAsync(JobOffer jobOfferToSave)
         {
-            jobOfferToSave.Validate();
-
-            var recruiterExists = await _recruiterRepository.CheckEntityExistsAsync(recruiterId);
+            var recruiterExists = await _recruiterRepository.CheckEntityExistsAsync(jobOfferToSave.RecruiterId);
 
             if(!recruiterExists)
             {
@@ -134,27 +132,18 @@ namespace JobOfferBackend.ApplicationServices
                 throw new InvalidOperationException(DomainErrorMessages.COMPANY_INVALID);
             }
 
-            if (!jobOfferToSave.HasIdCreated)
+            var jobOfferExists = await _jobOfferRepository.CheckEntityExistsAsync(jobOfferToSave.Id);
+
+            if (jobOfferExists)
             {
-                var jobOffersCreatedByRecruiter = await _jobOfferRepository.GetActiveJobOffersByRecruiterAsync(recruiterId);
+                var jobOfferCreatedBySameRecruiter = await _jobOfferRepository.JobOfferBelongsToRecruiter(jobOfferToSave);
 
-                if (jobOffersCreatedByRecruiter.Any(j => j.CompanyId == jobOfferToSave.CompanyId && j.Title == jobOfferToSave.Title && j.State != JobOfferState.Finished))
+                if (!jobOfferCreatedBySameRecruiter)
                 {
-                    throw new InvalidOperationException(DomainErrorMessages.JOBOFFER_ALREADY_EXISTS);
-                }
-
-                jobOfferToSave.RecruiterId = recruiterId;
-
-                jobOfferToSave.State = JobOfferState.Created;
-            }
-            else
-            {
-                if (!await _jobOfferRepository.JobOfferBelongsToRecruiter(jobOfferToSave, recruiterId))
-                {
-                    throw new InvalidOperationException(DomainErrorMessages.INVALID_RECRUITER);
+                    throw new InvalidOperationException(DomainErrorMessages.RECRUITER_WHO_SAVE_THE_JOBOFFER_SHOULD_BE_THE_SAME_THAN_CREATED_IT);
                 }
             }
-
+            
             await _jobOfferRepository.UpsertAsync(jobOfferToSave);
         }
 
@@ -170,6 +159,16 @@ namespace JobOfferBackend.ApplicationServices
             jobOffer.Finish();
 
             await _jobOfferRepository.UpsertAsync(jobOffer);
+        }
+
+        public virtual async Task<JobOffer> GetNewJobOffer(string recruiterId)
+        {
+            if(!await _recruiterRepository.CheckEntityExistsAsync(recruiterId))
+            {
+                throw new InvalidOperationException(ServicesErrorMessages.RECRUITER_DOES_NOT_EXISTS);
+            }
+
+            return new JobOffer() { Id = _jobOfferRepository.CreateId(), State = JobOfferState.WorkInProgress, RecruiterId = recruiterId };
         }
     }
 }
