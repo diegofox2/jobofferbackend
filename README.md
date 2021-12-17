@@ -54,6 +54,9 @@ dotnet tool install -g coveralls.net --version 1.0.0
 
 CD C:\Fuentes\JobOffersBackendDotNet\jobofferbackend
 
+:: DELETE PREVIOUS CODE COVERAGE FILES AND REPORT
+
+RMDIR C:\SourceCode\JobOffersTestResult /S /Q
 
 :: REPLACE D: WITH THE DISK FOR SAVING THE COVERAGE REPORT
 
