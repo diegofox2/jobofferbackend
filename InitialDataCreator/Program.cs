@@ -85,8 +85,6 @@ namespace InitialDataCreator
                 WorkingDays = "Lunes a viernes 9 a 18"
             };
 
-            recruiterService.CreateRecruiterAsync(recruiter).Wait();
-
             recruiterService.SaveJobOfferAsync(jobOffer).Wait();
 
             //

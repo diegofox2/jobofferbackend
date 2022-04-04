@@ -37,6 +37,21 @@ namespace JobOfferBackend.Domain.Entities
             
         }
 
+        public Person GetPerson()
+        {
+            return new Person()
+            {
+                Abilities = this.Abilities,
+                FirstName = this.FirstName,
+                LastName = this.LastName,
+                MyJobApplications = this.MyJobApplications,
+                Id = this.Id,
+                IdentityCard = this.IdentityCard,
+                JobHistory = this.JobHistory,
+                Studies = this.Studies
+            };
+        }
+
         private void CheckPersonSkillsAndYearsOfExperience(Person person, JobOffer jobOffer)
         {
             var mandatorySkills = jobOffer.SkillsRequired.Where(s => s.IsMandatory);

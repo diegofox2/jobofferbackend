@@ -73,11 +73,27 @@ namespace JobOfferBackend.ApplicationServices
         {
             recruiter.Validate();
 
-            //This should be transactional and integration tests should validate all these repositories 
+            var person = recruiter.GetPerson();
 
-            await _personRepository.UpsertAsync(recruiter);
-            await _recruiterRepository.UpsertAsync(recruiter);
-            //
+            using(var session = _personRepository.GetTransactionalSession())
+            {
+                try
+                {
+                    session.StartTransaction();
+                    await _personRepository.UpsertAsync(person);
+
+                    recruiter.Id = person.Id;
+
+                    await _recruiterRepository.UpsertAsync(recruiter);
+
+                    await session.CommitTransactionAsync();
+                }
+                catch(Exception ex)
+                {
+                    await session.AbortTransactionAsync();
+
+                }
+            }
         }
 
         public virtual async Task UpdateRecruiterAsync(Recruiter recruiter)

@@ -26,6 +26,11 @@ namespace JobOfferBackend.DataAccess
 
         protected IMongoCollection<T> Collection { get; set; }
 
+        public IClientSessionHandle GetTransactionalSession()
+        {
+            return _database.Client.StartSession();
+        }
+
         public string CreateId()
         {
             return ObjectId.GenerateNewId(DateTime.UtcNow).ToString();
