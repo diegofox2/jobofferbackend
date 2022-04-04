@@ -54,7 +54,13 @@ namespace InitialDataCreator
 
             companyRepository.UpsertAsync(company1).Wait();
 
-            var jobOffer = Task.Run(() => recruiterService.GetNewJobOffer(recruiter.Id)).Result;
+            recruiterService.CreateRecruiterAsync(recruiter).Wait();
+
+            var jobOffer = Task.Run(() =>
+            {
+                RecruiterService recruiterService1 = recruiterService;
+                return recruiterService1.GetNewJobOffer(recruiter.Id);
+            }).Result;
 
             jobOffer.Date = DateTime.Now.Date;
             jobOffer.Title = "Analista programador";
