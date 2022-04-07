@@ -6,11 +6,13 @@ using System.Linq;
 
 namespace JobOfferBackend.Domain.Entities
 {
-    public class Recruiter : Person, IIdentity<Recruiter>
+    public class Recruiter : BaseEntity<Recruiter>
     {
         private List<string> _clientCompaniesId = new List<string>();
 
-        public IEnumerable<string> ClientCompanies { get => _clientCompaniesId; set => _clientCompaniesId = (List<string>)value; }
+        public string PersonId { get; set; }
+
+        public IEnumerable<string> ClientCompaniesId { get => _clientCompaniesId; set => _clientCompaniesId = (List<string>)value; }
 
         public void AddClient(Company company)
         {
@@ -37,21 +39,6 @@ namespace JobOfferBackend.Domain.Entities
             
         }
 
-        public Person GetPerson()
-        {
-            return new Person()
-            {
-                Abilities = this.Abilities,
-                FirstName = this.FirstName,
-                LastName = this.LastName,
-                MyJobApplications = this.MyJobApplications,
-                Id = this.Id,
-                IdentityCard = this.IdentityCard,
-                JobHistory = this.JobHistory,
-                Studies = this.Studies
-            };
-        }
-
         private void CheckPersonSkillsAndYearsOfExperience(Person person, JobOffer jobOffer)
         {
             var mandatorySkills = jobOffer.SkillsRequired.Where(s => s.IsMandatory);
@@ -62,5 +49,10 @@ namespace JobOfferBackend.Domain.Entities
             }
         }
 
+        public override void Validate()
+        {
+            if (string.IsNullOrEmpty(PersonId))
+                throw new InvalidOperationException(DomainErrorMessages.PERSON_DOES_NOT_EXITS);
+        }
     }
 }

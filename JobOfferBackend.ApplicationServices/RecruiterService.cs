@@ -69,30 +69,43 @@ namespace JobOfferBackend.ApplicationServices
             }
         }
 
-        public virtual async Task CreateRecruiterAsync(Recruiter recruiter)
+        public virtual async Task CreateRecruiterAsync(Person person, List<string> companiesId = null)
         {
-            recruiter.Validate();
+            person.Validate();
 
-            var person = recruiter.GetPerson();
-
-            using(var session = _personRepository.GetTransactionalSession())
+            if (!person.HasIdCreated)
             {
-                try
+                using (var session = _personRepository.GetTransactionalSession())
                 {
-                    session.StartTransaction();
-                    await _personRepository.UpsertAsync(person);
+                    try
+                    {
+                        session.StartTransaction();
+                        await _personRepository.UpsertAsync(person);
 
-                    recruiter.Id = person.Id;
+                        var recruiter = CreateRecruiter(person, companiesId);
 
-                    await _recruiterRepository.UpsertAsync(recruiter);
+                        await _recruiterRepository.UpsertAsync(recruiter);
 
-                    await session.CommitTransactionAsync();
+                        await session.CommitTransactionAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        await session.AbortTransactionAsync();
+                        throw new InvalidOperationException(ServicesErrorMessages.CAN_NOT_CREATE_A_RECRUITER_AND_PERSON);
+                    }
                 }
-                catch(Exception ex)
+            }
+
+            else
+            {
+                if(await _personRepository.GetByIdAsync(person.Id) == null)
                 {
-                    await session.AbortTransactionAsync();
-
+                    throw new InvalidOperationException(ServicesErrorMessages.PERSON_DOES_NOT_EXISTS);
                 }
+
+                var recruiter = CreateRecruiter(person, companiesId);
+
+                await _recruiterRepository.UpsertAsync(recruiter);
             }
         }
 
@@ -175,6 +188,16 @@ namespace JobOfferBackend.ApplicationServices
             jobOffer.Finish();
 
             await _jobOfferRepository.UpsertAsync(jobOffer);
+        }
+
+        private Recruiter CreateRecruiter(Person person, IEnumerable<string> companiesId)
+        {
+            var recruiter = new Recruiter() { PersonId = person.Id };
+
+            if (companiesId != null)
+                recruiter.ClientCompaniesId = companiesId;
+
+            return recruiter;
         }
 
         public virtual async Task<JobOffer> GetNewJobOffer(string recruiterId)

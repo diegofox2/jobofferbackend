@@ -9,11 +9,5 @@ namespace JobOfferBackend.DataAccess
         public RecruiterRepository(IMongoDatabase database) : base(database)
         {
         }
-
-        public virtual async Task<Person> GetByIdentityCardAsync(string identityCard)
-        {
-            return await Collection.Find(p => p.IdentityCard == identityCard).SingleOrDefaultAsync();
-        }
-
     }
 }
