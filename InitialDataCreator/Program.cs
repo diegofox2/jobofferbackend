@@ -42,19 +42,20 @@ namespace InitialDataCreator
             var recruiter = new Recruiter();
             recruiter.AddClient(new Company("Acme", "Software"));
 
-            recruiter.IdentityCard = "28.999.999";
-            recruiter.FirstName = "Patricia";
-            recruiter.LastName = "Maidana";
-            recruiter.SetStudy(new Study("UBA", "Lic.RRHH", StudyStatus.Completed));
-            recruiter.SetPreviousJob(new Job("Coto", "HR Analyst", DateTime.Now.AddYears(-6), true));
+            var person = new Person();
 
-            recruiter.SetAbility(new Ability(javascript, 9));
+            person.IdentityCard = "28.999.999";
+            person.FirstName = "Patricia";
+            person.LastName = "Maidana";
+            person.SetStudy(new Study("UBA", "Lic.RRHH", StudyStatus.Completed));
+            person.SetPreviousJob(new Job("Coto", "HR Analyst", DateTime.Now.AddYears(-6), true));
+            person.SetAbility(new Ability(javascript, 9));
 
             var company1 = new Company("Acme", "software");
 
             companyRepository.UpsertAsync(company1).Wait();
 
-            recruiterService.CreateRecruiterAsync(recruiter).Wait();
+            recruiterService.CreateRecruiterAsync(person, new string[] { company1.Id } ).Wait();
 
             var jobOffer = Task.Run(() =>
             {
@@ -148,10 +149,7 @@ namespace InitialDataCreator
             recruiterService.PublishJobOffer(jobOffer3).Wait();
             recruiterService.FinishJobOffer(jobOffer3).Wait();
 
-            var pRepo = new RecruiterRepository(database);
             var aRepo = new AccountRepository(database);
-
-            var person = pRepo.GetByIdentityCardAsync("28.999.999").Result;
 
             var account = new Account() { Id = Guid.NewGuid().ToString(), PersonId = person.Id, Email = "a@b.com", Password = "password", IsRecruiter = true };
 

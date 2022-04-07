@@ -69,7 +69,7 @@ namespace JobOfferBackend.ApplicationServices
             }
         }
 
-        public virtual async Task CreateRecruiterAsync(Person person, List<string> companiesId = null)
+        public virtual async Task CreateRecruiterAsync(Person person, IEnumerable<string> companiesId = null)
         {
             person.Validate();
 
