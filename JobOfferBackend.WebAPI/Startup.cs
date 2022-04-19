@@ -62,7 +62,7 @@ namespace JobOfferBackend.WebAPI
                     };
                 });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddControllers();
 
             services.AddSession();
 
@@ -81,8 +81,6 @@ namespace JobOfferBackend.WebAPI
             }
 
             app.UseCors();
-
-            app.UseMvc();
 
             app.UseAuthentication();
 
