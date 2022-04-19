@@ -261,7 +261,7 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
             catch (InvalidOperationException ex)
             {
                 Assert.IsTrue(ex.Data[0].ToString() == DomainErrorMessages.COMPANY_REQUIRED);
-                Assert.AreEqual(JobOfferState.WorkInProgress, jobOffer.State);
+                Assert.AreEqual(JobOfferState.NoValid, jobOffer.State);
             }
         }
 
@@ -287,7 +287,7 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
             catch (InvalidOperationException ex)
             {
                 Assert.IsTrue(ex.Data[0].ToString() == DomainErrorMessages.RECRUITER_REQUIRED);
-                Assert.AreEqual(JobOfferState.WorkInProgress, jobOffer.State);
+                Assert.AreEqual(JobOfferState.NoValid, jobOffer.State);
             }
         }
 
@@ -313,7 +313,7 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
             catch (InvalidOperationException ex)
             {
                 Assert.IsTrue(ex.Data[0].ToString() == DomainErrorMessages.CONTRACT_INFORMATION_EMPTY);
-                Assert.AreEqual(JobOfferState.WorkInProgress, jobOffer.State);
+                Assert.AreEqual(JobOfferState.NoValid, jobOffer.State);
             }
         }
 

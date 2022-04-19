@@ -10,8 +10,11 @@ namespace JobOfferBackend.Domain.Entities
     public enum JobOfferState
     {
         WorkInProgress,
+        Publishing,
         Published,
-        Finished
+        Finalizing,
+        Finished,
+        NoValid
     }
 
     public enum LanguageLevel
@@ -107,9 +110,11 @@ namespace JobOfferBackend.Domain.Entities
         {
             if(State == JobOfferState.WorkInProgress)
             {
-                State = JobOfferState.Published;
+                State = JobOfferState.Publishing;
 
                 Validate();
+
+                State = JobOfferState.Published;
             }
             else
             {
@@ -120,7 +125,12 @@ namespace JobOfferBackend.Domain.Entities
 
         public void Finish()
         {
+            State = JobOfferState.Finalizing;
+
+            Validate();
+
             State = JobOfferState.Finished;
+
         }
 
         public override void Validate()
@@ -142,9 +152,9 @@ namespace JobOfferBackend.Domain.Entities
 
                 CheckingNoInvalidApplications();
 
-                if(_errorLines.Length > 0)
+                if (_errorLines.Length > 0)
                 {
-                    State = JobOfferState.WorkInProgress;
+                    State = JobOfferState.NoValid;
                 }
 
                 ThrowExceptionIfErrors();
