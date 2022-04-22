@@ -47,9 +47,9 @@ namespace JobOfferBackend.WebAPI.Controllers
 
         [HttpPost]
         [Route("CreateRecruiter")]
-        public async Task CreateRecruiter([FromBody] Recruiter recruiter)
+        public async Task CreateRecruiter([FromBody] Person person, IEnumerable<string> companies = null)
         {
-            await _recruiterService.CreateRecruiterAsync(recruiter);
+            await _recruiterService.CreateRecruiterAsync(person, companies);
         }
 
         [HttpGet()]

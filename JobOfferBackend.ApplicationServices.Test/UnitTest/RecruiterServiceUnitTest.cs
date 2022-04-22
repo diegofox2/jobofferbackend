@@ -43,7 +43,7 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
         public async Task UpdateRecruiterAsync_InvokesRepostiroy_WhenRecriterIsValidAndExists()
         {
             //Arrange
-            var recruiter = new Recruiter() { LastName = "Maidana", FirstName = "Patricia", IdentityCard = "2899999" };
+            var recruiter = new Recruiter() { PersonId = "xxxx"};
 
             _recruiterRepositoryMock.Setup(mock => mock.CheckEntityExistsAsync(It.IsAny<string>())).ReturnsAsync(true);
 
@@ -61,7 +61,7 @@ namespace JobOfferBackend.ApplicationServices.Test.UnitTest
         public async Task UpdateRecruiterAsync_ThrowsInvalidOperationException_WhenRecriterDoesNotExists()
         {
             //Arrange
-            var recruiter = new Recruiter() { LastName = "Maidana", FirstName = "Patricia", IdentityCard = "2899999" };
+            var recruiter = new Recruiter() { PersonId = "xxx"};
 
             _recruiterRepositoryMock.Setup(mock => mock.CheckEntityExistsAsync(It.IsAny<string>())).ReturnsAsync(false);
 

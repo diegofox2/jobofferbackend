@@ -57,14 +57,14 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
         {
 
             //Arrange
-            var recruiter = new Recruiter()
+            var person = new Person()
             {
                 FirstName = "Patricia",
                 LastName = "Maidana",
                 IdentityCard = "28123456"
             };
 
-            await _recruiterService.CreateRecruiterAsync(recruiter);
+            var recruiter = await _recruiterService.CreateRecruiterAsync(person);
 
             var company = new Company("Acme", "Software");
 
@@ -76,7 +76,7 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
 
             //Assert
             Assert.AreEqual(company, savedCompany, "Company was not saved");
-            Assert.IsTrue(recruiter.ClientCompanies.Any(item => item == company.Id), "Company was not added to client list");
+            Assert.IsTrue(recruiter.ClientCompaniesId.Any(item => item == company.Id), "Company was not added to client list");
 
         }
 
@@ -85,22 +85,22 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
         {
             //Arrage
 
-            var recruiter1 = new Recruiter()
+            var person1 = new Person()
             {
                 FirstName = "Patricia",
                 LastName = "Maidana",
                 IdentityCard = "28123456"
             };
 
-            var recruiter2 = new Recruiter()
+            var person2 = new Person()
             {
                 FirstName = "Carolina",
                 LastName = "Leanza",
                 IdentityCard = "28987561"
             };
 
-            await _recruiterService.CreateRecruiterAsync(recruiter1);
-            await _recruiterService.CreateRecruiterAsync(recruiter2);
+            var recruiter1 = await _recruiterService.CreateRecruiterAsync(person1);
+            var recruiter2 = await _recruiterService.CreateRecruiterAsync(person2);
 
             var company = new Company("Acme", "Software");
             var otherCompany = new Company("Mulesoft", "Software");
@@ -116,108 +116,9 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
             //Assert
             Assert.IsTrue(await _companyRepository.CheckEntityExistsAsync(company.Id), "Company 1 was not recorded");
             Assert.IsTrue(await _companyRepository.CheckEntityExistsAsync(otherCompany.Id), "Company 2 was not recorded");
-            Assert.AreEqual(2, recruiter1.ClientCompanies.Count(), "Recruiter1 does not have all the clientes linked" );
-            Assert.AreEqual(1, recruiter2.ClientCompanies.Count(), "Recruiter2 does not have all the clientes linked");
-            Assert.AreEqual(otherCompany.Id, recruiter2.ClientCompanies.First(), "Recruiter2 does not have linked the existing company");
-        }
-
-        [TestMethod]
-        public async Task CreateRecruiter_SaveRecruiterSuccessfully_WhenRecruiterDataIsCorrectAndRecruiterNotExists()
-        {
-            //Arrange
-            var recruiter = new Recruiter()
-            {
-                FirstName = "Patricia",
-                LastName = "Maidana",
-                IdentityCard = "28123456"
-            };
-
-            recruiter.AddClient(new Company("Acme", "Software"));
-
-            recruiter.SetPreviousJob(new Job("Accenture", "Sr.Talent Adquision", new DateTime(2015,5,1), true));
-            recruiter.SetPreviousJob(new Job("Accenture", "Sr.Talent Adquision", new DateTime(2014, 1, 1), false, new DateTime(2015,4,30)));
-
-            recruiter.SetStudy(new Study("UBA", "Lic.Relaciones del Trabajo", StudyStatus.Completed));
-
-            var cSharp = new Skill() { Name = "C#" };
-            var javascript = new Skill() { Name = "Javascript" };
-            var react = new Skill() { Name = "React" };
-
-            await _skillRepository.UpsertAsync(cSharp);
-            await _skillRepository.UpsertAsync(javascript);
-            await _skillRepository.UpsertAsync(react);
-
-            recruiter.SetAbility(new Ability(cSharp, 10));
-            recruiter.SetAbility(new Ability(javascript, 8));
-            recruiter.SetAbility(new Ability(react, 7));
-
-            //Act
-            await _recruiterService.CreateRecruiterAsync(recruiter);
-
-            var savedRecruiter = await _recruiterService.GetRecruiterAsync(recruiter);
-
-            //Assert
-            Assert.AreEqual(recruiter, savedRecruiter, "Recruiter was not saved");
-        }
-
-        [TestMethod]
-        public async Task UpdateRecruiter_SaveRecruiterSuccessfully_WhenRecruiterDataIsCorrectAndRecruiterExists()
-        {
-            //Arrange
-            var recruiter = new Recruiter()
-            {
-                FirstName = "Patricia",
-                LastName = "Maidana",
-                IdentityCard = "28123456"
-            };
-
-            recruiter.AddClient(new Company("Acme", "Software"));
-
-            recruiter.SetPreviousJob(new Job("Accenture", "Sr.Talent Adquision", new DateTime(2015, 5, 1), true));
-            recruiter.SetPreviousJob(new Job("Accenture", "Sr.Talent Adquision", new DateTime(2014, 1, 1), false, new DateTime(2015, 4, 30)));
-
-            recruiter.SetStudy(new Study("UBA", "Lic.Relaciones del Trabajo", StudyStatus.Completed));
-
-            var cSharp = new Skill() { Name = "C#" };
-            var javascript = new Skill() { Name = "Javascript" };
-            var react = new Skill() { Name = "React" };
-
-            await _skillRepository.UpsertAsync(cSharp);
-            await _skillRepository.UpsertAsync(javascript);
-            await _skillRepository.UpsertAsync(react);
-
-            var cSharpAbility = new Ability(cSharp, 10);
-            var javascriptAbility = new Ability(javascript, 8);
-
-            recruiter.SetAbility(cSharpAbility);
-            recruiter.SetAbility(javascriptAbility);
-
-            await _recruiterService.CreateRecruiterAsync(recruiter);
-
-            //Act
-
-            var savedRecruiter = await _recruiterService.GetRecruiterAsync(recruiter);
-
-            var previousJob = savedRecruiter.JobHistory.Where(j => j.CompanyName == "Accenture" && j.From.Date == new DateTime(2014, 1, 1).Date).Single();
-
-            var newJob = (Job)previousJob.Clone();
-
-            newJob.CompanyName = "Globant";
-
-            savedRecruiter.SetPreviousJob(newJob, previousJob);
-
-            var reactAbility = new Ability(react, 5);
-
-            savedRecruiter.SetAbility(reactAbility, cSharpAbility);
-
-            await _recruiterService.UpdateRecruiterAsync(savedRecruiter);
-
-            var updatedRecruiter = await _recruiterService.GetRecruiterAsync(savedRecruiter);
-
-            //Assert
-            Assert.AreEqual("Globant", updatedRecruiter.JobHistory.Single(j => j == newJob).CompanyName, "Company name of a recruiter was now updated");
-            Assert.IsTrue(updatedRecruiter.Abilities.Count() == 2);
-            Assert.IsNotNull(updatedRecruiter.Abilities.SingleOrDefault(a => a.SkillId == react.Id));
+            Assert.AreEqual(2, recruiter1.ClientCompaniesId.Count(), "Recruiter1 does not have all the clientes linked" );
+            Assert.AreEqual(1, recruiter2.ClientCompaniesId.Count(), "Recruiter2 does not have all the clientes linked");
+            Assert.AreEqual(otherCompany.Id, recruiter2.ClientCompaniesId.First(), "Recruiter2 does not have linked the existing company");
         }
 
         [TestMethod]
@@ -232,9 +133,9 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
             await _skillRepository.UpsertAsync(skill2);
             await _skillRepository.UpsertAsync(skill3);
 
-            var recruiter = new Recruiter() { FirstName = "Maidana", LastName = "Patricia", IdentityCard = "28123456" };
+            var person = new Person() { FirstName = "Maidana", LastName = "Patricia", IdentityCard = "28123456" };
 
-            await _recruiterService.CreateRecruiterAsync(recruiter);
+            var recruiter = await _recruiterService.CreateRecruiterAsync(person);
 
             var company = new Company("Acme", "Software");
 
@@ -271,8 +172,8 @@ namespace JobOfferBackend.ApplicationServices.Test.IntegrationTest
         public async Task SaveJobOffer_UpdatesAJobOfferSuccessfuly_WhenJobOfferExistsAndHasValidInformation()
         {
             //Arrange
-            var recruiter = new Recruiter() { FirstName = "Maidana", LastName = "Patricia", IdentityCard = "28123456" };            
-            await _recruiterService.CreateRecruiterAsync(recruiter);
+            var person = new Person() { FirstName = "Maidana", LastName = "Patricia", IdentityCard = "28123456" };            
+            var recruiter = await _recruiterService.CreateRecruiterAsync(person);
 
             var company = new Company("Acme", "Software");
             await _recruiterService.AddClientAsync(company, recruiter.Id);

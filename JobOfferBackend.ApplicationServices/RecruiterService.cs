@@ -69,9 +69,11 @@ namespace JobOfferBackend.ApplicationServices
             }
         }
 
-        public virtual async Task CreateRecruiterAsync(Person person, IEnumerable<string> companiesId = null)
+        public virtual async Task<Recruiter> CreateRecruiterAsync(Person person, IEnumerable<string> companiesId = null)
         {
             person.Validate();
+
+            var recruiter = CreateRecruiter(person, companiesId);
 
             if (!person.HasIdCreated)
             {
@@ -81,8 +83,6 @@ namespace JobOfferBackend.ApplicationServices
                     {
                         session.StartTransaction();
                         await _personRepository.UpsertAsync(person);
-
-                        var recruiter = CreateRecruiter(person, companiesId);
 
                         await _recruiterRepository.UpsertAsync(recruiter);
 
@@ -103,10 +103,10 @@ namespace JobOfferBackend.ApplicationServices
                     throw new InvalidOperationException(ServicesErrorMessages.PERSON_DOES_NOT_EXISTS);
                 }
 
-                var recruiter = CreateRecruiter(person, companiesId);
-
                 await _recruiterRepository.UpsertAsync(recruiter);
             }
+
+            return recruiter;
         }
 
         public virtual async Task UpdateRecruiterAsync(Recruiter recruiter)
